@@ -80,14 +80,15 @@
         .p-common-bg { background: #9136FE !important; }
 
         /* Стили для анимации появления при прокрутке */
-        .dialog-row {
+        .env-viewer-message {
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
             will-change: opacity, transform;
+            margin-bottom: 20px;
         }
 
-        .dialog-row.visible {
+        .env-viewer-message.visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -125,200 +126,183 @@
                     <p>Стенограмма начала судебного процесса. Слушается дело...</p>
                 </div>
 
-               <div class="dialog d-visible-content g-text-style env-viewer-dialog-viewer env-viewer-hidden">
-  <div class="env-viewer-container">
-    <div class="global-margin-behaviour">
-      
-      <!-- Обвинитель -->
-     <div class="dialog d-visible-content g-text-style env-viewer-dialog-viewer env-viewer-hidden">
-  <div class="env-viewer-container">
-    <div class="global-margin-behaviour">
-      
-      <!-- Обвинитель -->
-      <div class="env-viewer-message g-text-style">
-        <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
-          <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-            <div class="env-message-box" style="background-color: rgb(242, 243, 255); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgb(216, 218, 243) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-              <div class="env-quill env-message-text">
-                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                  <div class="ql-editor" data-gramm="false" contenteditable="false">
-                    <p>Ваша честь, а как быть с тем, что в Библии записано множество событий, которым невозможно найти подтверждение?</p>
-                  </div>
-                  <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
+                <div class="dialog d-visible-content g-text-style env-viewer-dialog-viewer">
+                    <div class="env-viewer-container">
+                        <div class="global-margin-behaviour">
+                            
+                            <!-- Обвинитель 1 -->
+                            <div class="env-viewer-message g-text-style">
+                                <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
+                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
+                                        <div class="env-message-box" style="background-color: rgb(242, 243, 255); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgb(216, 218, 243) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
+                                            <div class="env-quill env-message-text">
+                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
+                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
+                                                        <p>Ваша честь, а как быть с тем, что в Библии записано множество событий, которым невозможно найти подтверждение?</p>
+                                                    </div>
+                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
+                                                </div>
+                                            </div> 
+                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
+                                                <div class="env-message-value">Обвинитель</div> 
+                                                <div class="env-message-value dynamic-time">--:--</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+
+                            <!-- Обвинитель 2 -->
+                            <div class="env-viewer-message g-text-style">
+                                <div class="env-message env-message-last undefined env-message" style="visibility: inherit; opacity: 1;">
+                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
+                                        <div class="env-message-box" style="background-color: rgb(242, 243, 255); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgb(216, 218, 243) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
+                                            <div class="env-quill env-message-text">
+                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
+                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
+                                                        <p>Ах, предсказываю, что защита сейчас начнет говорить нам о вере. Но это просто смешно, где доказательства того, что библейская история верна? Их просто нет!</p>
+                                                    </div>
+                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
+                                                </div>
+                                            </div> 
+                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
+                                                <div class="env-message-value">Обвинитель</div> 
+                                                <div class="env-message-value dynamic-time">--:--</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+
+                            <!-- Защитник 1 -->
+                            <div class="env-viewer-message g-text-style">
+                                <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
+                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
+                                        <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
+                                            <div class="env-quill env-message-text">
+                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
+                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
+                                                        <p>Господин судья, <span class="ql-palette-color-three">@Обвинитель</span> вновь манипулирует фактами! Я могу дать аргументированный ответ и в этом случае.</p>
+                                                    </div>
+                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
+                                                </div>
+                                            </div> 
+                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
+                                                <div class="env-message-value">Защитник</div> 
+                                                <div class="env-message-value dynamic-time">--:--</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+
+                            <!-- Защитник 2 -->
+                            <div class="env-viewer-message g-text-style">
+                                <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
+                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
+                                        <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
+                                            <div class="env-quill env-message-text">
+                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
+                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
+                                                        <p>Действительно, как уже было сказано, многие ученые скептически относятся к историческим фактам, описанным в Библии.</p>
+                                                    </div>
+                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
+                                                </div>
+                                            </div> 
+                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
+                                                <div class="env-message-value">Защитник</div> 
+                                                <div class="env-message-value dynamic-time">--:--</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+
+                            <!-- Защитник 3 -->
+                            <div class="env-viewer-message g-text-style">
+                                <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
+                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
+                                        <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
+                                            <div class="env-quill env-message-text">
+                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
+                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
+                                                        <p>Как правило, в качестве основной причины называют отсутствие каких-либо находок, которые могли бы подтвердить правдивость ее рассказов.</p>
+                                                    </div>
+                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
+                                                </div>
+                                            </div> 
+                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
+                                                <div class="env-message-value">Защитник</div> 
+                                                <div class="env-message-value dynamic-time">--:--</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+
+                            <!-- Защитник 4 -->
+                            <div class="env-viewer-message g-text-style">
+                                <div class="env-message env-message-last undefined env-message" style="visibility: inherit; opacity: 1;">
+                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
+                                        <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
+                                            <div class="env-quill env-message-text">
+                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
+                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
+                                                        <p>Однако этот аргумент можно было бы смело приводить где-то в 17 веке… в 21 же, ситуация с Библейскими находками сильно изменилась.</p>
+                                                    </div>
+                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
+                                                </div>
+                                            </div> 
+                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
+                                                <div class="env-message-value">Защитник</div> 
+                                                <div class="env-message-value dynamic-time">--:--</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-              </div> 
-              <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                <div class="env-message-value">Обвинитель</div> 
-                <div class="env-message-value dynamic-time">--:--</div>
-              </div>
-            </div>
-          </div>
-        </div> 
-      </div>
 
-      <!-- Обвинитель -->
-      <div class="env-viewer-message g-text-style">
-        <div class="env-message env-message-last undefined env-message" style="visibility: inherit; opacity: 1;">
-          <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-            <div class="env-message-box" style="background-color: rgb(242, 243, 255); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgb(216, 218, 243) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-              <div class="env-quill env-message-text">
-                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                  <div class="ql-editor" data-gramm="false" contenteditable="false">
-                    <p>Ах, предсказываю, что защита сейчас начнет говорить нам о вере. Но это просто смешно, где доказательства того, что библейская история верна? Их просто нет!</p>
-                  </div>
-                  <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
-                </div>
-              </div> 
-              <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                <div class="env-message-value">Обвинитель</div> 
-                <div class="env-message-value dynamic-time">--:--</div>
-              </div>
-            </div>
-          </div>
-        </div> 
-      </div>
-
-      <!-- Защитник -->
-      <div class="env-viewer-message g-text-style">
-        <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
-          <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-            <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-              <div class="env-quill env-message-text">
-                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                  <div class="ql-editor" data-gramm="false" contenteditable="false">
-                    <p>Господин судья, <span class="ql-palette-color-three">@Обвинитель</span> вновь манипулирует фактами! Я могу дать аргументированный ответ и в этом случае.</p>
-                  </div>
-                  <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
-                </div>
-              </div> 
-              <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                <div class="env-message-value">Защитник</div> 
-                <div class="env-message-value dynamic-time">--:--</div>
-              </div>
-            </div>
-          </div>
-        </div> 
-      </div>
-
-      <!-- Защитник -->
-      <div class="env-viewer-message g-text-style">
-        <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
-          <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-            <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-              <div class="env-quill env-message-text">
-                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                  <div class="ql-editor" data-gramm="false" contenteditable="false">
-                    <p>Действительно, как уже было сказано, многие ученые скептически относятся к историческим фактам, описанным в Библии.</p>
-                  </div>
-                  <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
-                </div>
-              </div> 
-              <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                <div class="env-message-value">Защитник</div> 
-                <div class="env-message-value dynamic-time">--:--</div>
-              </div>
-            </div>
-          </div>
-        </div> 
-      </div>
-
-      <!-- Защитник -->
-      <div class="env-viewer-message g-text-style">
-        <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
-          <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-            <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-              <div class="env-quill env-message-text">
-                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                  <div class="ql-editor" data-gramm="false" contenteditable="false">
-                    <p>Как правило, в качестве основной причины называют отсутствие каких-либо находок, которые могли бы подтвердить правдивость ее рассказов.</p>
-                  </div>
-                  <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
-                </div>
-              </div> 
-              <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                <div class="env-message-value">Защитник</div> 
-                <div class="env-message-value dynamic-time">--:--</div>
-              </div>
-            </div>
-          </div>
-        </div> 
-      </div>
-
-      <!-- Защитник -->
-      <div class="env-viewer-message g-text-style">
-        <div class="env-message env-message-last undefined env-message" style="visibility: inherit; opacity: 1;">
-          <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-            <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-              <div class="env-quill env-message-text">
-                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                  <div class="ql-editor" data-gramm="false" contenteditable="false">
-                    <p>Однако этот аргумент можно было бы смело приводить где-то в 17 веке… в 21 же, ситуация с Библейскими находками сильно изменилась.</p>
-                  </div>
-                  <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
-                </div>
-              </div> 
-              <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                <div class="env-message-value">Защитник</div> 
-                <div class="env-message-value dynamic-time">--:--</div>
-              </div>
-            </div>
-          </div>
-        </div> 
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- Скрипт автоматического обновления времени при прокрутке и появлении сообщения -->
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const timeElements = document.querySelectorAll('.dynamic-time');
-    
-    const observer = new IntersectionObserver((entries, observerInstance) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const now = new Date();
-          const hours = String(now.getHours()).padStart(2, '0');
-          const minutes = String(now.getMinutes()).padStart(2, '0');
-          
-          // Устанавливаем реальное текущее время в момент прокрутки до блока
-          entry.target.textContent = `${hours}:${minutes}`;
-          
-          // Отключаем наблюдение за этим блоком, чтобы время зафиксировалось после появления
-          observerInstance.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.2 });
-
-    timeElements.forEach(el => observer.observe(el));
-  });
-</script>
             </div>
         </div>
     </div>
 
-    <!-- Скрипт для анимации появления блоков при прокрутке (Intersection Observer) -->
+    <!-- Объединенный скрипт: анимация появления и динамическое время при прокрутке -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const observerOptions = {
                 root: null,
                 rootMargin: '0px',
-                threshold: 0.15 // Блок срабатывает, когда виден на 15%
+                threshold: 0.15
             };
 
-            const observer = new IntersectionObserver((entries, observer) => {
+            const observer = new IntersectionObserver((entries, observerInstance) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        // 1. Плавное появление блока
                         entry.target.classList.add('visible');
-                        // Если нужно, чтобы анимация срабатывала один раз:
-                        // observer.unobserve(entry.target);
+
+                        // 2. Автоматическое подставление текущего времени в момент появления блока
+                        const timeEl = entry.target.querySelector('.dynamic-time');
+                        if (timeEl && timeEl.textContent === '--:--') {
+                            const now = new Date();
+                            const hours = String(now.getHours()).padStart(2, '0');
+                            const minutes = String(now.getMinutes()).padStart(2, '0');
+                            timeEl.textContent = `${hours}:${minutes}`;
+                        }
+
+                        // Останавливаем наблюдение за этим блоком, чтобы время зафиксировалось
+                        observerInstance.unobserve(entry.target);
                     }
                 });
             }, observerOptions);
 
-            const dialogRows = document.querySelectorAll('.dialog-row');
-            dialogRows.forEach(row => {
+            // Наблюдаем за каждым сообщением
+            const messageRows = document.querySelectorAll('.env-viewer-message');
+            messageRows.forEach(row => {
                 observer.observe(row);
             });
         });
