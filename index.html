@@ -1,338 +1,231 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html class="cssscrollbar" style="margin-right: calc(100% - 100vw);">
 <head>
-    <meta charset="UTF-8">
+    <!-- Google Tag Manager -->
+    <script async="" src="https://www.googletagmanager.com/gtm.js?id=undefined"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        function setCookie(name, value, days) {
+          var expires = "";
+          if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+          }
+          document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var cookieArray = document.cookie.split(';');
+            for (var i=0; i < cookieArray.length; i++) {
+                var c = cookieArray[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+        let defaultConsent = { 'analytics_storage': 'granted' };
+        gtag('consent', 'default', defaultConsent);
+    </script>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','undefined');</script>
+    <!-- End Google Tag Manager -->
+    
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Судебное заседание: Исполнившиеся пророчества</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>99% людей не знают этих фактов о Библии. А ты?</title>
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/css/swiper.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+    <style type="text/css">
+        :root {
+            --primary-color: #5943BE;
+            --title-weight: 700;
+            --backgorund-gradient: linear-gradient(90deg, #5943BE 0%, #392981 100%);
+            --text-font: Montserrat;
+            --title-font: Montserrat;
+            --component-border-radius: 6px;
+            --button-border-radius: 6px;
+            --button-gradient: linear-gradient(90deg, #3B2B87 0%, #433195 24.87%, #5943BE 100%);
+            --button-play-bg: linear-gradient(90deg, #3B2B87 0%, #433195 24.87%, #5943BE 100%);
+            --button-shadow: 0 5px 20px 0 rgba(89, 67, 190, 0.3);
+            --button-color: #ffffff;
+            --button-border: none;
+            --button-white-border: 0.16rem solid #fff;
+            --button-monocolor: #5943BE;
         }
 
-        html, body {
-            height: 100%;
-            background: linear-gradient(145deg, #f4f6f9 0%, #eceff4 100%);
-            background-attachment: fixed;
-            color: #2d3748;
-            scroll-behavior: smooth;
+        .g-button-style {
+            border-radius: 0px !important;
         }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M9 24c0-2.206 1.794-4 4-4s4 1.794 4 4-1.794 4-4 4-4-1.794-4-4zm4-2c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2zm20 18c0-2.206 1.794-4 4-4s4 1.794 4 4-1.794 4-4 4-4-1.794-4-4zm4-2c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2z' fill='%23a0aec0' fill-opacity='0.04' fill-rule='evenodd'/%3E%3C/svg%3E");
-            z-index: -1;
-            pointer-events: none;
+        .g-component-radius {
+            border-radius: 0px !important;
         }
-
-        header {
-            max-width: 750px;
-            margin: 40px auto 10px;
-            padding: 0 20px;
-            text-align: center;
+        .g-component-shadow {
+            box-shadow: 0 6px 20px 0 rgba(93,95,102,0.15) !important;
         }
-
-        header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1a202c;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
+        .g-title-style {
+            font-family: 'Montserrat' !important;
         }
-
-        .controls {
-            margin-top: 12px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
+        .g-text-style {
+            font-family: 'Montserrat' !important;
         }
-
-        .control-btn {
-            background-color: #3182ce;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        
+        .p-buttons-bg {
+            background: linear-gradient(to right, #6C15D4 0%, #9136FE 100%) !important;
         }
-
-        .control-btn:hover {
-            background-color: #2b6cb0;
+        .p-audio-track-bg {
+            background: linear-gradient(to right, #6C15D4 0%, #9136FE 100%) !important;
         }
-
-        .chat-container {
-            max-width: 750px;
-            margin: 0 auto;
-            padding: 20px 20px 100px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        .p-dialog-outline-border {
+            border-color: #B971F7 !important;
         }
-
-        .message-row {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-            width: 100%;
-            opacity: 0;
-            transform: scale(0.98) translateY(15px);
-            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        .p-quote-common-bg {
+            background: #9136FE !important;
         }
-
-        .message-row.visible {
-            opacity: 1;
-            transform: scale(1) translateY(0);
+        .p-quote-common-color {
+            color: #9136FE !important;
         }
-
-        /* Аватарка без белой обводки */
-        .avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        .p-quote-common-border {
+            border-color: #9136FE !important;
         }
-
-        /* Облачко без левых границ, точно как на втором фото */
-        .bubble {
-            flex-grow: 1;
-            padding: 18px 22px;
-            border-radius: 16px;
-            position: relative;
+        .p-quote-icon-color {
+            color: #B971F7 !important;
         }
-
-        .prosecutor .bubble {
-            background-color: rgb(242, 243, 255);
-            box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgb(216, 218, 243) 0px 6px 20px 0px;
+        .p-photo-mask-bg {
+            background: #9136FE !important;
         }
-
-        .defender .bubble {
-            background-color: rgb(255, 241, 227);
-            box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px;
+        .p-event-date-color {
+            color: #D3A7F8 !important;
         }
-
-        .text {
-            font-size: 15px;
-            line-height: 1.6;
-            color: #1f1f1f;
-            margin-bottom: 12px;
-            white-space: pre-line;
+        .p-lessonfooter-stars-color {
+            color: #9136FE !important;
         }
-
-        /* Нижняя часть: роль слева (сероватая), время справа внизу */
-        .meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            font-weight: 700;
+        .p-lessonfooter-link-color {
+            color: #9136FE !important;
         }
-
-        .role {
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 11px;
-            color: #718096; /* Слегка сероватый оттенок подписи */
+        .p-lessonfooter-name-color {
+            color: #9136FE !important;
         }
-
-        .time {
-            color: #718096;
-            font-weight: 400;
+        .p-quill-link-color {
+            color: #9136FE !important;
         }
-
-        .message-attachment {
-            margin-top: 12px;
-            border-radius: 12px;
-            overflow: hidden;
-            max-width: 100%;
+        .p-quill-text-color {
+            color: #9136FE !important;
         }
-
-        .message-attachment img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 12px;
+        .p-quill-fill-bg {
+            background: #B971F7 !important;
         }
-
-        .typing-indicator {
-            display: flex;
-            gap: 5px;
-            padding: 6px 0;
-            align-items: center;
+        .p-common-bg {
+            background: #9136FE !important;
         }
-
-        .typing-indicator span {
-            width: 7px;
-            height: 7px;
-            background-color: #cbd5e0;
-            border-radius: 50%;
-            animation: upstreamBounce 1.4s infinite both;
+        .p-common-color {
+            color: #9136FE !important;
         }
-
-        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes upstreamBounce {
-            0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
-            40% { transform: translateY(-6px); opacity: 1; }
+        .p-common-border {
+            border-color: #9136FE !important;
         }
+        .p-buttons-monocolor-bg {
+            background: #9136FE !important;
+        }
+        .p-buttons-monocolor-border {
+            border-color: #9136FE !important;
+        }
+        .p-buttons-monocolor-color {
+            color: #9136FE !important;
+        }
+        :root {
+            --element-primary-color: #370A4C;
+            --element-primary-pulse-start: rgba(55, 10, 76, 0.5);
+            --element-primary-pulse-end: rgba(55, 10, 76, 0);
+        }
+    </style>
+
+    <style type="text/css" quill-styles="">
+        .ql-palette-color-one { color: #370A4C; }
+        .ql-palette-fill-one { background-color: rgba(55, 10, 76, 0.3); }
+        .ql-palette-link-color-one { color: #370A4C !important; }
+        .ql-palette-color-two { color: #4B207F; }
+        .ql-palette-fill-two { background-color: rgba(75, 32, 127, 0.3); }
+        .ql-palette-link-color-two { color: #4B207F !important; }
+        .ql-palette-color-three { color: #9136FE; }
+        .ql-palette-fill-three { background-color: rgba(145, 54, 254, 0.3); }
+        .ql-palette-link-color-three { color: #9136FE !important; }
+        .ql-palette-color-four { color: #B971F7; }
+        .ql-palette-fill-four { background-color: rgba(185, 113, 247, 0.3); }
+        .ql-palette-link-color-four { color: #B971F7 !important; }
+        .ql-palette-color-five { color: #D3A7F8; }
+        .ql-palette-fill-five { background-color: rgba(211, 167, 248, 0.3); }
+        .ql-palette-link-color-five { color: #D3A7F8 !important; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>Судебное заседание: Исполнившиеся пророчества</h1>
-        <div class="controls">
-            <button class="control-btn" onclick="restartDialogue()">Запустить заново</button>
-        </div>
-    </header>
-
-    <div class="chat-container" id="chat"></div>
-
-    <script>
-        const dialogueData = [
-            {
-                role: 'prosecutor',
-                roleName: 'Обвинитель',
-                avatar: 'https://assets.hope.study/images/8YaRWQakL_main_okE.webp',
-                text: 'Да в этой Библии не осталось и следа от ее первоистоков! Разве что одна черта и осталась…'
-            },
-            {
-                role: 'prosecutor',
-                roleName: 'Обвинитель',
-                avatar: 'https://assets.hope.study/images/8YaRWQakL_main_okE.webp',
-                text: 'Как можно доверять такому недостоверному источнику? Да, и примите во внимание! Желающих переписать Библию во все века было просто масса. Вы ведь знаете, что за одно поколение историю одной страны могут переписать дважды.',
-                image: 'https://dv-clevio-storage.fra1.digitaloceanspaces.com/images/Gp09oz2Ez.png'
-            },
-            {
-                role: 'prosecutor',
-                roleName: 'Обвинитель',
-                avatar: 'https://assets.hope.study/images/8YaRWQakL_main_okE.webp',
-                text: 'Представьте, сколько же литературных слоев в этом тексте! Каждый исторический период диктовал свою корректуру…'
-            },
-            {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
-                text: 'Ваша честь, я протестую! Это уже переходит рамки вопроса… Я позволю себе, господин судья, ответить на это обвинение!'
-            },
-            {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
-                text: 'Дело в том, ваша честь, что у еврейского народа существовала традиция переписывания Священных Писаний вручную. Ученых, которые занимались столь ответственным делом, именуют масоретами.',
-                image: 'https://dv-clevio-storage.fra1.digitaloceanspaces.com/images/8LGht1LLO.png'
-            },
-            {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
-                text: 'Для того, чтобы избежать искажений или каких-либо упущений и неточностей, масореты произвели точный расчет количества слов и символов каждой книги Ветхого Завета, создав своего рода шаблон.'
-            },
-            {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
-                text: 'Заканчивая работу над книгой, каждый переписчик должен был совершить подсчёт слов и букв всей книги. Если его цифры не совпадали с шаблоном, то он искал ошибку в тексте до тех пор, пока не найдет.'
-            },
-            {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
-                text: 'Лишь придя в соответствие с нормой, масорет мог двигаться дальше. Это обеспечивало максимально возможную сохранность текста.'
-            }
-        ];
-
-        const chatContainer = document.getElementById('chat');
-        let currentIndex = 0;
-        let timeoutIds = [];
-
-        // Функция получения реального текущего времени в формате ЧЧ:ММ
-        function getCurrentTime() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            return `${hours}:${minutes}`;
-        }
-
-        function createTypingRow(item) {
-            const row = document.createElement('div');
-            row.className = `message-row ${item.role}`;
-            row.innerHTML = `
-                <img class="avatar" src="${item.avatar}" alt="${item.roleName}">
-                <div class="bubble">
-                    <div class="typing-indicator">
-                        <span></span><span></span><span></span>
+    <div id="__nuxt">
+        <div id="__layout">
+            <!-- Контент диалога (только текст и аватарки защитника/обвинителя) -->
+            <div class="dialog-container" style="font-family: 'Montserrat', sans-serif; padding: 20px; max-width: 800px; margin: 0 auto;">
+                
+                <!-- Блок диалога: Обвинитель -->
+                <div class="dialog-row prosecutor" style="display: flex; align-items: flex-start; margin-bottom: 20px;">
+                    <div class="avatar" style="width: 50px; height: 50px; border-radius: 50%; background: #370A4C; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; margin-right: 15px; flex-shrink: 0;">
+                        Обв
+                    </div>
+                    <div class="message-box" style="background: rgba(145, 54, 254, 0.1); padding: 15px; border-radius: 6px; border-left: 4px solid #9136FE; flex-grow: 1;">
+                        <p style="margin: 0; color: #370A4C; font-size: 15px; line-height: 1.5;">Текст реплики обвинителя в судебном процессе.</p>
                     </div>
                 </div>
-            `;
-            return row;
-        }
 
-        function revealMessage(row, item) {
-            const bubble = row.querySelector('.bubble');
-            const imageHtml = item.image 
-                ? `<div class="message-attachment"><img src="${item.image}" alt="Иллюстрация к заседанию"></div>` 
-                : '';
-
-            bubble.innerHTML = `
-                <div class="text">${item.text}</div>
-                ${imageHtml}
-                <div class="meta">
-                    <span class="role">${item.roleName}</span>
-                    <span class="time">${getCurrentTime()}</span>
+                <!-- Блок диалога: Защитник -->
+                <div class="dialog-row defender" style="display: flex; align-items: flex-start; margin-bottom: 20px;">
+                    <div class="avatar" style="width: 50px; height: 50px; border-radius: 50%; background: #5943BE; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; margin-right: 15px; flex-shrink: 0;">
+                        Защ
+                    </div>
+                    <div class="message-box" style="background: rgba(89, 67, 190, 0.1); padding: 15px; border-radius: 6px; border-left: 4px solid #5943BE; flex-grow: 1;">
+                        <p style="margin: 0; color: #370A4C; font-size: 15px; line-height: 1.5;">Текст реплики защитника в судебном процессе.</p>
+                    </div>
                 </div>
-            `;
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        }
 
-        function showNextMessage() {
-            if (currentIndex >= dialogueData.length) return;
+            </div>
+        </div>
+    </div>
 
-            const currentItem = dialogueData[currentIndex];
-            const typingRow = createTypingRow(currentItem);
-            
-            chatContainer.appendChild(typingRow);
-            
-            let t1 = setTimeout(() => {
-                typingRow.classList.add('visible');
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            }, 50);
-            timeoutIds.push(t1);
-
-            let t2 = setTimeout(() => {
-                revealMessage(typingRow, currentItem);
-                currentIndex++;
-                
-                let t3 = setTimeout(showNextMessage, 2200);
-                timeoutIds.push(t3);
-            }, 1300);
-            timeoutIds.push(t2);
-        }
-
-        function restartDialogue() {
-            timeoutIds.forEach(id => clearTimeout(id));
-            timeoutIds = [];
-            chatContainer.innerHTML = '';
-            currentIndex = 0;
-            setTimeout(showNextMessage, 500);
-        }
-
-        window.onload = () => {
-            setTimeout(showNextMessage, 800);
-        };
-    </script>
+    <!-- Подключение оригинальных скриптов из источника[cite: 4] -->
+    <script src="/_nuxt/9ea71a1.js" as="script"></script>
+    <script src="/_nuxt/9081f74.js" as="script"></script>
+    <script src="/_nuxt/cf9ff4a.js" as="script"></script>
+    <script src="/_nuxt/e607a26.js" as="script"></script>
+    <script charset="utf-8" src="/_nuxt/72ab634.js"></script>
+    <script charset="utf-8" src="/_nuxt/f90d770.js"></script>
+    <script charset="utf-8" src="/_nuxt/af23db5.js"></script>
+    <script charset="utf-8" src="/_nuxt/c8c2bd3.js"></script>
+    <script charset="utf-8" src="/_nuxt/93acbfe.js"></script>
+    <script charset="utf-8" src="/_nuxt/f08df09.js"></script>
+    <script charset="utf-8" src="/_nuxt/64ea4b3.js"></script>
+    <script charset="utf-8" src="/_nuxt/50fe500.js"></script>
+    <script charset="utf-8" src="/_nuxt/359f3ea.js"></script>
+    <script charset="utf-8" src="/_nuxt/e7d9816.js"></script>
+    <script charset="utf-8" src="/_nuxt/5a41b78.js"></script>
+    <script charset="utf-8" src="/_nuxt/49d61be.js"></script>
+    <script charset="utf-8" src="/_nuxt/edf561d.js"></script>
+    <script charset="utf-8" src="/_nuxt/140d3a9.js"></script>
+    <script charset="utf-8" src="/_nuxt/34a8c9f.js"></script>
+    <script charset="utf-8" src="/_nuxt/ae7f77d.js"></script>
+    <script charset="utf-8" src="/_nuxt/de9c496.js"></script>
+    <script charset="utf-8" src="/_nuxt/6b44fa2.js"></script>
+    <script charset="utf-8" src="/_nuxt/06a1b07.js"></script>
+    <script charset="utf-8" src="/_nuxt/032343a.js"></script>
+    <script charset="utf-8" src="/_nuxt/d1be6d0.js"></script>
+    <script charset="utf-8" src="/_nuxt/0fc1a76.js"></script>
+    <script charset="utf-8" src="/_nuxt/6d29fee.js"></script>
+    <script charset="utf-8" src="/_nuxt/0c2fe36.js"></script>
+    <script charset="utf-8" src="/_nuxt/a7babf4.js"></script>
+    <script charset="utf-8" src="/_nuxt/a024a61.js"></script>
+    <script charset="utf-8" src="/_nuxt/62b3911.js"></script>
 </body>
 </html>
+```[cite: 4]
