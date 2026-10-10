@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Судебный диалог</title>
+    <title>Судебный диалог: Исполнившиеся пророчества</title>
     <style>
         /* Стилизация под Upstream Life */
         * {
@@ -15,14 +15,12 @@
 
         html, body {
             height: 100%;
-            /* Нежный фоновый цвет-градиент */
             background: linear-gradient(145deg, #f4f6f9 0%, #eceff4 100%);
             background-attachment: fixed;
             color: #2d3748;
             scroll-behavior: smooth;
         }
 
-        /* Наложение едва заметной фоновой картинки-текстуры */
         body::before {
             content: "";
             position: fixed;
@@ -30,42 +28,64 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* Тонкая геометрическая или абстрактная сетка/паттерн, еле видимая глазу */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M9 24c0-2.206 1.794-4 4-4s4 1.794 4 4-1.794 4-4 4-4-1.794-4-4zm4-2c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2zm20 18c0-2.206 1.794-4 4-4s4 1.794 4 4-1.794 4-4 4-4-1.794-4-4zm4-2c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2z' fill='%23a0aec0' fill-opacity='0.04' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M9 24c0-2.206 1.794-4 4-4s4 1.794 4 4-1.794 4-4 4-4-1.794-4-4zm4-2c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2zm20 18c0-2.206 1.794-4 4-4s4 1.794 4 4-1.794 4-4 4-4-1.794-4-4zm4-2c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2 z' fill='%23a0aec0' fill-opacity='0.04' fill-rule='evenodd'/%3E%3C/svg%3E");
             z-index: -1;
             pointer-events: none;
         }
 
         header {
             max-width: 750px;
-            margin: 50px auto 10px;
+            margin: 40px auto 10px;
             padding: 0 20px;
             text-align: center;
         }
 
         header h1 {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 700;
             color: #1a202c;
             letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .controls {
+            margin-top: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .control-btn:hover {
+            background-color: #2b6cb0;
         }
 
         .chat-container {
             max-width: 750px;
             margin: 0 auto;
-            padding: 30px 20px 120px;
+            padding: 20px 20px 100px;
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
 
-        /* Блоки сообщений */
         .message-row {
             display: flex;
             gap: 16px;
             align-items: flex-start;
             width: 100%;
-            /* Анимация плавного появления */
             opacity: 0;
             transform: scale(0.98) translateY(15px);
             transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -76,7 +96,6 @@
             transform: scale(1) translateY(0);
         }
 
-        /* Аватарки */
         .avatar {
             width: 44px;
             height: 44px;
@@ -86,28 +105,28 @@
             background-color: #cbd5e0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             border: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+            font-size: 16px;
         }
 
-        /* Базовые стили облачка текста (аккуратный дизайн без лишних рамок) */
+        .prosecutor .avatar { background-color: #3182ce; }
+        .defender .avatar { background-color: #dd6b20; }
+
         .bubble {
             flex-grow: 1;
             padding: 16px 20px;
             border-radius: 14px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
             position: relative;
+            background-color: #ffffff;
         }
 
-        /* Обвинитель: мягкий прохладный/серый тон */
-        .prosecutor .bubble {
-            background-color: #ffffff;
-            border-left: 4px solid #3182ce; /* Акцентная линия стороны */
-        }
-
-        /* Защитник: мягкий тёплый/кремовый тон */
-        .defender .bubble {
-            background-color: #ffffff;
-            border-left: 4px solid #dd6b20; /* Акцентная линия стороны */
-        }
+        .prosecutor .bubble { border-left: 4px solid #3182ce; }
+        .defender .bubble { border-left: 4px solid #dd6b20; }
 
         .text {
             font-size: 15px;
@@ -117,7 +136,6 @@
             white-space: pre-line;
         }
 
-        /* Подсветка упоминаний */
         .mention {
             background-color: #ebf8ff;
             color: #2b6cb0;
@@ -144,7 +162,6 @@
         .prosecutor .role { color: #3182ce; }
         .defender .role { color: #dd6b20; }
 
-        /* Трехточечный индикатор набора текста */
         .typing-indicator {
             display: flex;
             gap: 5px;
@@ -172,56 +189,55 @@
 <body>
 
     <header>
-        <!-- Название вашего судебного процесса -->
-        <h1>Заседание: Исполнившиеся пророчества</h1>
+        <h1>Судебное заседание: Исполнившиеся пророчества</h1>
+        <div class="controls">
+            <button class="control-btn" id="restartBtn" onclick="restartDialogue()">Запустить заново</button>
+        </div>
     </header>
 
-    <div class="chat-container" id="chat">
-        <!-- Сюда скрипт поочередно добавляет реплики -->
-    </div>
+    <div class="chat-container" id="chat"></div>
 
     <script>
-        // ВАШ МАССИВ ДАННЫХ. Сюда мы добавим весь ваш текст!
-        // В поле 'avatar' можно вставлять ссылки на картинки, которые вы достанете
         const dialogueData = [
             {
                 role: 'prosecutor',
                 roleName: 'Обвинитель',
-                avatar: 'https://unsplash.com', 
-                text: 'Ваша честь, а как быть с тем, что в Библии записано множество событий, которым невозможно найти подтверждение?',
+                avatarText: 'О',
+                text: 'Ваша честь, а как быть с тем, что в Библии записано множество событий, которым якобы невозможно найти внешнее историческое подтверждение?',
                 time: '20:02'
             },
             {
                 role: 'prosecutor',
                 roleName: 'Обвинитель',
-                avatar: 'https://unsplash.com',
-                text: 'Ах, предсказываю, что защита сейчас начнет говорить нам о вере. Но это просто смешно, где доказательства того, что библейская история верна? Их просто нет!',
+                avatarText: 'О',
+                text: 'Предсказываю, что защита сейчас начнет говорить нам о слепой вере. Но это же просто уход от рациональных фактов!',
                 time: '20:02'
             },
             {
                 role: 'defender',
                 roleName: 'Защитник',
-                avatar: 'https://unsplash.com',
-                text: 'Господин судья, <span class="mention">@Обвинитель</span> вновь манипулирует фактами! Я могу дать аргументированный ответ и в этом случае.',
+                avatarText: 'З',
+                text: 'Господин судья, <span class="mention">@Обвинитель</span> снова сводит всю глубину Божественного замысла к поверхностным схемам.',
                 time: '20:03'
             },
             {
                 role: 'defender',
                 roleName: 'Защитник',
-                avatar: 'https://unsplash.com',
-                text: 'Действительно, как уже было сказано, многие ученые скептически относятся к историческим фактам, описанным в Библии.',
+                avatarText: 'З',
+                text: 'Истина открывается не человеческим доказательствам, а тем, чье сердце готово принять живую силу Христа, преображающую изнутри.',
                 time: '20:03'
             }
         ];
 
         const chatContainer = document.getElementById('chat');
         let currentIndex = 0;
+        let timeoutIds = [];
 
         function createTypingRow(item) {
             const row = document.createElement('div');
             row.className = `message-row ${item.role}`;
             row.innerHTML = `
-                <img class="avatar" src="${item.avatar}" alt="${item.roleName}">
+                <div class="avatar">${item.avatarText}</div>
                 <div class="bubble">
                     <div class="typing-indicator">
                         <span></span><span></span><span></span>
@@ -251,19 +267,29 @@
             
             chatContainer.appendChild(typingRow);
             
-            setTimeout(() => {
+            let t1 = setTimeout(() => {
                 typingRow.classList.add('visible');
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             }, 50);
+            timeoutIds.push(t1);
 
-            // Имитация обдумывания (1.3 секунды печатаются точки, затем плавно выходит текст)
-            setTimeout(() => {
+            let t2 = setTimeout(() => {
                 revealMessage(typingRow, currentItem);
                 currentIndex++;
                 
-                // Пауза между сообщениями персонажей (2.2 секунды)
-                setTimeout(showNextMessage, 2200);
+                let t3 = setTimeout(showNextMessage, 2200);
+                timeoutIds.push(t3);
             }, 1300);
+            timeoutIds.push(t2);
+        }
+
+        function restartDialogue() {
+            // Очищаем все активные таймеры, чтобы избежать наложений
+            timeoutIds.forEach(id => clearTimeout(id));
+            timeoutIds = [];
+            chatContainer.innerHTML = '';
+            currentIndex = 0;
+            setTimeout(showNextMessage, 500);
         }
 
         window.onload = () => {
@@ -272,4 +298,3 @@
     </script>
 </body>
 </html>
-
