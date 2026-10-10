@@ -1,344 +1,74 @@
 <!DOCTYPE html>
-<html class="cssscrollbar" style="margin-right: calc(100% - 100vw);">
+<html lang="ru">
 <head>
-    <!-- Google Tag Manager -->
-    <script async="" src="https://www.googletagmanager.com/gtm.js?id=undefined"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){ dataLayer.push(arguments); }
-        function setCookie(name, value, days) {
-          var expires = "";
-          if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
-          }
-          document.cookie = name + "=" + (value || "") + expires + "; path=/";
-        }
-        function getCookie(name) {
-            var nameEQ = name + "=";
-            var cookieArray = document.cookie.split(';');
-            for (var i=0; i < cookieArray.length; i++) {
-                var c = cookieArray[i];
-                while (c.charAt(0)==' ') c = c.substring(1,c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-            }
-            return null;
-        }
-        let defaultConsent = { 'analytics_storage': 'granted' };
-        gtag('consent', 'default', defaultConsent);
-    </script>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','undefined');</script>
-    <!-- End Google Tag Manager -->
-    
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Судебное заседание: Начало процесса</title>
+    <title>99% людей не знают этих фактов о Библии. А ты?</title>
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/css/swiper.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
-    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-    <style type="text/css">
+    <!-- Стили из твоей системы -->
+    <style>
         :root {
             --primary-color: #5943BE;
-            --title-weight: 700;
-            --backgorund-gradient: linear-gradient(90deg, #5943BE 0%, #392981 100%);
-            --text-font: Montserrat;
-            --title-font: Montserrat;
+            --background-gradient: linear-gradient(135deg, #3B2B87 0%, #5943BE 50%, #9136FE 100%);
+            --text-font: 'Montserrat', sans-serif;
             --component-border-radius: 6px;
-            --button-border-radius: 6px;
-            --button-gradient: linear-gradient(90deg, #3B2B87 0%, #433195 24.87%, #5943BE 100%);
-            --button-play-bg: linear-gradient(90deg, #3B2B87 0%, #433195 24.87%, #5943BE 100%);
             --button-shadow: 0 5px 20px 0 rgba(89, 67, 190, 0.3);
-            --button-color: #ffffff;
-            --button-border: none;
-            --button-white-border: 0.16rem solid #fff;
-            --button-monocolor: #5943BE;
         }
 
         body {
-            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
-            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            background: var(--background-gradient);
+            font-family: var(--text-font);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .g-button-style { border-radius: 0px !important; }
-        .g-component-radius { border-radius: 0px !important; }
-        .g-component-shadow { box-shadow: 0 6px 20px 0 rgba(93,95,102,0.15) !important; }
-        .g-title-style { font-family: 'Montserrat' !important; }
-        .g-text-style { font-family: 'Montserrat' !important; }
-        
-        .p-buttons-bg { background: linear-gradient(to right, #6C15D4 0%, #9136FE 100%) !important; }
-        .p-audio-track-bg { background: linear-gradient(to right, #6C15D4 0%, #9136FE 100%) !important; }
-        .p-dialog-outline-border { border-color: #B971F7 !important; }
-        .p-quote-common-bg { background: #9136FE !important; }
-        .p-common-bg { background: #9136FE !important; }
-
-        /* Стили для анимации появления при прокрутке */
-        .env-viewer-message {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-            will-change: opacity, transform;
-            margin-bottom: 20px;
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 24px;
+            box-sizing: border-box;
         }
 
-        .env-viewer-message.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Оформление заголовка судебного разговора */
-        .court-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 20px;
-            background: var(--backgorund-gradient);
-            color: #fff;
-            border-radius: 8px;
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: var(--component-border-radius);
+            padding: 32px;
             box-shadow: var(--button-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .court-header h1 {
-            margin: 0 0 10px 0;
+
+        h1 {
             font-size: 24px;
             font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.3;
         }
-        .court-header p {
-            margin: 0;
-            font-size: 14px;
+
+        p {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
             opacity: 0.9;
         }
     </style>
 </head>
 <body>
-    <div id="__nuxt">
-        <div id="__layout">
-            <div class="dialog-container" style="padding: 30px 20px; max-width: 800px; margin: 0 auto;">
-                
-                <!-- Заголовок как в начале судебного разговора -->
-                <div class="court-header">
-                    <h1>Судебное заседание: Дело об Истине и Законе</h1>
-                    <p>Стенограмма начала судебного процесса. Слушается дело...</p>
-                </div>
 
-                <div class="dialog d-visible-content g-text-style env-viewer-dialog-viewer">
-                    <div class="env-viewer-container">
-                        <div class="global-margin-behaviour">
-                            
-                            <!-- Обвинитель 1 -->
-                            <div class="env-viewer-message g-text-style">
-                                <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
-                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-                                        <div class="env-message-box" style="background-color: rgb(242, 243, 255); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgb(216, 218, 243) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-                                            <div class="env-quill env-message-text">
-                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
-                                                        <p>Ваша честь, а как быть с тем, что в Библии записано множество событий, которым невозможно найти подтверждение?</p>
-                                                    </div>
-                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
-                                                </div>
-                                            </div> 
-                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                                                <div class="env-message-value">Обвинитель</div> 
-                                                <div class="env-message-value dynamic-time">--:--</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> 
-                            </div>
-
-                            <!-- Обвинитель 2 -->
-                            <div class="env-viewer-message g-text-style">
-                                <div class="env-message env-message-last undefined env-message" style="visibility: inherit; opacity: 1;">
-                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-                                        <div class="env-message-box" style="background-color: rgb(242, 243, 255); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgb(216, 218, 243) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-                                            <div class="env-quill env-message-text">
-                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
-                                                        <p>Ах, предсказываю, что защита сейчас начнет говорить нам о вере. Но это просто смешно, где доказательства того, что библейская история верна? Их просто нет!</p>
-                                                    </div>
-                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
-                                                </div>
-                                            </div> 
-                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                                                <div class="env-message-value">Обвинитель</div> 
-                                                <div class="env-message-value dynamic-time">--:--</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> 
-                            </div>
-
-                            <!-- Защитник 1 -->
-                            <div class="env-viewer-message g-text-style">
-                                <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
-                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-                                        <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-                                            <div class="env-quill env-message-text">
-                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
-                                                        <p>Господин судья, <span class="ql-palette-color-three">@Обвинитель</span> вновь манипулирует фактами! Я могу дать аргументированный ответ и в этом случае.</p>
-                                                    </div>
-                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
-                                                </div>
-                                            </div> 
-                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                                                <div class="env-message-value">Защитник</div> 
-                                                <div class="env-message-value dynamic-time">--:--</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> 
-                            </div>
-
-                            <!-- Защитник 2 -->
-                            <div class="env-viewer-message g-text-style">
-                                <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
-                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-                                        <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-                                            <div class="env-quill env-message-text">
-                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
-                                                        <p>Действительно, как уже было сказано, многие ученые скептически относятся к историческим фактам, описанным в Библии.</p>
-                                                    </div>
-                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
-                                                </div>
-                                            </div> 
-                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                                                <div class="env-message-value">Защитник</div> 
-                                                <div class="env-message-value dynamic-time">--:--</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> 
-                            </div>
-
-                            <!-- Защитник 3 -->
-                            <div class="env-viewer-message g-text-style">
-                                <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
-                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-                                        <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-                                            <div class="env-quill env-message-text">
-                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
-                                                        <p>Как правило, в качестве основной причины называют отсутствие каких-либо находок, которые могли бы подтвердить правдивость ее рассказов.</p>
-                                                    </div>
-                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
-                                                </div>
-                                            </div> 
-                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                                                <div class="env-message-value">Защитник</div> 
-                                                <div class="env-message-value dynamic-time">--:--</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> 
-                            </div>
-
-                            <!-- Защитник 4 -->
-                            <div class="env-viewer-message g-text-style">
-                                <div class="env-message env-message-last undefined env-message" style="visibility: inherit; opacity: 1;">
-                                    <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
-                                        <div class="env-message-box" style="background-color: rgb(255, 241, 227); box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px; color: rgb(31, 31, 31);">
-                                            <div class="env-quill env-message-text">
-                                                <div class="notranslate quill-text env-quill-textarea ql-container ql-disabled">
-                                                    <div class="ql-editor" data-gramm="false" contenteditable="false">
-                                                        <p>Однако этот аргумент можно было бы смело приводить где-то в 17 веке… в 21 же, ситуация с Библейскими находками сильно изменилась.</p>
-                                                    </div>
-                                                    <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
-                                                </div>
-                                            </div> 
-                                            <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
-                                                <div class="env-message-value">Защитник</div> 
-                                                <div class="env-message-value dynamic-time">--:--</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> 
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+    <div class="container">
+        <div class="card">
+            <h1>99% людей не знают этих фактов о Библии. А ты?</h1>
+            <p>Жизнь человека полна суеты, но истинный свет пробивается сквозь любую темноту, когда мы обретаем покой в простоте и силе созидающего Слова.</p>
         </div>
     </div>
 
-    <!-- Объединенный скрипт: анимация появления и динамическое время при прокрутке -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.15
-            };
-
-            const observer = new IntersectionObserver((entries, observerInstance) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // 1. Плавное появление блока
-                        entry.target.classList.add('visible');
-
-                        // 2. Автоматическое подставление текущего времени в момент появления блока
-                        const timeEl = entry.target.querySelector('.dynamic-time');
-                        if (timeEl && timeEl.textContent === '--:--') {
-                            const now = new Date();
-                            const hours = String(now.getHours()).padStart(2, '0');
-                            const minutes = String(now.getMinutes()).padStart(2, '0');
-                            timeEl.textContent = `${hours}:${minutes}`;
-                        }
-
-                        // Останавливаем наблюдение за этим блоком, чтобы время зафиксировалось
-                        observerInstance.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            // Наблюдаем за каждым сообщением
-            const messageRows = document.querySelectorAll('.env-viewer-message');
-            messageRows.forEach(row => {
-                observer.observe(row);
-            });
-        });
-    </script>
-
-    <!-- Подключение оригинальных скриптов из источника -->
-    <script src="/_nuxt/9ea71a1.js" as="script"></script>
-    <script src="/_nuxt/9081f74.js" as="script"></script>
-    <script src="/_nuxt/cf9ff4a.js" as="script"></script>
-    <script src="/_nuxt/e607a26.js" as="script"></script>
-    <script charset="utf-8" src="/_nuxt/72ab634.js"></script>
-    <script charset="utf-8" src="/_nuxt/f90d770.js"></script>
-    <script charset="utf-8" src="/_nuxt/af23db5.js"></script>
-    <script charset="utf-8" src="/_nuxt/c8c2bd3.js"></script>
-    <script charset="utf-8" src="/_nuxt/93acbfe.js"></script>
-    <script charset="utf-8" src="/_nuxt/f08df09.js"></script>
-    <script charset="utf-8" src="/_nuxt/64ea4b3.js"></script>
-    <script charset="utf-8" src="/_nuxt/50fe500.js"></script>
-    <script charset="utf-8" src="/_nuxt/359f3ea.js"></script>
-    <script charset="utf-8" src="/_nuxt/e7d9816.js"></script>
-    <script charset="utf-8" src="/_nuxt/5a41b78.js"></script>
-    <script charset="utf-8" src="/_nuxt/49d61be.js"></script>
-    <script charset="utf-8" src="/_nuxt/edf561d.js"></script>
-    <script charset="utf-8" src="/_nuxt/140d3a9.js"></script>
-    <script charset="utf-8" src="/_nuxt/34a8c9f.js"></script>
-    <script charset="utf-8" src="/_nuxt/ae7f77d.js"></script>
-    <script charset="utf-8" src="/_nuxt/de9c496.js"></script>
-    <script charset="utf-8" src="/_nuxt/6b44fa2.js"></script>
-    <script charset="utf-8" src="/_nuxt/06a1b07.js"></script>
-    <script charset="utf-8" src="/_nuxt/032343a.js"></script>
-    <script charset="utf-8" src="/_nuxt/d1be6d0.js"></script>
-    <script charset="utf-8" src="/_nuxt/0fc1a76.js"></script>
-    <script charset="utf-8" src="/_nuxt/6d29fee.js"></script>
-    <script charset="utf-8" src="/_nuxt/0c2fe36.js"></script>
-    <script charset="utf-8" src="/_nuxt/a7babf4.js"></script>
-    <script charset="utf-8" src="/_nuxt/a024a61.js"></script>
-    <script charset="utf-8" src="/_nuxt/62b3911.js"></script>
 </body>
 </html>
