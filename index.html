@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Судебное заседание</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html, body {
+            background-color: #ffffff;
+            color: #333333;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            max-width: 800px;
+            margin: 40px auto 20px;
+            padding: 0 20px;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding-bottom: 100px;
+        }
+
+        /* Общие стили для строк диалога */
+        .message-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            width: 100%;
+            /* Стили для анимации появления */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        /* Класс, который делает блок видимым (добавляется через JavaScript) */
+        .message-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .bubble {
+            flex-grow: 1;
+            padding: 20px 24px;
+            border-radius: 16px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Стили Обвинителя (Синеватый оттенок) */
+        .prosecutor .bubble {
+            background-color: #f0f3f9;
+        }
+
+        /* Стили Защитника (Бежевый оттенок) */
+        .defender .bubble {
+            background-color: #fff7ed;
+        }
+
+        .text {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            color: #2c3e50;
+        }
+
+        /* Стили для упоминаний типа @Обвинитель */
+        .mention {
+            color: #8b5cf6;
+            font-weight: 600;
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #a0aec0;
+        }
+
+        .role {
+            font-weight: 500;
+        }
+
+        /* Анимация трех точек (Печатает...) */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 8px 0;
+            align-items: center;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background-color: #a0aec0;
+            border-radius: 50%;
+            animation: bounce 1.3s infinite both;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.15s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Заголовок как на скриншоте -->
+        <h1>Исполнившиеся пророчества и найденные артефакты</h1>
+    </header>
+
+    <div class="chat-container" id="chat">
+        <!-- Сюда JavaScript будет по очереди вставлять сообщения -->
+    </div>
+
+    <script>
+        // Вставьте сюда весь свой текст. 
+        // role может быть 'prosecutor' (обвинитель) или 'defender' (защитник)
+        const dialogueData = [
+            {
+                role: 'prosecutor',
+                roleName: 'Обвинитель',
+                avatar: 'https://unsplash.com', // Можно заменить на свою ссылку
+                text: 'Ваша честь, а как быть с тем, что в Библии записано множество событий, которым невозможно найти подтверждение?',
+                time: '20:02'
+            },
+            {
+                role: 'prosecutor',
+                roleName: 'Обвинитель',
+                avatar: 'https://unsplash.com',
+                text: 'Ах, предсказываю, что защита сейчас начнет говорить нам о вере. Но это просто смешно, где доказательства того, что библейская история верна? Их просто нет!',
+                time: '20:02'
+            },
+            {
+                role: 'defender',
+                roleName: 'Защитник',
+                avatar: 'https://unsplash.com',
+                text: 'Господин судья, <span class="mention">@Обвинитель</span> вновь манипулирует фактами! Я могу дать аргументированный ответ и в этом случае.',
+                time: '20:02'
+            },
+            {
+                role: 'defender',
+                roleName: 'Защитник',
+                avatar: 'https://unsplash.com',
+                text: 'Действительно, как уже было сказано, многие ученые скептически относятся к историческим фактам, описанным в Библии.',
+                time: '20:02'
+            }
+        ];
+
+        const chatContainer = document.getElementById('chat');
+
+        // Функция создания индикатора "печатает..."
+        function createTypingRow(item) {
+            const row = document.createElement('div');
+            row.className = `message-row ${item.role}`;
+            row.innerHTML = `
+                <img class="avatar" src="${item.avatar}" alt="${item.roleName}">
+                <div class="bubble">
+                    <div class="typing-indicator">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            `;
+            return row;
+        }
+
+        // Функция замены точек на реальный текст
+        function revealMessage(row, item) {
+            const bubble = row.querySelector('.bubble');
+            bubble.innerHTML = `
+                <div class="text">${item.text}</div>
+                <div class="meta">
+                    <span class="role">${item.roleName}</span>
+                    <span class="time">${item.time}</span>
+                </div>
+            `;
+            // Плавная прокрутка экрана вниз к новому сообщению
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // Логика последовательного вывода сообщений
+        let currentIndex = 0;
+
+        function showNextMessage() {
+            if (currentIndex >= dialogueData.length) return;
+
+            const currentItem = dialogueData[currentIndex];
+            const typingRow = createTypingRow(currentItem);
+            
+            chatContainer.appendChild(typingRow);
+            
+            // Плавное проявление индикатора точек
+            setTimeout(() => {
+                typingRow.classList.add('visible');
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 50);
+
+            // Имитация печати (через 1.5 секунды точки превращаются в текст)
+            setTimeout(() => {
+                revealMessage(typingRow, currentItem);
+                currentIndex++;
+                
+                // Задержка перед началом печати следующего блока (2 секунды)
+                setTimeout(showNextMessage, 2000);
+            }, 1500);
+        }
+
+        // Запуск переписки при загрузке страницы
+        window.onload = () => {
+            setTimeout(showNextMessage, 1000);
+        };
+    </script>
+</body>
+</html>
