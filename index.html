@@ -3,156 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Судебное заседание</title>
+    <title>Судебный диалог</title>
     <style>
+        /* Стилизация под Upstream Life */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         html, body {
-            background-color: #ffffff;
-            color: #333333;
+            height: 100%;
+            /* Нежный фоновый цвет-градиент */
+            background: linear-gradient(145deg, #f4f6f9 0%, #eceff4 100%);
+            background-attachment: fixed;
+            color: #2d3748;
             scroll-behavior: smooth;
         }
 
+        /* Наложение едва заметной фоновой картинки-текстуры */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Тонкая геометрическая или абстрактная сетка/паттерн, еле видимая глазу */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M9 24c0-2.206 1.794-4 4-4s4 1.794 4 4-1.794 4-4 4-4-1.794-4-4zm4-2c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2zm20 18c0-2.206 1.794-4 4-4s4 1.794 4 4-1.794 4-4 4-4-1.794-4-4zm4-2c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2z' fill='%23a0aec0' fill-opacity='0.04' fill-rule='evenodd'/%3E%3C/svg%3E");
+            z-index: -1;
+            pointer-events: none;
+        }
+
         header {
-            max-width: 800px;
-            margin: 40px auto 20px;
+            max-width: 750px;
+            margin: 50px auto 10px;
             padding: 0 20px;
+            text-align: center;
         }
 
         header h1 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
-            color: #1a1a1a;
+            color: #1a202c;
+            letter-spacing: -0.5px;
         }
 
         .chat-container {
-            max-width: 800px;
+            max-width: 750px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px 20px 120px;
             display: flex;
             flex-direction: column;
-            gap: 24px;
-            padding-bottom: 100px;
+            gap: 20px;
         }
 
-        /* Общие стили для строк диалога */
+        /* Блоки сообщений */
         .message-row {
             display: flex;
             gap: 16px;
             align-items: flex-start;
             width: 100%;
-            /* Стили для анимации появления */
+            /* Анимация плавного появления */
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: scale(0.98) translateY(15px);
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Класс, который делает блок видимым (добавляется через JavaScript) */
         .message-row.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: scale(1) translateY(0);
         }
 
+        /* Аватарки */
         .avatar {
-            width: 50px;
-            height: 50px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             object-fit: cover;
             flex-shrink: 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #cbd5e0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 2px solid #ffffff;
         }
 
+        /* Базовые стили облачка текста (аккуратный дизайн без лишних рамок) */
         .bubble {
             flex-grow: 1;
-            padding: 20px 24px;
-            border-radius: 16px;
+            padding: 16px 20px;
+            border-radius: 14px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
             position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
         }
 
-        /* Стили Обвинителя (Синеватый оттенок) */
+        /* Обвинитель: мягкий прохладный/серый тон */
         .prosecutor .bubble {
-            background-color: #f0f3f9;
+            background-color: #ffffff;
+            border-left: 4px solid #3182ce; /* Акцентная линия стороны */
         }
 
-        /* Стили Защитника (Бежевый оттенок) */
+        /* Защитник: мягкий тёплый/кремовый тон */
         .defender .bubble {
-            background-color: #fff7ed;
+            background-color: #ffffff;
+            border-left: 4px solid #dd6b20; /* Акцентная линия стороны */
         }
 
         .text {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.6;
-            margin-bottom: 12px;
-            color: #2c3e50;
+            color: #2d3748;
+            margin-bottom: 8px;
+            white-space: pre-line;
         }
 
-        /* Стили для упоминаний типа @Обвинитель */
+        /* Подсветка упоминаний */
         .mention {
-            color: #8b5cf6;
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+            padding: 2px 6px;
+            border-radius: 4px;
             font-weight: 600;
+            font-size: 14px;
         }
 
         .meta {
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
+            font-size: 12px;
             color: #a0aec0;
-        }
-
-        .role {
             font-weight: 500;
         }
 
-        /* Анимация трех точек (Печатает...) */
+        .role {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 11px;
+        }
+
+        .prosecutor .role { color: #3182ce; }
+        .defender .role { color: #dd6b20; }
+
+        /* Трехточечный индикатор набора текста */
         .typing-indicator {
             display: flex;
-            gap: 4px;
-            padding: 8px 0;
+            gap: 5px;
+            padding: 6px 0;
             align-items: center;
         }
 
         .typing-indicator span {
-            width: 8px;
-            height: 8px;
-            background-color: #a0aec0;
+            width: 7px;
+            height: 7px;
+            background-color: #cbd5e0;
             border-radius: 50%;
-            animation: bounce 1.3s infinite both;
+            animation: upstreamBounce 1.4s infinite both;
         }
 
-        .typing-indicator span:nth-child(2) { animation-delay: 0.15s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.3s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
+        @keyframes upstreamBounce {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+            40% { transform: translateY(-6px); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <!-- Заголовок как на скриншоте -->
-        <h1>Исполнившиеся пророчества и найденные артефакты</h1>
+        <!-- Название вашего судебного процесса -->
+        <h1>Заседание: Исполнившиеся пророчества</h1>
     </header>
 
     <div class="chat-container" id="chat">
-        <!-- Сюда JavaScript будет по очереди вставлять сообщения -->
+        <!-- Сюда скрипт поочередно добавляет реплики -->
     </div>
 
     <script>
-        // Вставьте сюда весь свой текст. 
-        // role может быть 'prosecutor' (обвинитель) или 'defender' (защитник)
+        // ВАШ МАССИВ ДАННЫХ. Сюда мы добавим весь ваш текст!
+        // В поле 'avatar' можно вставлять ссылки на картинки, которые вы достанете
         const dialogueData = [
             {
                 role: 'prosecutor',
                 roleName: 'Обвинитель',
-                avatar: 'https://unsplash.com', // Можно заменить на свою ссылку
+                avatar: 'https://unsplash.com', 
                 text: 'Ваша честь, а как быть с тем, что в Библии записано множество событий, которым невозможно найти подтверждение?',
                 time: '20:02'
             },
@@ -168,20 +203,20 @@
                 roleName: 'Защитник',
                 avatar: 'https://unsplash.com',
                 text: 'Господин судья, <span class="mention">@Обвинитель</span> вновь манипулирует фактами! Я могу дать аргументированный ответ и в этом случае.',
-                time: '20:02'
+                time: '20:03'
             },
             {
                 role: 'defender',
                 roleName: 'Защитник',
                 avatar: 'https://unsplash.com',
                 text: 'Действительно, как уже было сказано, многие ученые скептически относятся к историческим фактам, описанным в Библии.',
-                time: '20:02'
+                time: '20:03'
             }
         ];
 
         const chatContainer = document.getElementById('chat');
+        let currentIndex = 0;
 
-        // Функция создания индикатора "печатает..."
         function createTypingRow(item) {
             const row = document.createElement('div');
             row.className = `message-row ${item.role}`;
@@ -196,7 +231,6 @@
             return row;
         }
 
-        // Функция замены точек на реальный текст
         function revealMessage(row, item) {
             const bubble = row.querySelector('.bubble');
             bubble.innerHTML = `
@@ -206,12 +240,8 @@
                     <span class="time">${item.time}</span>
                 </div>
             `;
-            // Плавная прокрутка экрана вниз к новому сообщению
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
-
-        // Логика последовательного вывода сообщений
-        let currentIndex = 0;
 
         function showNextMessage() {
             if (currentIndex >= dialogueData.length) return;
@@ -221,26 +251,25 @@
             
             chatContainer.appendChild(typingRow);
             
-            // Плавное проявление индикатора точек
             setTimeout(() => {
                 typingRow.classList.add('visible');
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             }, 50);
 
-            // Имитация печати (через 1.5 секунды точки превращаются в текст)
+            // Имитация обдумывания (1.3 секунды печатаются точки, затем плавно выходит текст)
             setTimeout(() => {
                 revealMessage(typingRow, currentItem);
                 currentIndex++;
                 
-                // Задержка перед началом печати следующего блока (2 секунды)
-                setTimeout(showNextMessage, 2000);
-            }, 1500);
+                // Пауза между сообщениями персонажей (2.2 секунды)
+                setTimeout(showNextMessage, 2200);
+            }, 1300);
         }
 
-        // Запуск переписки при загрузке страницы
         window.onload = () => {
-            setTimeout(showNextMessage, 1000);
+            setTimeout(showNextMessage, 800);
         };
     </script>
 </body>
 </html>
+
