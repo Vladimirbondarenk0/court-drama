@@ -130,6 +130,11 @@
     <div class="global-margin-behaviour">
       
       <!-- Обвинитель -->
+     <div class="dialog d-visible-content g-text-style env-viewer-dialog-viewer env-viewer-hidden">
+  <div class="env-viewer-container">
+    <div class="global-margin-behaviour">
+      
+      <!-- Обвинитель -->
       <div class="env-viewer-message g-text-style">
         <div class="env-message undefined env-message" style="visibility: inherit; opacity: 1;">
           <div class="env-message-content" style="visibility: inherit; opacity: 1; margin-left: 0;">
@@ -144,7 +149,7 @@
               </div> 
               <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
                 <div class="env-message-value">Обвинитель</div> 
-                <div class="env-message-value">20:02</div>
+                <div class="env-message-value dynamic-time">--:--</div>
               </div>
             </div>
           </div>
@@ -166,7 +171,7 @@
               </div> 
               <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
                 <div class="env-message-value">Обвинитель</div> 
-                <div class="env-message-value">20:02</div>
+                <div class="env-message-value dynamic-time">--:--</div>
               </div>
             </div>
           </div>
@@ -188,7 +193,7 @@
               </div> 
               <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
                 <div class="env-message-value">Защитник</div> 
-                <div class="env-message-value">20:02</div>
+                <div class="env-message-value dynamic-time">--:--</div>
               </div>
             </div>
           </div>
@@ -210,7 +215,7 @@
               </div> 
               <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
                 <div class="env-message-value">Защитник</div> 
-                <div class="env-message-value">20:02</div>
+                <div class="env-message-value dynamic-time">--:--</div>
               </div>
             </div>
           </div>
@@ -232,7 +237,7 @@
               </div> 
               <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
                 <div class="env-message-value">Защитник</div> 
-                <div class="env-message-value">20:03</div>
+                <div class="env-message-value dynamic-time">--:--</div>
               </div>
             </div>
           </div>
@@ -254,7 +259,7 @@
               </div> 
               <div class="env-message-bottom" style="color: rgb(31, 31, 31);">
                 <div class="env-message-value">Защитник</div> 
-                <div class="env-message-value">20:03</div>
+                <div class="env-message-value dynamic-time">--:--</div>
               </div>
             </div>
           </div>
@@ -264,6 +269,31 @@
     </div>
   </div>
 </div>
+
+<!-- Скрипт автоматического обновления времени при прокрутке и появлении сообщения -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const timeElements = document.querySelectorAll('.dynamic-time');
+    
+    const observer = new IntersectionObserver((entries, observerInstance) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const now = new Date();
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          
+          // Устанавливаем реальное текущее время в момент прокрутки до блока
+          entry.target.textContent = `${hours}:${minutes}`;
+          
+          // Отключаем наблюдение за этим блоком, чтобы время зафиксировалось после появления
+          observerInstance.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    timeElements.forEach(el => observer.observe(el));
+  });
+</script>
             </div>
         </div>
     </div>
