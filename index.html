@@ -14,7 +14,9 @@
 
         html, body {
             height: 100%;
-            background: linear-gradient(145deg, #f4f6f9 0%, #eceff4 100%);
+            /* Динамический фон со слайда */
+            background: linear-gradient(145deg, #f4f6f9 0%, #eceff4 100%), url("https://assets.hope.study/images/3p-IH9S5p.png") no-repeat center center fixed;
+            background-size: cover;
             background-attachment: fixed;
             color: #2d3748;
             scroll-behavior: smooth;
@@ -27,7 +29,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M9 24c0-2.206 1.794-4 4-4s4 1.794 4 4-1.794 4-4 4-4-1.794-4-4zm4-2c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2zm20 18c0-2.206 1.794-4 4-4s4 1.794 4 4-1.794 4-4 4-4-1.794-4-4zm4-2c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2z' fill='%23a0aec0' fill-opacity='0.04' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background: rgba(244, 246, 249, 0.92); /* Легкая тонировка поверх картинки фона для читаемости */
             z-index: -1;
             pointer-events: none;
         }
@@ -95,7 +97,6 @@
             transform: scale(1) translateY(0);
         }
 
-        /* Аватарка без белой обводки */
         .avatar {
             width: 44px;
             height: 44px;
@@ -105,7 +106,6 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
-        /* Облачко без левых границ, точно как на втором фото */
         .bubble {
             flex-grow: 1;
             padding: 18px 22px;
@@ -113,6 +113,7 @@
             position: relative;
         }
 
+        /* Цветовые палитры для разных спикеров */
         .prosecutor .bubble {
             background-color: rgb(242, 243, 255);
             box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgb(216, 218, 243) 0px 6px 20px 0px;
@@ -123,6 +124,21 @@
             box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px;
         }
 
+        .huong .bubble {
+            background-color: rgb(234, 254, 240);
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(100, 227, 134, 0.3) 0px 6px 20px 0px;
+        }
+
+        .sojun .bubble {
+            background-color: rgb(242, 255, 255);
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(119, 206, 231, 0.3) 0px 6px 20px 0px;
+        }
+
+        .oleg .bubble {
+            background-color: rgb(255, 253, 234);
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(231, 172, 83, 0.3) 0px 6px 20px 0px;
+        }
+
         .text {
             font-size: 15px;
             line-height: 1.6;
@@ -131,7 +147,6 @@
             white-space: pre-line;
         }
 
-        /* Нижняя часть: роль слева (сероватая), время справа внизу */
         .meta {
             display: flex;
             justify-content: space-between;
@@ -144,7 +159,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-size: 11px;
-            color: #718096; /* Слегка сероватый оттенок подписи */
+            color: #718096;
         }
 
         .time {
@@ -159,11 +174,55 @@
             max-width: 100%;
         }
 
-        .message-attachment img {
+        .message-attachment img, .message-attachment video {
             width: 100%;
             height: auto;
             display: block;
             border-radius: 12px;
+        }
+
+        /* Интерактивный блок опроса/теста */
+        .interactive-poll {
+            margin-top: 12px;
+            background: #fff;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .poll-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .poll-option {
+            padding: 10px 12px;
+            background: #f7fafc;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .poll-option:hover {
+            background: #edf2f7;
+        }
+
+        .poll-option.selected {
+            background: #ebf8ff;
+            border-color: #3182ce;
+            color: #2b6cb0;
+            font-weight: 600;
+        }
+
+        .poll-option.correct {
+            background: #f0fff4;
+            border-color: #38a169;
+            color: #22543d;
+            font-weight: 600;
         }
 
         .typing-indicator {
@@ -193,7 +252,7 @@
 <body>
 
     <header>
-        <h1>Судебное заседание: Исполнившиеся пророчества</h1>
+        <h1>Диалог: Проект доставки в Северную Корею</h1>
         <div class="controls">
             <button class="control-btn" onclick="restartDialogue()">Запустить заново</button>
         </div>
@@ -204,54 +263,67 @@
     <script>
         const dialogueData = [
             {
-                role: 'prosecutor',
-                roleName: 'Обвинитель',
-                avatar: 'https://assets.hope.study/images/8YaRWQakL_main_okE.webp',
-                text: 'Да в этой Библии не осталось и следа от ее первоистоков! Разве что одна черта и осталась…'
+                role: 'huong',
+                roleName: 'Хуонг',
+                avatar: 'https://assets.hope.study/images/ZGEspvRIh_main_Dbr.webp',
+                text: 'Нам нужно дождаться попутного ветра!'
             },
             {
-                role: 'prosecutor',
-                roleName: 'Обвинитель',
-                avatar: 'https://assets.hope.study/images/8YaRWQakL_main_okE.webp',
-                text: 'Как можно доверять такому недостоверному источнику? Да, и примите во внимание! Желающих переписать Библию во все века было просто масса. Вы ведь знаете, что за одно поколение историю одной страны могут переписать дважды.',
-                image: 'https://dv-clevio-storage.fra1.digitaloceanspaces.com/images/Gp09oz2Ez.png'
+                role: 'sojun',
+                roleName: 'Соджун',
+                avatar: 'https://assets.hope.study/images/SJu277cb4_main_DTh.webp',
+                text: 'А разве мы не можем управлять зоной выгрузки нашего груза удаленно?'
             },
             {
-                role: 'prosecutor',
-                roleName: 'Обвинитель',
-                avatar: 'https://assets.hope.study/images/8YaRWQakL_main_okE.webp',
-                text: 'Представьте, сколько же литературных слоев в этом тексте! Каждый исторический период диктовал свою корректуру…'
+                role: 'huong',
+                roleName: 'Хуонг',
+                avatar: 'https://assets.hope.study/images/ZGEspvRIh_main_Dbr.webp',
+                text: 'Да, наши шары как дирижабли могут двигаться в определенном направлении, но это требует много энергии, поэтому попутный ветер очень помогает достичь цели.'
             },
             {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
-                text: 'Ваша честь, я протестую! Это уже переходит рамки вопроса… Я позволю себе, господин судья, ответить на это обвинение!'
+                role: 'oleg',
+                roleName: 'Олег',
+                avatar: 'https://assets.hope.study/images/ACu2ejQmc_main_yWB.webp',
+                text: 'Кто эти люди? Где они, и что за груз они доставляют воздушным путем? Причем тут Библия?'
             },
             {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
-                text: 'Дело в том, ваша честь, что у еврейского народа существовала традиция переписывания Священных Писаний вручную. Ученых, которые занимались столь ответственным делом, именуют масоретами.',
-                image: 'https://dv-clevio-storage.fra1.digitaloceanspaces.com/images/8LGht1LLO.png'
+                role: 'oleg',
+                roleName: 'Олег',
+                avatar: 'https://assets.hope.study/images/ACu2ejQmc_main_yWB.webp',
+                text: 'Vladimir, ты догадываешься?'
             },
             {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
-                text: 'Для того, чтобы избежать искажений или каких-либо упущений и неточностей, масореты произвели точный расчет количества слов и символов каждой книги Ветхого Завета, создав своего рода шаблон.'
+                role: 'oleg',
+                roleName: 'Олег',
+                avatar: 'https://assets.hope.study/images/ACu2ejQmc_main_yWB.webp',
+                text: 'Это достаточно неафишируемый проект доставки Библии в Северную Корею на воздушных шарах 👀.',
+                image: 'https://assets.hope.study/files/QzQlKAe00.gif'
             },
             {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
-                text: 'Заканчивая работу над книгой, каждый переписчик должен был совершить подсчёт слов и букв всей книги. Если его цифры не совпадали с шаблоном, то он искал ошибку в тексте до тех пор, пока не найдет.'
+                role: 'oleg',
+                roleName: 'Олег',
+                avatar: 'https://assets.hope.study/images/ACu2ejQmc_main_yWB.webp',
+                text: 'Правда, неожиданно!?)\nЯ сам был шокирован. Первой моей мыслью было: "Что? Библии на воздушных шарах?"'
             },
             {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
-                text: 'Лишь придя в соответствие с нормой, масорет мог двигаться дальше. Это обеспечивало максимально возможную сохранность текста.'
+                role: 'oleg',
+                roleName: 'Олег',
+                avatar: 'https://assets.hope.study/images/ACu2ejQmc_main_yWB.webp',
+                text: 'И на это есть весомые причины.\n🤔 Как ты думаешь, почему таким изощренным путем?',
+                isPoll: true,
+                options: [
+                    'Сложность провоза через границу',
+                    'Нет международных почтовых компаний',
+                    'Библия с неба вдохновляет людей',
+                    'Риск для жизни: перевозчика и получателя'
+                ],
+                correctIndex: 3
+            },
+            {
+                role: 'oleg',
+                roleName: 'Олег',
+                avatar: 'https://assets.hope.study/images/ACu2ejQmc_main_yWB.webp',
+                text: 'Ты был близок. Однако реальность другая. На кону очень высока ставка. Ставка ценою в жизнь. Сотни казней. Без поправки на возраст.'
             }
         ];
 
@@ -259,12 +331,9 @@
         let currentIndex = 0;
         let timeoutIds = [];
 
-        // Функция получения реального текущего времени в формате ЧЧ:ММ
         function getCurrentTime() {
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            return `${hours}:${minutes}`;
+            return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
         }
 
         function createTypingRow(item) {
@@ -284,18 +353,44 @@
         function revealMessage(row, item) {
             const bubble = row.querySelector('.bubble');
             const imageHtml = item.image 
-                ? `<div class="message-attachment"><img src="${item.image}" alt="Иллюстрация к заседанию"></div>` 
+                ? `<div class="message-attachment"><img src="${item.image}" alt="Вложение"></div>` 
                 : '';
+
+            let pollHtml = '';
+            if (item.isPoll) {
+                pollHtml = `<div class="interactive-poll"><div class="poll-options">`;
+                item.options.forEach((opt, idx) => {
+                    pollHtml += `<div class="poll-option" onclick="handlePollClick(this, ${idx}, ${item.correctIndex})">${opt}</div>`;
+                });
+                pollHtml += `</div></div>`;
+            }
 
             bubble.innerHTML = `
                 <div class="text">${item.text}</div>
                 ${imageHtml}
+                ${pollHtml}
                 <div class="meta">
                     <span class="role">${item.roleName}</span>
                     <span class="time">${getCurrentTime()}</span>
                 </div>
             `;
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function handlePollClick(element, selectedIdx, correctIdx) {
+            const parent = element.parentElement;
+            const options = parent.querySelectorAll('.poll-option');
+            
+            options.forEach((opt, idx) => {
+                opt.style.pointerEvents = 'none';
+                if (idx === correctIdx) {
+                    opt.classList.add('correct');
+                }
+            });
+
+            if (selectedIdx !== correctIdx) {
+                element.classList.add('selected');
+            }
         }
 
         function showNextMessage() {
