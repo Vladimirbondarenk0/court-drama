@@ -184,6 +184,34 @@
             0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
             40% { transform: translateY(-6px); opacity: 1; }
         }
+
+        /* Фоновые цвета облачков точь-в-точь как в исходнике */
+.prosecutor .bubble {
+    background-color: #f2f3ff;
+    border-left: 4px solid #3182ce;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, #d8daf3 0px 6px 20px 0px;
+}
+
+.defender .bubble {
+    background-color: #fff1e3;
+    border-left: 4px solid #dd6b20;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(219, 145, 32, 0.3) 0px 6px 20px 0px;
+}
+
+/* Стили для прикрепленных картинок */
+.message-attachment {
+    margin-top: 10px;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.message-attachment img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+}
     </style>
 </head>
 <body>
@@ -199,65 +227,102 @@
 
     <script>
         const dialogueData = [
-            {
-                role: 'prosecutor',
-                roleName: 'Обвинитель',
-                avatarText: 'О',
-                text: 'Ваша честь, а как быть с тем, что в Библии записано множество событий, которым якобы невозможно найти внешнее историческое подтверждение?',
-                time: '20:02'
-            },
-            {
-                role: 'prosecutor',
-                roleName: 'Обвинитель',
-                avatarText: 'О',
-                text: 'Предсказываю, что защита сейчас начнет говорить нам о слепой вере. Но это же просто уход от рациональных фактов!',
-                time: '20:02'
-            },
-            {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatarText: 'З',
-                text: 'Господин судья, <span class="mention">@Обвинитель</span> снова сводит всю глубину Божественного замысла к поверхностным схемам.',
-                time: '20:03'
-            },
-            {
-                role: 'defender',
-                roleName: 'Защитник',
-                avatarText: 'З',
-                text: 'Истина открывается не человеческим доказательствам, а тем, чье сердце готово принять живую силу Христа, преображающую изнутри.',
-                time: '20:03'
-            }
-        ];
+    {
+        role: 'prosecutor',
+        roleName: 'Обвинитель',
+        avatar: 'https://assets.hope.study/images/8YaRWQakL_main_okE.webp',
+        text: 'Да в этой Библии не осталось и следа от ее первоистоков! Разве что одна черта и осталась…',
+        time: '19:58'
+    },
+    {
+        role: 'prosecutor',
+        roleName: 'Обвинитель',
+        avatar: 'https://assets.hope.study/images/8YaRWQakL_main_okE.webp',
+        text: 'Как можно доверять такому недостоверному источнику? Да, и примите во внимание! Желающих переписать Библию во все века было просто масса. Вы ведь знаете, что за одно поколение историю одной страны могут переписать дважды.',
+        image: 'https://dv-clevio-storage.fra1.digitaloceanspaces.com/images/Gp09oz2Ez.png',
+        time: '19:58'
+    },
+    {
+        role: 'prosecutor',
+        roleName: 'Обвинитель',
+        avatar: 'https://assets.hope.study/images/8YaRWQakL_main_okE.webp',
+        text: 'Представьте, сколько же литературных слоев в этом тексте! Каждый исторический период диктовал свою корректуру…',
+        time: '19:59'
+    },
+    {
+        role: 'defender',
+        roleName: 'Защитник',
+        avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
+        text: 'Ваша честь, я протестую! Это уже переходит рамки вопроса… Я позволю себе, господин судья, ответить на это обвинение!',
+        time: '19:59'
+    },
+    {
+        role: 'defender',
+        roleName: 'Защитник',
+        avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
+        text: 'Дело в том, ваша честь, что у еврейского народа существовала традиция переписывания Священных Писаний вручную. Ученых, которые занимались столь ответственным делом, именуют масоретами.',
+        image: 'https://dv-clevio-storage.fra1.digitaloceanspaces.com/images/8LGht1LLO.png',
+        time: '19:59'
+    },
+    {
+        role: 'defender',
+        roleName: 'Защитник',
+        avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
+        text: 'Для того, чтобы избежать искажений или каких-либо упущений и неточностей, масореты произвели точный расчет количества слов и символов каждой книги Ветхого Завета, создав своего рода шаблон.',
+        time: '20:00'
+    },
+    {
+        role: 'defender',
+        roleName: 'Защитник',
+        avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
+        text: 'Заканчивая работу над книгой, каждый переписчик должен был совершить подсчёт слов и букв всей книги. Если его цифры не совпадали с шаблоном, то он искал ошибку в тексте до тех пор, пока не найдет.',
+        time: '20:00'
+    },
+    {
+        role: 'defender',
+        roleName: 'Защитник',
+        avatar: 'https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp',
+        text: 'Лишь придя в соответствие с нормой, масорет мог двигаться дальше. Это обеспечивало максимально возможную сохранность текста.',
+        time: '20:00'
+    }
+];
 
         const chatContainer = document.getElementById('chat');
         let currentIndex = 0;
         let timeoutIds = [];
 
         function createTypingRow(item) {
-            const row = document.createElement('div');
-            row.className = `message-row ${item.role}`;
-            row.innerHTML = `
-                <div class="avatar">${item.avatarText}</div>
-                <div class="bubble">
-                    <div class="typing-indicator">
-                        <span></span><span></span><span></span>
-                    </div>
-                </div>
-            `;
-            return row;
-        }
+    const row = document.createElement('div');
+    row.className = `message-row ${item.role}`;
+    row.innerHTML = `
+        <img class="avatar" src="${item.avatar}" alt="${item.roleName}">
+        <div class="bubble">
+            <div class="typing-indicator">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    `;
+    return row;
+}
 
         function revealMessage(row, item) {
-            const bubble = row.querySelector('.bubble');
-            bubble.innerHTML = `
-                <div class="text">${item.text}</div>
-                <div class="meta">
-                    <span class="role">${item.roleName}</span>
-                    <span class="time">${item.time}</span>
-                </div>
-            `;
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        }
+    const bubble = row.querySelector('.bubble');
+    
+    // Формируем блок картинки, если она есть в сообщении
+    const imageHtml = item.image 
+        ? `<div class="message-attachment"><img src="${item.image}" alt="Вложение"></div>` 
+        : '';
+
+    bubble.innerHTML = `
+        <div class="text">${item.text}</div>
+        ${imageHtml}
+        <div class="meta">
+            <span class="role">${item.roleName}</span>
+            <span class="time">${item.time}</span>
+        </div>
+    `;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
 
         function showNextMessage() {
             if (currentIndex >= dialogueData.length) return;
