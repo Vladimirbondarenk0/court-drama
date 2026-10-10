@@ -34,7 +34,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>99% людей не знают этих фактов о Библии. А ты?</title>
+    <title>Судебное заседание: Начало процесса</title>
     
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
@@ -60,172 +60,99 @@
             --button-monocolor: #5943BE;
         }
 
-        .g-button-style {
-            border-radius: 0px !important;
+        body {
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
         }
-        .g-component-radius {
-            border-radius: 0px !important;
-        }
-        .g-component-shadow {
-            box-shadow: 0 6px 20px 0 rgba(93,95,102,0.15) !important;
-        }
-        .g-title-style {
-            font-family: 'Montserrat' !important;
-        }
-        .g-text-style {
-            font-family: 'Montserrat' !important;
-        }
-        
-        .p-buttons-bg {
-            background: linear-gradient(to right, #6C15D4 0%, #9136FE 100%) !important;
-        }
-        .p-audio-track-bg {
-            background: linear-gradient(to right, #6C15D4 0%, #9136FE 100%) !important;
-        }
-        .p-dialog-outline-border {
-            border-color: #B971F7 !important;
-        }
-        .p-quote-common-bg {
-            background: #9136FE !important;
-        }
-        .p-quote-common-color {
-            color: #9136FE !important;
-        }
-        .p-quote-common-border {
-            border-color: #9136FE !important;
-        }
-        .p-quote-icon-color {
-            color: #B971F7 !important;
-        }
-        .p-photo-mask-bg {
-            background: #9136FE !important;
-        }
-        .p-event-date-color {
-            color: #D3A7F8 !important;
-        }
-        .p-lessonfooter-stars-color {
-            color: #9136FE !important;
-        }
-        .p-lessonfooter-link-color {
-            color: #9136FE !important;
-        }
-        .p-lessonfooter-name-color {
-            color: #9136FE !important;
-        }
-        .p-quill-link-color {
-            color: #9136FE !important;
-        }
-        .p-quill-text-color {
-            color: #9136FE !important;
-        }
-        .p-quill-fill-bg {
-            background: #B971F7 !important;
-        }
-        .p-common-bg {
-            background: #9136FE !important;
-        }
-        .p-common-color {
-            color: #9136FE !important;
-        }
-        .p-common-border {
-            border-color: #9136FE !important;
-        }
-        .p-buttons-monocolor-bg {
-            background: #9136FE !important;
-        }
-        .p-buttons-monocolor-border {
-            border-color: #9136FE !important;
-        }
-        .p-buttons-monocolor-color {
-            color: #9136FE !important;
-        }
-        :root {
-            --element-primary-color: #370A4C;
-            --element-primary-pulse-start: rgba(55, 10, 76, 0.5);
-            --element-primary-pulse-end: rgba(55, 10, 76, 0);
-        }
-    </style>
 
-    <style type="text/css" quill-styles="">
-        .ql-palette-color-one { color: #370A4C; }
-        .ql-palette-fill-one { background-color: rgba(55, 10, 76, 0.3); }
-        .ql-palette-link-color-one { color: #370A4C !important; }
-        .ql-palette-color-two { color: #4B207F; }
-        .ql-palette-fill-two { background-color: rgba(75, 32, 127, 0.3); }
-        .ql-palette-link-color-two { color: #4B207F !important; }
-        .ql-palette-color-three { color: #9136FE; }
-        .ql-palette-fill-three { background-color: rgba(145, 54, 254, 0.3); }
-        .ql-palette-link-color-three { color: #9136FE !important; }
-        .ql-palette-color-four { color: #B971F7; }
-        .ql-palette-fill-four { background-color: rgba(185, 113, 247, 0.3); }
-        .ql-palette-link-color-four { color: #B971F7 !important; }
-        .ql-palette-color-five { color: #D3A7F8; }
-        .ql-palette-fill-five { background-color: rgba(211, 167, 248, 0.3); }
-        .ql-palette-link-color-five { color: #D3A7F8 !important; }
+        .g-button-style { border-radius: 0px !important; }
+        .g-component-radius { border-radius: 0px !important; }
+        .g-component-shadow { box-shadow: 0 6px 20px 0 rgba(93,95,102,0.15) !important; }
+        .g-title-style { font-family: 'Montserrat' !important; }
+        .g-text-style { font-family: 'Montserrat' !important; }
+        
+        .p-buttons-bg { background: linear-gradient(to right, #6C15D4 0%, #9136FE 100%) !important; }
+        .p-audio-track-bg { background: linear-gradient(to right, #6C15D4 0%, #9136FE 100%) !important; }
+        .p-dialog-outline-border { border-color: #B971F7 !important; }
+        .p-quote-common-bg { background: #9136FE !important; }
+        .p-common-bg { background: #9136FE !important; }
+
+        /* Стили для анимации появления при прокрутке */
+        .dialog-row {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .dialog-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Оформление заголовка судебного разговора */
+        .court-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--backgorund-gradient);
+            color: #fff;
+            border-radius: 8px;
+            box-shadow: var(--button-shadow);
+        }
+        .court-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .court-header p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
     <div id="__nuxt">
         <div id="__layout">
-            <!-- Контент диалога (только текст и аватарки защитника/обвинителя) -->
-            <div class="dialog-container" style="font-family: 'Montserrat', sans-serif; padding: 20px; max-width: 800px; margin: 0 auto;">
+            <div class="dialog-container" style="padding: 30px 20px; max-width: 800px; margin: 0 auto;">
                 
-                <!-- Блок диалога: Обвинитель -->
-                <div class="dialog-row prosecutor" style="display: flex; align-items: flex-start; margin-bottom: 20px;">
-                    <div class="avatar" style="width: 50px; height: 50px; border-radius: 50%; background: #370A4C; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; margin-right: 15px; flex-shrink: 0;">
+                <!-- Заголовок как в начале судебного разговора -->
+                <div class="court-header">
+                    <h1>Судебное заседание: Дело об Истине и Законе</h1>
+                    <p>Стенограмма начала судебного процесса. Слушается дело...</p>
+                </div>
+
+                <!-- Реплика 1 (Судья) -->
+                <div class="dialog-row judge" style="display: flex; align-items: flex-start; margin-bottom: 25px;">
+                    <div class="avatar" style="width: 50px; height: 50px; border-radius: 50%; background: #4B207F; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; margin-right: 15px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+                        Суд
+                    </div>
+                    <div class="message-box" style="background: rgba(75, 32, 127, 0.08); padding: 16px; border-radius: 6px; border-left: 4px solid #4B207F; flex-grow: 1;">
+                        <p style="margin: 0; color: #370A4C; font-size: 15px; line-height: 1.6;">Судебное заседание объявляется открытым. Слушается дело по существу обвинений, предъявленных бедному человечеству. Прошу стороны занять свои места.</p>
+                    </div>
+                </div>
+
+                <!-- Реплика 2 (Обвинитель) -->
+                <div class="dialog-row prosecutor" style="display: flex; align-items: flex-start; margin-bottom: 25px;">
+                    <div class="avatar" style="width: 50px; height: 50px; border-radius: 50%; background: #370A4C; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; margin-right: 15px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
                         Обв
                     </div>
-                    <div class="message-box" style="background: rgba(145, 54, 254, 0.1); padding: 15px; border-radius: 6px; border-left: 4px solid #9136FE; flex-grow: 1;">
-                        <p style="margin: 0; color: #370A4C; font-size: 15px; line-height: 1.5;">Текст реплики обвинителя в судебном процессе.</p>
+                    <div class="message-box" style="background: rgba(55, 10, 76, 0.08); padding: 16px; border-radius: 6px; border-left: 4px solid #370A4C; flex-grow: 1;">
+                        <p style="margin: 0; color: #370A4C; font-size: 15px; line-height: 1.6;">Ваша честь, этот бедный обвиняемый в очередной раз нарушил установленные правила. Его природа пропитана грехом, и он не в состоянии оправдать себя собственными усилиями.</p>
                     </div>
                 </div>
 
-                <!-- Блок диалога: Защитник -->
-                <div class="dialog-row defender" style="display: flex; align-items: flex-start; margin-bottom: 20px;">
-                    <div class="avatar" style="width: 50px; height: 50px; border-radius: 50%; background: #5943BE; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; margin-right: 15px; flex-shrink: 0;">
+                <!-- Реплика 3 (Защитник) -->
+                <div class="dialog-row defender" style="display: flex; align-items: flex-start; margin-bottom: 25px;">
+                    <div class="avatar" style="width: 50px; height: 50px; border-radius: 50%; background: #5943BE; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; margin-right: 15px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
                         Защ
                     </div>
-                    <div class="message-box" style="background: rgba(89, 67, 190, 0.1); padding: 15px; border-radius: 6px; border-left: 4px solid #5943BE; flex-grow: 1;">
-                        <p style="margin: 0; color: #370A4C; font-size: 15px; line-height: 1.5;">Текст реплики защитника в судебном процессе.</p>
+                    <div class="message-box" style="background: rgba(89, 67, 190, 0.08); padding: 16px; border-radius: 6px; border-left: 4px solid #5943BE; flex-grow: 1;">
+                        <p style="margin: 0; color: #370A4C; font-size: 15px; line-height: 1.6;">Возражаю, Ваша честь! Обвинение упускает из виду главное: этот бедный человек полностью осознал свою немощь и принес на суд свою капитуляцию.</p>
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </div>
-
-    <!-- Подключение оригинальных скриптов из источника[cite: 4] -->
-    <script src="/_nuxt/9ea71a1.js" as="script"></script>
-    <script src="/_nuxt/9081f74.js" as="script"></script>
-    <script src="/_nuxt/cf9ff4a.js" as="script"></script>
-    <script src="/_nuxt/e607a26.js" as="script"></script>
-    <script charset="utf-8" src="/_nuxt/72ab634.js"></script>
-    <script charset="utf-8" src="/_nuxt/f90d770.js"></script>
-    <script charset="utf-8" src="/_nuxt/af23db5.js"></script>
-    <script charset="utf-8" src="/_nuxt/c8c2bd3.js"></script>
-    <script charset="utf-8" src="/_nuxt/93acbfe.js"></script>
-    <script charset="utf-8" src="/_nuxt/f08df09.js"></script>
-    <script charset="utf-8" src="/_nuxt/64ea4b3.js"></script>
-    <script charset="utf-8" src="/_nuxt/50fe500.js"></script>
-    <script charset="utf-8" src="/_nuxt/359f3ea.js"></script>
-    <script charset="utf-8" src="/_nuxt/e7d9816.js"></script>
-    <script charset="utf-8" src="/_nuxt/5a41b78.js"></script>
-    <script charset="utf-8" src="/_nuxt/49d61be.js"></script>
-    <script charset="utf-8" src="/_nuxt/edf561d.js"></script>
-    <script charset="utf-8" src="/_nuxt/140d3a9.js"></script>
-    <script charset="utf-8" src="/_nuxt/34a8c9f.js"></script>
-    <script charset="utf-8" src="/_nuxt/ae7f77d.js"></script>
-    <script charset="utf-8" src="/_nuxt/de9c496.js"></script>
-    <script charset="utf-8" src="/_nuxt/6b44fa2.js"></script>
-    <script charset="utf-8" src="/_nuxt/06a1b07.js"></script>
-    <script charset="utf-8" src="/_nuxt/032343a.js"></script>
-    <script charset="utf-8" src="/_nuxt/d1be6d0.js"></script>
-    <script charset="utf-8" src="/_nuxt/0fc1a76.js"></script>
-    <script charset="utf-8" src="/_nuxt/6d29fee.js"></script>
-    <script charset="utf-8" src="/_nuxt/0c2fe36.js"></script>
-    <script charset="utf-8" src="/_nuxt/a7babf4.js"></script>
-    <script charset="utf-8" src="/_nuxt/a024a61.js"></script>
-    <script charset="utf-8" src="/_nuxt/62b3911.js"></script>
-</body>
-</html>
-```[cite: 4]
+                <!-- Реплика 4 (Обвинитель
