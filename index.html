@@ -25,8 +25,54 @@
       font-weight:300; line-height:1.8; overflow-x:hidden;
       -webkit-font-smoothing:antialiased;
       min-height: 100vh;
+      transition: background 0.5s ease, color 0.5s ease;
     }
+
+    .dlg-root.dark {
+      --ivory:#161311; --beige:#211c18; --ink:#ece5dc; --ink-soft:#b5aaa0;
+      --terracotta:#d4836a; --terracotta-soft:#8a5342; --olive:#a39755;
+      --gold:#d4b483; --slate:#9aa5ae; --line:#332b25;
+      background:
+        radial-gradient(1200px 800px at 80% -10%, #201a16 0%, transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, #110e0c 0%, transparent 55%),
+        var(--ivory);
+    }
+
     .dlg-root *{margin:0;padding:0;box-sizing:border-box}
+    
+    /* Кнопка переключения темы */
+    .theme-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+      background: var(--beige);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+    .theme-toggle:hover {
+      transform: scale(1.08);
+      border-color: var(--terracotta);
+    }
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     .dlg-root .rail{
       position:fixed;top:0;left:0;height:3px;width:0;
       background:linear-gradient(90deg,var(--terracotta),var(--gold),var(--olive));
@@ -96,19 +142,19 @@
 
     .dlg-root .scene-label .role-highlight {
       font-weight: 600;
-      color: #766346;
+      color: var(--gold);
     }
 
     .role-highlight-bold {
-      color: #766346;
-      background-color: rgb(234 161 73 / 30%);
-      padding: 2px 4px 2px 4px; 
+      color: var(--gold);
+      background-color: var(--beige);
+      padding: 2px 6px; 
       box-decoration-break: clone;
       -webkit-box-decoration-break: clone;
       border-radius: 4px;
+      border: 1px solid var(--line);
     }
 
-    /* Блок с кнопкой Старт Суда */
     .dlg-root .start-court-section {
       display: flex;
       flex-direction: column;
@@ -145,7 +191,7 @@
     .dlg-root .start-court-btn.started {
       border-color: var(--olive);
       color: var(--olive);
-      background: rgba(124, 115, 64, 0.08);
+      background: var(--beige);
       cursor: default;
       box-shadow: none;
     }
@@ -187,14 +233,15 @@
 
     .dlg-root .avatar{
       width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;
-      border:2px solid var(--line);background:var(--beige);box-shadow:0 4px 12px rgba(44,37,33,.1);
+      border:2px solid var(--line);background:var(--beige);box-shadow:0 4px 12px rgba(0,0,0,0.15);
     }
     .dlg-root .avatar img{width:100%;height:100%;object-fit:cover}
 
     .dlg-root .line .card{
       background:var(--ivory);border:1px solid var(--line);border-radius:14px;
-      padding:1.5rem 1.8rem 1.7rem;box-shadow:0 18px 50px -32px rgba(44,37,33,.28);
+      padding:1.5rem 1.8rem 1.7rem;box-shadow:0 18px 50px -32px rgba(0,0,0,0.35);
       max-width:78%;position:relative;flex-grow:1;
+      transition: background 0.5s ease, border-color 0.5s ease;
     }
     
     .dlg-root .line .card::before{
@@ -221,7 +268,7 @@
       letter-spacing: .20em;
       text-transform: uppercase;
       margin-bottom: .9rem;
-      opacity: 0.55;
+      opacity: 0.7;
     }
     .dlg-root .line .role .dot{
       width: 7px;
@@ -238,11 +285,11 @@
     .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
 
     .dlg-root .line.prosecutor{justify-content:flex-start;flex-direction:row;}
-    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:#e8d3c6}
+    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:var(--line)}
     .dlg-root .line.prosecutor .card::before{left:1.8rem}
 
     .dlg-root .line.accused{justify-content:flex-end;flex-direction:row-reverse;}
-    .dlg-root .line.accused .card{color:var(--olive);border-color:#e2e0cf;background:linear-gradient(180deg,#fffefb,#f6f3ec)}
+    .dlg-root .line.accused .card{color:var(--olive);border-color:var(--line);background:var(--beige)}
     .dlg-root .line.accused .card::before{right:1.8rem}
     .dlg-root .line.accused .role{justify-content:flex-end}
 
@@ -258,7 +305,7 @@
     .dlg-root .verdict .seal{
       width:84px;height:84px;border-radius:50%;border:1px solid var(--gold);margin:0 auto 2rem;
       display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;
-      color:var(--gold);font-size:1.6rem;font-style:italic;box-shadow:inset 0 0 0 6px rgba(184,153,104,.08);
+      color:var(--gold);font-size:1.6rem;font-style:italic;box-shadow:inset 0 0 0 6px var(--beige);
     }
     .dlg-root .verdict h2{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;color:var(--ink)}
     .dlg-root .verdict h2 em{font-style:italic;color:var(--olive)}
@@ -304,6 +351,7 @@
     function Dialogue() {
       const rootRef = useRef(null);
       const [isCourtStarted, setIsCourtStarted] = useState(false);
+      const [isDarkMode, setIsDarkMode] = useState(false);
       const isCourtStartedRef = useRef(false);
       const targetScrollYRef = useRef(0);
       const currentScrollYRef = useRef(0);
@@ -345,7 +393,6 @@
         const verdict = root.querySelector('.verdict');
         const rail = root.querySelector('.rail');
         const startSection = root.querySelector('.start-court-section');
-        const hero = root.querySelector('.hero');
 
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
@@ -362,7 +409,6 @@
         targetScrollYRef.current = window.scrollY;
         currentScrollYRef.current = window.scrollY;
 
-        // Физика сверхплавной инерции для всей страницы (коэффициент 0.08 для максимальной мягкости)
         const lerpLoop = () => {
           currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
           if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.3) {
@@ -388,7 +434,6 @@
             maxAllowedScroll = sectionBottom;
           }
 
-          // Если находимся в зоне диалога после старта — включаем строгий пошаговый скролл от блока к блоку
           if (isCourtStartedRef.current && scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
             const direction = e.deltaY > 0 ? 1 : -1;
             
@@ -414,7 +459,6 @@
 
             targetScrollYRef.current = Math.max(0, Math.min(snapTargets[nextIndex], maxAllowedScroll));
           } else {
-            // В начале (в hero) и в самом конце страницы скролл также идет через мягкую инерцию
             targetScrollYRef.current = Math.max(0, Math.min(targetScrollYRef.current + e.deltaY * 0.9, maxAllowedScroll));
           }
 
@@ -469,8 +513,20 @@
       }, []);
 
       return (
-        <div className="dlg-root" ref={rootRef}>
+        <div className={`dlg-root ${isDarkMode ? 'dark' : ''}`} ref={rootRef}>
           <div className="rail" />
+
+          <button 
+            className="theme-toggle" 
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            title="Переключить тему"
+          >
+            {isDarkMode ? (
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            ) : (
+              <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            )}
+          </button>
 
           <header className="hero">
             <div className="eyebrow">Зал Суда · Драма в одном акте</div>
@@ -490,7 +546,7 @@
               <p>
                 <span className="role-highlight">Судья — Господь.&nbsp;</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
                 <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Он не желает уступать ни одной позиции и использует все возможные аргументы. Он верит (экспериментально), что Христос принял святую плоть человека, какой она была до грехопадения, но ослабленная невинными немощами, спустя 4000 лет.<br /><br />
-                <span className="role-highlight">Учитель Израилев — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей либо лишь физически ослабленной человеческой природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет не только объяснение, но, при определённом понимании природы Христа, — и основание для оправдания. Хитрае мысли и расчет, он как искусный и хитрый грешник уже приготовил, посмотрим... 
+                <span className="role-highlight">Учитель Израилев — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей либо лишь физически ослабленной человеческой природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет не только объяснение, но, при определённом понимании природы Христа, — и основание для оправдания. Хитрая мысль и расчет, он как искусный и хитрый грешник уже приготовил, посмотрим... 
               </p>
             </div>
 
