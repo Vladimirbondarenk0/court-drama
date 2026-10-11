@@ -262,13 +262,13 @@
 
         const onWheel = (e) => {
           const scrollY = window.scrollY;
-          const firstSnapTarget = lines[0].offsetTop;
-          const lastLine = lines[lines.length - 1];
-          const lastLineTop = lastLine.offsetTop;
+          const firstLineTop = lines[0].offsetTop;
+          const lastLineTop = lines[lines.length - 1].offsetTop;
 
-          // Фиксация работает от 1-го блока ПОКА ПОСЛЕДНИЙ блок еще не достиг фокуса (верха экрана).
-          // Как только последний блок ("Я больше не спорю...") в фокусе (scrollY >= lastLineTop - 40), фиксация отключается!
-          if (scrollY >= firstSnapTarget - 120 && scrollY < lastLineTop - 40) {
+          // Фиксация работает СТРОГО внутри диалога: 
+          // 1) Сверху: отступаем чуть выше первого блока (firstLineTop - 40), чтобы при скролле вверх мы легко отпускали замок и выходили к шапке.
+          // 2) Снизу: как только последний блок доходит до верха (lastLineTop - 40), замок открывается для вердикта и футера.
+          if (scrollY >= firstLineTop - 40 && scrollY < lastLineTop - 40) {
             e.preventDefault();
 
             const direction = e.deltaY > 0 ? 1 : -1;
@@ -280,7 +280,7 @@
               nextTarget = next !== undefined ? next : lastLineTop;
             } else {
               const prev = [...snapTargets].reverse().find(t => t < targetScrollY - 30);
-              nextTarget = prev !== undefined ? prev : firstSnapTarget;
+              nextTarget = prev !== undefined ? prev : 0; // При прокрутке вверх доходим до верха страницы (0)
             }
 
             targetScrollY = nextTarget;
@@ -289,7 +289,7 @@
               requestAnimationFrame(lerpLoop);
             }
           } else {
-            // Когда последний блок в фокусе или ниже (вердикт, футер) — свободный плавный ледовый скролл без фиксации!
+            // Вне зоны диалога (в шапке/hero, а также на последнем блоке/вердикте/футере) — абсолютно свободный плавный ледовый скролл!
             e.preventDefault();
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
             targetScrollY = Math.max(0, Math.min(targetScrollY + e.deltaY * 0.9, maxScroll));
