@@ -324,7 +324,7 @@
           isAnimatingRef.current = true;
 
           const lerpJump = () => {
-            currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.1;
+            currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
             if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.5) {
               currentScrollYRef.current = targetScrollYRef.current;
               window.scrollTo(0, currentScrollYRef.current);
@@ -345,6 +345,7 @@
         const verdict = root.querySelector('.verdict');
         const rail = root.querySelector('.rail');
         const startSection = root.querySelector('.start-court-section');
+        const hero = root.querySelector('.hero');
 
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
@@ -361,9 +362,9 @@
         targetScrollYRef.current = window.scrollY;
         currentScrollYRef.current = window.scrollY;
 
-        // Плавнейшая физика инерции (lerp коэффициент уменьшен до 0.1 для глубокой мягкости)
+        // Физика сверхплавной инерции для всей страницы (коэффициент 0.08 для максимальной мягкости)
         const lerpLoop = () => {
-          currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.1;
+          currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
           if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.3) {
             currentScrollYRef.current = targetScrollYRef.current;
             window.scrollTo(0, currentScrollYRef.current);
@@ -387,15 +388,13 @@
             maxAllowedScroll = sectionBottom;
           }
 
-          // Строгий поэтапный перенос от блока к блоку после старта суда
-          if (isCourtStartedRef.current && scrollY >= firstLineTop - 60 && scrollY <= lastLineTop + 100) {
+          // Если находимся в зоне диалога после старта — включаем строгий пошаговый скролл от блока к блоку
+          if (isCourtStartedRef.current && scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
             const direction = e.deltaY > 0 ? 1 : -1;
             
-            // Собираем все ключевые точки привязки (позиции реплик относительно верха экрана с отступом 40px)
             const snapTargets = lines.map(l => l.offsetTop - 40);
             snapTargets.push(verdict.offsetTop - 40);
 
-            // Ищем ближайшую цель
             let currentIndex = 0;
             let minDiff = Infinity;
             snapTargets.forEach((t, idx) => {
@@ -415,7 +414,8 @@
 
             targetScrollYRef.current = Math.max(0, Math.min(snapTargets[nextIndex], maxAllowedScroll));
           } else {
-            targetScrollYRef.current = Math.max(0, Math.min(targetScrollYRef.current + e.deltaY * 0.8, maxAllowedScroll));
+            // В начале (в hero) и в самом конце страницы скролл также идет через мягкую инерцию
+            targetScrollYRef.current = Math.max(0, Math.min(targetScrollYRef.current + e.deltaY * 0.9, maxAllowedScroll));
           }
 
           if (!isAnimatingRef.current) {
