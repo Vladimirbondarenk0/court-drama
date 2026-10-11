@@ -315,6 +315,7 @@
     
     .dlg-root .line.active .card::before{
       width:54px;
+      opacity: 0.7;
     }
     
     .dlg-root .line .role{
@@ -340,11 +341,15 @@
       display: inline-block;
     }
 
+    .dlg-root.dark .line .card {
+      background: linear-gradient(135deg, #211c18 0%, #1a1614 100%);
+    }
+
     .dlg-root .line .speech{font-family:inherit;font-weight:500;letter-spacing: .3px;font-size:1.05rem;line-height:1.6875rem;color:var(--ink)}
     .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
 
     .dlg-root .line.prosecutor{justify-content:flex-start;flex-direction:row;}
-    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:var(--line)}
+    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:var(--line);background: linear-gradient(135deg, #fff8f4 0%, #f0ece9 100%);}
     .dlg-root .line.prosecutor .card::before{left:1.8rem}
 
     .dlg-root .line.accused{justify-content:flex-end;flex-direction:row-reverse;}
