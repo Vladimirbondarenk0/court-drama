@@ -102,6 +102,11 @@
       color: #766346;
     }
 
+    .role-highlight-bold {
+      font-weight: 600;
+      color: #766346;
+    }
+
     .dlg-root .line{
       position:relative;z-index:2;display:flex;align-items:flex-start;gap:1rem;margin:2.4rem 0;opacity:0;transform:translateY(40px);
       transition:opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter .6s ease;
@@ -119,7 +124,7 @@
 
     .dlg-root .line .card{
       background:var(--ivory);border:1px solid var(--line);border-radius:14px;
-      padding:1.6rem 1.8rem 1.7rem;box-shadow:0 18px 50px -32px rgba(44,37,33,.28);
+      padding:1.5rem 1.8rem 1.7rem;box-shadow:0 18px 50px -32px rgba(44,37,33,.28);
       max-width:78%;position:relative;flex-grow:1;
     }
     .dlg-root .line .card::before{content:"";position:absolute;top:0;width:0;height:2px;background:currentColor;transition:width .9s .25s ease}
@@ -130,11 +135,12 @@
       align-items: center;
       gap: .6rem;
       font-size: .73rem;
-      font-weight: 400;
-      letter-spacing: .23em;
+      line-height: 1rem;
+      font-weight: 500;
+      letter-spacing: .20em;
       text-transform: uppercase;
-      margin-bottom: .7rem;
-      opacity: 0.65;
+      margin-bottom: .9rem;
+      opacity: 0.55;
     }
     .dlg-root .line .role .dot{
       width: 7px;
@@ -147,7 +153,7 @@
       display: inline-block;
     }
 
-    .dlg-root .line .speech{font-family:'Montserrat',sans-serif;font-weight:500;font-size:1.14rem;line-height:1.75;color:var(--ink)}
+    .dlg-root .line .speech{font-family:inherit;font-weight:500;letter-spacing: .3px;font-size:1.05rem;line-height:1.6875rem;color:var(--ink)}
     .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
 
     /* Расположение по ролям */
@@ -319,8 +325,8 @@
               </div>
               <p>
                 <span className="role-highlight">Судья — Господь.&nbsp;</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
-                <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Верит (экспериментально), что Христос принял святую плоть человека, какой она была до грехопадения, но ослабленную невинными немощами спустя 4000 лет.<br /><br />
-                <span className="role-highlight">Учитель Израилев — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: Христос обладал непавшей природой. Подсудимый намерен доказать, что его нечестивая жизнь имеет основание для оправдания, рассчитывая найти лазейку в самом богословии Неба.
+                <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Он не желает уступать ни одной позиции и использует все возможные аргументы. Он верит (экспериментально), что Христос принял святую плоть человека, какой она была до грехопадения, но ослабленная невинными немощами, спустя 4000 лет.<br /><br />
+                <span className="role-highlight">Учитель Израилев — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей либо лишь физически ослабленной человеческой природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет не только объяснение, но, при определённом понимании природы Христа, — и основание для оправдания. Хитрае мысли и расчет, он как искусный и хитрый грешник уже приготовил, посмотрим... 
               </p>
             </div>
 
