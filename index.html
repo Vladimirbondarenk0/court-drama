@@ -243,49 +243,43 @@
         }, { threshold: 0.4 });
         if (verdict) ioV.observe(verdict);
 
-        // Интеллектуальный мягкий перехват колесика мыши (со 2-го по последний блок)
+        // Интеллектуальный мягкий перехват колесика мыши (со 2-го по предпоследний блок)
         let isSnapping = false;
 
         const onWheel = (e) => {
-          // Если уже летим к блоку, блокируем повторные импульсы
           if (isSnapping) {
             e.preventDefault();
             return;
           }
 
           const scrollY = window.scrollY;
-          // Собираем массив точек начала блоков (начиная со 2-го блока, индекс 1)
-          const snapTargets = lines.slice(1).map(l => l.offsetTop);
           const firstSnapTarget = lines[1].offsetTop;
-          const lastSnapTarget = lines[lines.length - 1].offsetTop;
+          // Граница окончания привязки — начало предпоследнего блока (чтобы последний блок свободно переходил к вердикту)
+          const lastSnapTarget = lines[lines.length - 2].offsetTop;
+          const absoluteLastTarget = lines[lines.length - 1].offsetTop;
 
-          // Если мы находимся в зоне действия эффекта (от начала 2-го блока до начала последнего)
-          if (scrollY >= firstSnapTarget - 120 && scrollY <= lastSnapTarget + 50) {
+          // Работаем строго со 2-го блока и по предпоследний включительно
+          if (scrollY >= firstSnapTarget - 120 && scrollY < absoluteLastTarget - 50) {
             e.preventDefault();
             isSnapping = true;
 
-            // Определяем, куда крутят колесо (вниз или вверх)
             const direction = e.deltaY > 0 ? 1 : -1;
+            const snapTargets = lines.slice(1).map(l => l.offsetTop);
 
-            // Находим ближайший целевой блок относительно текущей позиции
             let targetY = scrollY;
             if (direction > 0) {
-              // Ищем следующий блок, который находится ниже текущей позиции с запасом
               const next = snapTargets.find(t => t > scrollY + 40);
-              targetY = next !== undefined ? next : lastSnapTarget;
+              targetY = next !== undefined ? next : absoluteLastTarget;
             } else {
-              // Ищем предыдущий блок, который находится выше текущей позиции
               const prev = [...snapTargets].reverse().find(t => t < scrollY - 40);
               targetY = prev !== undefined ? prev : lines[0].offsetTop;
             }
 
-            // Плавная программная прокрутка к нужному блоку
             window.scrollTo({
               top: targetY,
               behavior: 'smooth'
             });
 
-            // Снимаем блокировку после завершения анимации прокрутки
             setTimeout(() => {
               isSnapping = false;
             }, 450);
