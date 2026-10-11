@@ -243,50 +243,70 @@
         }, { threshold: 0.4 });
         if (verdict) ioV.observe(verdict);
 
-        // Интеллектуальный мягкий перехват колесика мыши (со 2-го по предпоследний блок)
-        let isSnapping = false;
+        // Идеально плавный и мягкий ледовый скролл (Интерполяция Lerp)
+        let targetScrollY = window.scrollY;
+        let currentScrollY = window.scrollY;
+        let isAnimating = false;
 
-        const onWheel = (e) => {
-          if (isSnapping) {
-            e.preventDefault();
+        const lerpLoop = () => {
+          currentScrollY += (targetScrollY - currentScrollY) * 0.08; // Коэффициент задает мягчайшее скольжение
+          if (Math.abs(targetScrollY - currentScrollY) < 0.3) {
+            currentScrollY = targetScrollY;
+            window.scrollTo(0, currentScrollY);
+            isAnimating = false;
             return;
           }
+          window.scrollTo(0, currentScrollY);
+          requestAnimationFrame(lerpLoop);
+        };
 
+        const onWheel = (e) => {
           const scrollY = window.scrollY;
           const firstSnapTarget = lines[1].offsetTop;
-          // Граница окончания привязки — начало предпоследнего блока (чтобы последний блок свободно переходил к вердикту)
-          const lastSnapTarget = lines[lines.length - 2].offsetTop;
-          const absoluteLastTarget = lines[lines.length - 1].offsetTop;
+          const lastSnapTarget = lines[lines.length - 1].offsetTop;
 
-          // Работаем строго со 2-го блока и по предпоследний включительно
-          if (scrollY >= firstSnapTarget - 120 && scrollY < absoluteLastTarget - 50) {
+          // Фиксация работает ровно со 2-го блока по последний включительно
+          if (scrollY >= firstSnapTarget - 120 && scrollY <= lastSnapTarget + 40) {
             e.preventDefault();
-            isSnapping = true;
 
             const direction = e.deltaY > 0 ? 1 : -1;
             const snapTargets = lines.slice(1).map(l => l.offsetTop);
 
-            let targetY = scrollY;
+            let nextTarget = targetScrollY;
             if (direction > 0) {
-              const next = snapTargets.find(t => t > scrollY + 40);
-              targetY = next !== undefined ? next : absoluteLastTarget;
+              const next = snapTargets.find(t => t > targetScrollY + 30);
+              nextTarget = next !== undefined ? next : lastSnapTarget;
             } else {
-              const prev = [...snapTargets].reverse().find(t => t < scrollY - 40);
-              targetY = prev !== undefined ? prev : lines[0].offsetTop;
+              const prev = [...snapTargets].reverse().find(t => t < targetScrollY - 30);
+              nextTarget = prev !== undefined ? prev : lines[0].offsetTop;
             }
 
-            window.scrollTo({
-              top: targetY,
-              behavior: 'smooth'
-            });
+            targetScrollY = nextTarget;
+            if (!isAnimating) {
+              isAnimating = true;
+              requestAnimationFrame(lerpLoop);
+            }
+          } else {
+            // Вне зоны фиксации (Hero, действующие лица, вердикт и футер) — тоже плавно скользим, но без привязок к блокам!
+            e.preventDefault();
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            targetScrollY = Math.max(0, Math.min(targetScrollY + e.deltaY * 0.9, maxScroll));
+            if (!isAnimating) {
+              isAnimating = true;
+              requestAnimationFrame(lerpLoop);
+            }
+          }
+        };
 
-            setTimeout(() => {
-              isSnapping = false;
-            }, 450);
+        const onScroll = () => {
+          if (!isAnimating) {
+            targetScrollY = window.scrollY;
+            currentScrollY = window.scrollY;
           }
         };
 
         window.addEventListener('wheel', onWheel, { passive: false });
+        window.addEventListener('scroll', onScroll, { passive: true });
 
         let raf;
         const tick = () => {
@@ -318,6 +338,7 @@
           ioV.disconnect();
           cancelAnimationFrame(raf);
           window.removeEventListener('wheel', onWheel);
+          window.removeEventListener('scroll', onScroll);
         };
       }, []);
 
