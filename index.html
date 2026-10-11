@@ -108,44 +108,62 @@
       border-radius: 4px;
     }
 
-    /* Современный интригующий блок «Старт Суда» */
+    /* Современная интерактивная кнопка-замок «Старт Суда» */
     .dlg-root .start-court-cue {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       margin: 4rem auto 6rem;
-      cursor: pointer;
-      z-index: 5;
+      z-index: 10;
       position: relative;
     }
     .dlg-root .start-court-btn {
       display: inline-flex;
       align-items: center;
       gap: 0.8rem;
-      padding: 0.85rem 2rem;
+      padding: 0.95rem 2.2rem;
       border-radius: 999px;
       border: 1px solid var(--terracotta);
-      background: rgba(251, 249, 245, 0.85);
-      backdrop-filter: blur(8px);
+      background: var(--ivory);
       color: var(--terracotta);
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 600;
       letter-spacing: 0.35em;
       text-transform: uppercase;
-      box-shadow: 0 10px 30px -10px rgba(181, 101, 74, 0.2);
+      box-shadow: 0 10px 30px -10px rgba(181, 101, 74, 0.25);
       transition: all 0.4s ease;
+      cursor: pointer;
     }
-    .dlg-root .start-court-cue:hover .start-court-btn {
+    .dlg-root .start-court-btn:hover {
       background: var(--terracotta);
       color: var(--ivory);
       transform: translateY(-2px);
-      box-shadow: 0 14px 35px -8px rgba(181, 101, 74, 0.35);
+      box-shadow: 0 14px 35px -8px rgba(181, 101, 74, 0.4);
+    }
+    .dlg-root .start-court-btn.started {
+      border-color: var(--olive);
+      color: var(--olive);
+      background: rgba(124, 115, 64, 0.08);
+      cursor: default;
+      box-shadow: none;
+    }
+    .dlg-root .start-court-btn.started .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--olive);
+      display: inline-block;
+      animation: pulseDot 1.5s infinite ease-in-out;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.2); }
     }
     .dlg-root .start-court-icon {
-      width: 14px;
-      height: 14px;
+      width: 15px;
+      height: 15px;
       fill: none;
       stroke: currentColor;
       stroke-width: 2;
@@ -251,7 +269,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useEffect, useRef } = React;
+    const { useEffect, useRef, useState } = React;
 
     const AVATARS = {
       prosecutor: "https://assets.hope.study/images/8YaRWQakL_main_okE.webp",
@@ -273,13 +291,25 @@
 
     function Dialogue() {
       const rootRef = useRef(null);
+      const [isCourtStarted, setIsCourtStarted] = useState(false);
+      const isCourtStartedRef = useRef(false);
 
-      const scrollToFirstLine = () => {
+      const handleStartCourt = () => {
+        setIsCourtStarted(true);
+        isCourtStartedRef.current = true;
+
         const root = rootRef.current;
         if (!root) return;
         const firstLine = root.querySelector('.line');
         if (firstLine) {
-          firstLine.scrollIntoView({ behavior: 'smooth' });
+          // Вычисляем позицию первого блока реплики, чтобы сфокусировать его идеально по центру экрана
+          const rect = firstLine.getBoundingClientRect();
+          const targetY = window.scrollY + rect.top - (window.innerHeight / 2) + (rect.height / 2);
+          
+          window.scrollTo({
+            top: targetY,
+            behavior: 'smooth'
+          });
         }
       };
 
@@ -289,6 +319,7 @@
         const lines = Array.from(root.querySelectorAll('.line'));
         const verdict = root.querySelector('.verdict');
         const rail = root.querySelector('.rail');
+        const startCue = root.querySelector('.start-court-cue');
 
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
@@ -302,7 +333,6 @@
         }, { threshold: 0.4 });
         if (verdict) ioV.observe(verdict);
 
-        // Единая математика скольжения без скачков скорости
         let targetScrollY = window.scrollY;
         let currentScrollY = window.scrollY;
         let isAnimating = false;
@@ -323,12 +353,18 @@
           const scrollY = window.scrollY;
           const firstLineTop = lines[0].offsetTop;
           const lastLineTop = lines[lines.length - 1].offsetTop;
+          const cueTop = startCue ? startCue.offsetTop : firstLineTop - 100;
 
           e.preventDefault();
-          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
 
-          // Внутри зоны диалога — пошаговая фиксация
-          if (scrollY >= firstLineTop - 40 && scrollY < lastLineTop - 40) {
+          // ЖЕСТКАЯ БЛОКИРОВКА: Пока суд не начат кнопкой, прокрутка ограничена кнопкой «Старт Суда»
+          let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
+          if (!isCourtStartedRef.current) {
+            maxAllowedScroll = cueTop - (window.innerHeight / 2) + 100;
+          }
+
+          // Если суд начат и мы находимся внутри зоны диалоговых блоков — шагаем с привязкой
+          if (isCourtStartedRef.current && scrollY >= firstLineTop - 40 && scrollY < lastLineTop - 40) {
             const direction = e.deltaY > 0 ? 1 : -1;
             const snapTargets = lines.map(l => l.offsetTop);
 
@@ -342,8 +378,8 @@
             }
             targetScrollY = nextTarget;
           } else {
-            // Вне диалога (включая задержку перед стартом) — свободное плавное скольжение
-            targetScrollY = Math.max(0, Math.min(targetScrollY + e.deltaY * 1.1, maxScroll));
+            // Вне диалога (или до старта) — свободное плавное скольжение с жестким ограничением снизу
+            targetScrollY = Math.max(0, Math.min(targetScrollY + e.deltaY * 1.1, maxAllowedScroll));
           }
 
           if (!isAnimating) {
@@ -422,14 +458,27 @@
               </p>
             </div>
 
-            {/* Элемент-пауза «Старт Суда» с пульсирующей стрелкой */}
-            <div className="start-court-cue" onClick={scrollToFirstLine}>
-              <div className="start-court-btn">
-                <span>Старт Суда</span>
-                <svg className="start-court-icon" viewBox="0 0 24 24">
-                  <path d="M12 5v14M19 12l-7 7-7-7" />
-                </svg>
-              </div>
+            {/* Элемент-замок «Старт Суда» */}
+            <div className="start-court-cue">
+              <button 
+                className={`start-court-btn ${isCourtStarted ? 'started' : ''}`}
+                onClick={handleStartCourt}
+                disabled={isCourtStarted}
+              >
+                {isCourtStarted ? (
+                  <>
+                    <span className="status-dot"></span>
+                    <span>Заседание идет</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Старт Суда</span>
+                    <svg className="start-court-icon" viewBox="0 0 24 24">
+                      <path d="M12 5v14M19 12l-7 7-7-7" />
+                    </svg>
+                  </>
+                )}
+              </button>
             </div>
 
             {LINES.map((l, i) => (
