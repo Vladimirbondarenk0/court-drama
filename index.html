@@ -66,9 +66,11 @@
     @keyframes dlgFadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
     .dlg-root .court{max-width:880px;margin:0 auto;padding:2rem 1.5rem 8rem;position:relative}
+    
+    /* Стили блока сцены без Playfair Display */
     .dlg-root .scene-label{
-      text-align:center;font-family:'Playfair Display',serif;font-style:italic;
-      color:var(--ink-soft);font-size:1.05rem;margin:3rem auto 4rem;max-width:68ch;position:relative;z-index:2;
+      text-align:center;font-family:inherit;font-style:normal;
+      color:var(--ink-soft);font-size:1.02rem;margin:3rem auto 4rem;max-width:68ch;position:relative;z-index:2;
       line-height: 1.8;
     }
     .dlg-root .scene-label::before,.dlg-root .scene-label::after{content:"";display:block;width:60px;height:1px;background:var(--line);margin:1.2rem auto}
@@ -82,7 +84,6 @@
       letter-spacing: .28em;
       text-transform: uppercase;
       margin-bottom: 1rem;
-      font-style: normal;
       color: var(--terracotta);
     }
     .dlg-root .scene-label .cast-title .dot{
@@ -91,6 +92,12 @@
       border-radius: 50%;
       background: currentColor;
       flex-shrink: 0;
+    }
+
+    /* Выделение ролей в действующих лицах */
+    .dlg-root .scene-label .role-highlight {
+      font-weight: 600;
+      color: var(--terracotta);
     }
 
     .dlg-root .line{
@@ -143,25 +150,20 @@
     .dlg-root .line .speech{font-family:'Montserrat',sans-serif;font-weight:400;font-size:1.24rem;line-height:1.75;color:var(--ink)}
     .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
 
+    /* Расположение по ролям */
     .dlg-root .line.prosecutor{justify-content:flex-start;flex-direction:row;}
     .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:#e8d3c6}
     .dlg-root .line.prosecutor .card::before{left:1.8rem}
 
-    .dlg-root .line.defender{justify-content:flex-end;flex-direction:row-reverse;text-align:right}
-    .dlg-root .line.defender .card{color:var(--olive);border-color:#e2e0cf;background:linear-gradient(180deg,#fffefb,#f6f3ec)}
-    .dlg-root .line.defender .card::before{right:1.8rem}
-    .dlg-root .line.defender .role{justify-content:flex-end}
-
-    .dlg-root .line.accused{justify-content:center;flex-direction:column;align-items:center}
-    .dlg-root .line.accused .card{color:var(--ink-soft);border-style:dashed;background:transparent;box-shadow:none;text-align:center;max-width:62%}
-    .dlg-root .line.accused .card::before{display:none}
-    .dlg-root .line.accused .role{justify-content:center}
-    .dlg-root .line.accused .speech{font-size:1.18rem;font-style:italic}
-    .dlg-root .line.accused .avatar {display:none;}
+    /* Учитель Израилев (справа, с использованием второй аватарки) */
+    .dlg-root .line.accused{justify-content:flex-end;flex-direction:row-reverse;text-align:right}
+    .dlg-root .line.accused .card{color:var(--olive);border-color:#e2e0cf;background:linear-gradient(180deg,#fffefb,#f6f3ec)}
+    .dlg-root .line.accused .card::before{right:1.8rem}
+    .dlg-root .line.accused .role{justify-content:flex-end}
 
     .dlg-root .line .nub{position:absolute;top:1.9rem;width:46px;height:1px;background:var(--line)}
     .dlg-root .line.prosecutor .nub{left:50%;transform:translateX(-46px)}
-    .dlg-root .line.defender .nub{right:50%;transform:translateX(46px)}
+    .dlg-root .line.accused .nub{right:50%;transform:translateX(46px)}
 
     .dlg-root .verdict{
       text-align:center;margin:6rem auto 2rem;max-width:680px;padding:0 1.5rem;position:relative;z-index:2;
@@ -187,7 +189,6 @@
       .dlg-root .line .card{max-width:82%}
       .dlg-root .line .speech{font-size:1.16rem}
       .dlg-root .line .nub{display:none}
-      .dlg-root .line.accused .card{max-width:92%}
     }
   </style>
 </head>
@@ -199,7 +200,7 @@
 
     const AVATARS = {
       prosecutor: "https://assets.hope.study/images/8YaRWQakL_main_okE.webp",
-      defender: "https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp"
+      accused: "https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp"
     };
 
     const LINES = [
@@ -305,8 +306,8 @@
             <h1>Экспериментальный Божий суд над <em>Учителем Израилевым</em></h1>
             <p className="sub">Сможет ли Учитель Израилев выиграть схватку в небесном суде, если ангел-прокурор придерживается той же самой идеи?</p>
             <div className="scroll-cue">
-              <span>Слушай дело</span>
               <div className="bar" />
+              <span>Слушай дело</span>
             </div>
           </header>
 
@@ -317,20 +318,20 @@
                 <span>Действующие лица:</span>
               </div>
               <p>
-                <strong>Судья — Господь.</strong> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
-                <strong>Высший ангел-прокурор —</strong> опытный, мудрейший, логически сильный обвинитель. Верит (экспериментально), что Христос принял святую плоть человека, какой она была до грехопадения, но ослабленную невинными немощами спустя 4000 лет.<br /><br />
-                <strong>Учитель Израилев — подсудимый.</strong> Свою защиту сознательно строит на выгодной богословской предпосылке: Христос обладал непавшей природой. Подсудимый намерен доказать, что его нечестивая жизнь имеет основание для оправдания, рассчитывая найти лазейку в самом богословии Неба.
+                <span className="role-highlight">Судья — Господь.</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
+                <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Верит (экспериментально), что Христос принял святую плоть человека, какой она была до грехопадения, но ослабленную невинными немощами спустя 4000 лет.<br /><br />
+                <span className="role-highlight">Учитель Израилев — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: Христос обладал непавшей природой. Подсудимый намерен доказать, что его нечестивая жизнь имеет основание для оправдания, рассчитывая найти лазейку в самом богословии Неба.
               </p>
             </div>
 
             {LINES.map((l, i) => (
               <div className={`line ${l.side}`} key={i}>
-                {l.side !== 'accused' && AVATARS[l.side] && (
+                {AVATARS[l.side] && (
                   <div className="avatar">
                     <img src={AVATARS[l.side]} alt={l.role} />
                   </div>
                 )}
-                {l.side !== 'accused' && <span className="nub" />}
+                <span className="nub" />
                 <div className="card">
                   <div className="role">
                     <span className="dot" />
