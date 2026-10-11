@@ -1,74 +1,278 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>99% людей не знают этих фактов о Библии. А ты?</title>
-    <!-- Шрифты -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Стили из твоей системы -->
-    <style>
-        :root {
-            --primary-color: #5943BE;
-            --background-gradient: linear-gradient(135deg, #3B2B87 0%, #5943BE 50%, #9136FE 100%);
-            --text-font: 'Montserrat', sans-serif;
-            --component-border-radius: 6px;
-            --button-shadow: 0 5px 20px 0 rgba(89, 67, 190, 0.3);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Голос Истины: Судебный Диалог</title>
+  <!-- Подключаем шрифты и Tailwind для иконок/утилит, если нужно -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Подключаем React и Babel прямо в браузер для работы JSX без сборщиков -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background: var(--background-gradient);
-            font-family: var(--text-font);
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+  <style>
+    .dlg-root{
+      --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#2C2521; --ink-soft:#5b4f47;
+      --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
+      --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;
+      background:
+        radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
+        var(--ivory);
+      color:var(--ink);
+      font-family:'Montserrat',sans-serif;
+      font-weight:300; line-height:1.8; overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      min-height: 100vh;
+    }
+    .dlg-root *{margin:0;padding:0;box-sizing:border-box}
+    .dlg-root .rail{
+      position:fixed;top:0;left:0;height:3px;width:0;
+      background:linear-gradient(90deg,var(--terracotta),var(--gold),var(--olive));
+      z-index:50;transition:width .1s linear;
+    }
+    .dlg-root .hero{
+      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;padding:6rem 1.5rem;position:relative;
+    }
+    .dlg-root .eyebrow{
+      letter-spacing:.5em;text-transform:uppercase;font-size:.72rem;font-weight:500;
+      color:var(--terracotta);margin-bottom:2.2rem;
+      opacity:0;animation:dlgFadeUp 1.1s .1s ease forwards;
+    }
+    .dlg-root h1{
+      font-family:'Playfair Display',serif;font-weight:600;
+      font-size:clamp(2.6rem,7vw,5.4rem);line-height:1.08;letter-spacing:-.01em;
+      max-width:16ch;opacity:0;animation:dlgFadeUp 1.3s .35s ease forwards;
+    }
+    .dlg-root h1 em{font-style:italic;color:var(--olive);font-weight:400}
+    .dlg-root .sub{
+      margin-top:2rem;max-width:46ch;color:var(--ink-soft);font-size:1.02rem;
+      opacity:0;animation:dlgFadeUp 1.3s .7s ease forwards;
+    }
+    .dlg-root .scroll-cue{
+      position:absolute;bottom:2.6rem;left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:.7rem;
+      color:var(--ink-soft);font-size:.72rem;letter-spacing:.35em;text-transform:uppercase;
+      opacity:0;animation:dlgFadeUp 1.3s 1.1s ease forwards;
+    }
+    @keyframes dlgFadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
-        .container {
-            width: 100%;
-            max-width: 600px;
-            padding: 24px;
-            box-sizing: border-box;
-        }
+    .dlg-root .court{max-width:880px;margin:0 auto;padding:2rem 1.5rem 8rem;position:relative}
+    .dlg-root .scene-label{
+      text-align:center;font-family:'Playfair Display',serif;font-style:italic;
+      color:var(--ink-soft);font-size:1.05rem;margin:3rem auto 4rem;max-width:40ch;position:relative;z-index:2;
+    }
+    .dlg-root .scene-label::before,.dlg-root .scene-label::after{content:"";display:block;width:60px;height:1px;background:var(--line);margin:1.2rem auto}
 
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: var(--component-border-radius);
-            padding: 32px;
-            box-shadow: var(--button-shadow);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+    .dlg-root .line{
+      position:relative;z-index:2;display:flex;margin:2.4rem 0;opacity:0;transform:translateY(40px);
+      transition:opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter .6s ease;
+      filter:saturate(.9);
+    }
+    .dlg-root .line.reveal{opacity:1;transform:translateY(0)}
+    .dlg-root .line.dim{opacity:.32;filter:saturate(.6) blur(.4px)}
+    .dlg-root .line.active{filter:saturate(1)}
+    .dlg-root .line .card{
+      background:var(--ivory);border:1px solid var(--line);border-radius:14px;
+      padding:1.6rem 1.8rem 1.7rem;box-shadow:0 18px 50px -32px rgba(44,37,33,.28);
+      max-width:78%;position:relative;
+    }
+    .dlg-root .line .card::before{content:"";position:absolute;top:0;width:0;height:2px;background:currentColor;transition:width .9s .25s ease}
+    .dlg-root .line.reveal .card::before{width:54px}
+    .dlg-root .line .role{display:flex;align-items:center;gap:.6rem;font-size:.68rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;margin-bottom:.7rem}
+    .dlg-root .line .role .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+    .dlg-root .line .speech{font-family:'Montserrat',sans-serif;font-weight:400;font-size:1.24rem;line-height:1.75;color:var(--ink)}
+    .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
 
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.3;
-        }
+    .dlg-root .line.prosecutor{justify-content:flex-start}
+    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:#e8d3c6}
+    .dlg-root .line.prosecutor .card::before{left:1.8rem}
+    .dlg-root .line.defender{justify-content:flex-end;text-align:right}
+    .dlg-root .line.defender .card{color:var(--olive);border-color:#e2e0cf;background:linear-gradient(180deg,#fffefb,#f6f3ec)}
+    .dlg-root .line.defender .card::before{right:1.8rem}
+    .dlg-root .line.defender .role{justify-content:flex-end}
+    .dlg-root .line.accused{justify-content:center}
+    .dlg-root .line.accused .card{color:var(--ink-soft);border-style:dashed;background:transparent;box-shadow:none;text-align:center;max-width:62%}
+    .dlg-root .line.accused .card::before{display:none}
+    .dlg-root .line.accused .role{justify-content:center}
+    .dlg-root .line.accused .speech{font-size:1.18rem;font-style:italic}
+    .dlg-root .line .nub{position:absolute;top:1.9rem;width:46px;height:1px;background:var(--line)}
+    .dlg-root .line.prosecutor .nub{left:50%;transform:translateX(-46px)}
+    .dlg-root .line.defender .nub{right:50%;transform:translateX(46px)}
 
-        p {
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 1.5;
-            opacity: 0.9;
-        }
-    </style>
+    .dlg-root .verdict{
+      text-align:center;margin:6rem auto 2rem;max-width:680px;padding:0 1.5rem;position:relative;z-index:2;
+      opacity:0;transform:translateY(40px);transition:opacity 1.2s ease,transform 1.2s ease;
+    }
+    .dlg-root .verdict.reveal{opacity:1;transform:translateY(0)}
+    .dlg-root .verdict .seal{
+      width:84px;height:84px;border-radius:50%;border:1px solid var(--gold);margin:0 auto 2rem;
+      display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;
+      color:var(--gold);font-size:1.6rem;font-style:italic;box-shadow:inset 0 0 0 6px rgba(184,153,104,.08);
+    }
+    .dlg-root .verdict h2{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;color:var(--ink)}
+    .dlg-root .verdict h2 em{font-style:italic;color:var(--olive)}
+    .dlg-root .verdict p{margin:1.6rem auto 0;color:var(--ink-soft);font-size:1.05rem;max-width:48ch}
+    .dlg-root .verdict .stamp{
+      margin-top:2.6rem;display:inline-block;padding:.5rem 1.4rem;border:1px solid var(--terracotta);
+      color:var(--terracotta);font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;font-weight:600;border-radius:999px;
+    }
+    .dlg-root footer{text-align:center;padding:3rem 1.5rem 5rem;color:var(--ink-soft);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase}
+    .dlg-root footer span{color:var(--terracotta)}
+
+    @media (max-width:640px){
+      .dlg-root .line .card{max-width:88%}
+      .dlg-root .line .speech{font-size:1.16rem}
+      .dlg-root .line .nub{display:none}
+      .dlg-root .line.accused .card{max-width:92%}
+    }
+  </style>
 </head>
 <body>
+  <div id="root"></div>
 
-    <div class="container">
-        <div class="card">
-            <h1>99% людей не знают этих фактов о Библии. А ты?</h1>
-            <p>Жизнь человека полна суеты, но истинный свет пробивается сквозь любую темноту, когда мы обретаем покой в простоте и силе созидающего Слова.</p>
+  <script type="text/babel">
+    const { useEffect, useRef } = React;
+
+    const LINES = [
+      { side: 'prosecutor', role: 'Прокурор', html: 'Суд идёт. Подсудимый, встань. Закон не закрывается на ночь — он требует отчёта за каждый день, каждый помысел, каждый невыплаченный долг. Где твои заслуги? Покажи мне реестр твоей праведности.' },
+      { side: 'defender', role: 'Защитник · Голос Истины', html: 'Не требуй с него реестра, обвинитель. Я принёс не весы, а <em>милость</em>. Закон взвешивает — а я поднимаю.' },
+      { side: 'prosecutor', role: 'Прокурор', html: 'Милость без закона — хаос! Вот его жизнь: «я» хотел, «я» брал, «я» судил, «я» оправдывал себя. Каждый поступок — кирпич в стену его тюрьмы. Приговор должен быть. Справедливость не молчит.' },
+      { side: 'accused', role: 'Подсудимый', html: 'Это правда. Я строил стену из себя. И не могу из неё выйти.' },
+      { side: 'defender', role: 'Защитник · Голос Истины', html: 'Закон исполнен — не тобой, а <em>Мною</em>. Каждый кирпич, что ты сложил, Я понёс. Каждый долг, что ты назвал своим, Я оплатил. Реестр закрыт. Подпись на нём — Моя.' },
+      { side: 'prosecutor', role: 'Прокурор', html: 'Ты отменяешь закон? Тогда где граница между праведным и виновным? Где страх перед судом?' },
+      { side: 'defender', role: 'Защитник · Голос Истины', html: 'Я не отменяю закон — Я <em>исполняю</em> его любовью. Граница не стёрта: она проведена через Меня. Страх перед судом умер там, где Я умер вместо него.' },
+      { side: 'accused', role: 'Подсудимый', html: 'Если это так… могу ли я дышать, не оправдываясь больше собой?' },
+      { side: 'prosecutor', role: 'Прокурор', html: 'Тогда кто ответит за его прошлое? Слова не сжигают вину. Мне нужен приговор — на бумаге, с печатью.' },
+      { side: 'defender', role: 'Защитник · Голос Истины', html: 'Вот приговор — не на бумаге, а в плоти. <em>«Оправдан даром»</em>. Печать — раны Мои. Прошлое закрыто, будущее открыто. Встань и иди.' },
+      { side: 'accused', role: 'Подсудимый', html: 'Тюрьма «я»… открыта? Я выхожу — не потому, что заслужил, а потому, что меня выпустили.' },
+      { side: 'defender', role: 'Защитник · Голос Истины', html: 'Именно так. Свобода — не награда за заслуги, а <em>дар</em> любящего. Ты больше не подсудимый. Ты — гость за Моим столом.' }
+    ];
+
+    function Dialogue() {
+      const rootRef = useRef(null);
+
+      useEffect(() => {
+        const root = rootRef.current;
+        if (!root) return;
+        const lines = Array.from(root.querySelectorAll('.line'));
+        const verdict = root.querySelector('.verdict');
+        const rail = root.querySelector('.rail');
+
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) { e.target.classList.add('reveal'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.22, rootMargin: '0px 0px -8% 0px' });
+        lines.forEach((l) => io.observe(l));
+
+        const ioV = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('reveal'); ioV.unobserve(e.target); } });
+        }, { threshold: 0.4 });
+        if (verdict) ioV.observe(verdict);
+
+        let raf;
+        const tick = () => {
+          const vh = window.innerHeight;
+          const center = vh * 0.5;
+          let best = null, bestDist = Infinity;
+          lines.forEach((l) => {
+            if (!l.classList.contains('reveal')) return;
+            const r = l.getBoundingClientRect();
+            if (r.bottom < 0 || r.top > vh) return;
+            const mid = (r.top + r.bottom) / 2;
+            const d = Math.abs(mid - center);
+            if (d < bestDist) { bestDist = d; best = l; }
+          });
+          lines.forEach((l) => {
+            if (l === best) { l.classList.add('active'); l.classList.remove('dim'); }
+            else if (best) { l.classList.remove('active'); l.classList.add('dim'); }
+            else { l.classList.remove('active', 'dim'); }
+          });
+          const sc = document.documentElement;
+          const max = sc.scrollHeight - vh;
+          if (rail) rail.style.width = (max > 0 ? (sc.scrollTop / max) * 100 : 0) + '%';
+          raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
+
+        let target = window.scrollY;
+        let current = window.scrollY;
+        let animating = false;
+        const smoothLoop = () => {
+          current += (target - current) * 0.14;
+          if (Math.abs(target - current) < 0.5) {
+            current = target;
+            window.scrollTo(0, current);
+            animating = false;
+            return;
+          }
+          window.scrollTo(0, current);
+          requestAnimationFrame(smoothLoop);
+        };
+        const onWheel = (e) => {
+          e.preventDefault();
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          target = Math.max(0, Math.min(target + e.deltaY, max));
+          if (!animating) { animating = true; smoothLoop(); }
+        };
+        const onScroll = () => {
+          if (!animating) { target = window.scrollY; current = window.scrollY; }
+        };
+        window.addEventListener('wheel', onWheel, { passive: false });
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        return () => {
+          io.disconnect();
+          ioV.disconnect();
+          cancelAnimationFrame(raf);
+          window.removeEventListener('wheel', onWheel);
+          window.removeEventListener('scroll', onScroll);
+        };
+      }, []);
+
+      return (
+        <div className="dlg-root" ref={rootRef}>
+          <div className="rail" />
+
+          <header className="hero">
+            <div className="eyebrow">Зал Суда · Драма в одном акте</div>
+            <h1>Суд над <em>душой</em><br />Обвинение и&nbsp;Оправдание</h1>
+            <p className="sub">Прокурор требует закона и отчёта. Защитник приносит оправдание даром. Подсудимый стоит на пороге освобождения из тюрьмы собственного «я».</p>
+            <div className="scroll-cue">Слушай дело</div>
+          </header>
+
+          <main className="court">
+            <p className="scene-label">Тишина в зале. Свет падает на скамью подсудимых. Обвинитель поднимается первым.</p>
+
+            {LINES.map((l, i) => (
+              <div className={`line ${l.side}`} key={i}>
+                {l.side !== 'accused' && <span className="nub" />}
+                <div className="card">
+                  <div className="role"><span className="dot" />{l.role}</div>
+                  <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
+                </div>
+              </div>
+            ))}
+
+            <section className="verdict">
+              <div className="seal">Ω</div>
+              <h2>Дело <em>закрыто</em>.<br />Душа — <em>оправдана</em>.</h2>
+              <p>Закон потребовал — Закон исполнился. Обвинитель замолчал. Тюрьма «я» осталась пустой. На пороге стоит свободный человек, и свет его — не его собственный.</p>
+              <div className="stamp">Приговор: Оправдание даром</div>
+            </section>
+          </main>
+
+          <footer>Текст · драматическая аллегория &nbsp;·&nbsp; <span>Голос Истины</span></footer>
         </div>
-    </div>
+      );
+    }
 
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<Dialogue />);
+  </script>
 </body>
 </html>
