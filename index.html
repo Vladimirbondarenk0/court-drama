@@ -53,11 +53,10 @@
       opacity:0;animation:dlgFadeUp 1.3s .7s ease forwards;
     }
     .dlg-root .scroll-cue{
-      position:absolute;bottom:2.6rem;left:0;right:0;margin:0 auto;
-      display:flex;flex-direction:column;align-items:center;text-align:center;gap:.7rem;
+      position:absolute;bottom:2.6rem;left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:.7rem;
       color:var(--ink-soft);font-size:.72rem;letter-spacing:.35em;text-transform:uppercase;
       opacity:0;animation:dlgFadeUp 1.3s 1.1s ease forwards;
-      width: max-content;
     }
     .dlg-root .scroll-cue .bar{
       width:1px;height:46px;background:var(--terracotta-soft);
@@ -66,7 +65,7 @@
     @keyframes dlgDrop{0%,100%{transform:scaleY(.2);opacity:.3}50%{transform:scaleY(1);opacity:1}}
     @keyframes dlgFadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
-    .dlg-root .court{max-width:880px;margin:0 auto;padding:0rem 1.5rem 8rem;position:relative;display:flex;flex-direction:column;align-items:center;}
+    .dlg-root .court{max-width:880px;margin:0 auto;padding:0rem 1.5rem 8rem;position:relative}
     
     .dlg-root .scene-label{
       text-align:center;
@@ -75,7 +74,6 @@
       font-size:1.05rem;
       margin:0rem auto 3rem;
       max-width:68ch;
-      width: 100%;
       position:relative;
       z-index:2;
       line-height:1.8;
@@ -119,7 +117,6 @@
       position: relative;
       z-index: 5;
       padding: 2rem 1.5rem 5rem;
-      width: 100%;
     }
     .dlg-root .start-court-btn {
       display: inline-flex;
@@ -183,7 +180,6 @@
       position:relative;z-index:2;display:flex;align-items:flex-start;gap:1rem;margin:2.4rem 0;opacity:0;transform:translateY(40px);
       transition:opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter .6s ease;
       filter:saturate(.9);
-      width: 100%;
     }
     .dlg-root .line.reveal{opacity:1;transform:translateY(0)}
     .dlg-root .line.dim{opacity:.32;filter:saturate(.6) blur(.4px)}
@@ -257,7 +253,6 @@
     .dlg-root .verdict{
       text-align:center;margin:6rem auto 2rem;max-width:680px;padding:0 1.5rem;position:relative;z-index:2;
       opacity:0;transform:translateY(40px);transition:opacity 1.2s ease,transform 1.2s ease;
-      width: 100%;
     }
     .dlg-root .verdict.reveal{opacity:1;transform:translateY(0)}
     .dlg-root .verdict .seal{
@@ -350,6 +345,7 @@
         const verdict = root.querySelector('.verdict');
         const rail = root.querySelector('.rail');
         const startSection = root.querySelector('.start-court-section');
+        const hero = root.querySelector('.hero');
 
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
@@ -366,6 +362,7 @@
         targetScrollYRef.current = window.scrollY;
         currentScrollYRef.current = window.scrollY;
 
+        // Физика сверхплавной инерции для всей страницы (коэффициент 0.08 для максимальной мягкости)
         const lerpLoop = () => {
           currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
           if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.3) {
@@ -391,6 +388,7 @@
             maxAllowedScroll = sectionBottom;
           }
 
+          // Если находимся в зоне диалога после старта — включаем строгий пошаговый скролл от блока к блоку
           if (isCourtStartedRef.current && scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
             const direction = e.deltaY > 0 ? 1 : -1;
             
@@ -416,6 +414,7 @@
 
             targetScrollYRef.current = Math.max(0, Math.min(snapTargets[nextIndex], maxAllowedScroll));
           } else {
+            // В начале (в hero) и в самом конце страницы скролл также идет через мягкую инерцию
             targetScrollYRef.current = Math.max(0, Math.min(targetScrollYRef.current + e.deltaY * 0.9, maxAllowedScroll));
           }
 
