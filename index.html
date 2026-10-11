@@ -12,6 +12,14 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #FBF9F5;
+    }
+
     .dlg-root{
       --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
       --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
@@ -24,9 +32,10 @@
       font-family:'Montserrat',sans-serif;
       font-weight:300; line-height:1.8;
       -webkit-font-smoothing:antialiased;
-      min-height: 100vh;
-      scroll-behavior: smooth;
+      height: 100vh;
+      overflow-y: scroll;
       scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
     }
     .dlg-root *{margin:0;padding:0;box-sizing:border-box}
     
@@ -36,11 +45,19 @@
       z-index:50;transition:width .1s linear;
     }
 
-    .dlg-root .hero{
-      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-      text-align:center;padding:6rem 1.5rem;position:relative;gap: 1.5rem;
+    .dlg-root .snap-section {
+      min-height: 100vh;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       scroll-snap-align: start;
+      scroll-snap-stop: always;
+      position: relative;
+      padding: 2rem 1.5rem;
     }
+
     .dlg-root .eyebrow{
       letter-spacing:.5em;text-transform:uppercase;font-size:.72rem;font-weight:500;
       color:var(--terracotta);margin-bottom:2.2rem;
@@ -56,6 +73,7 @@
     .dlg-root .sub{
       margin-top:2rem;max-width:46ch;color:var(--ink-soft);font-size:1.02rem;
       opacity:0;animation:dlgFadeUp 1.3s .7s ease forwards;
+      text-align: center;
     }
     .dlg-root .scroll-cue{
       position:absolute;bottom:2.6rem;left:50%;transform:translateX(-50%);
@@ -71,7 +89,7 @@
     @keyframes dlgFadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
     .dlg-root .court{
-      max-width:880px;margin:0 auto;padding:4rem 1.5rem 10rem;position:relative;
+      max-width:880px;margin:0 auto;width: 100%;
     }
     
     .dlg-root .scene-label{
@@ -79,21 +97,16 @@
       font-style:italic;
       color:var(--ink-soft);
       font-size:1.05rem;
-      margin:4rem auto;
       max-width:68ch;
-      position:relative;
-      z-index:2;
       line-height:1.8;
-      scroll-snap-align: center;
-      padding: 3rem 0;
-      opacity: 0.25;
-      filter: saturate(0.4) blur(4px);
-      transform: translateY(10px);
+      opacity: 0.2;
+      filter: blur(4px);
       transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease;
+      transform: translateY(20px);
     }
     .dlg-root .scene-label.active {
       opacity: 1;
-      filter: saturate(1) blur(0px);
+      filter: blur(0px);
       transform: translateY(0);
     }
     .dlg-root .scene-label::before,.dlg-root .scene-label::after{content:"";display:block;width:60px;height:1px;background:var(--line);margin:1.2rem auto}
@@ -101,6 +114,7 @@
     .dlg-root .scene-label .cast-title{
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: .6rem;
       font-size: .92rem;
       font-family: 'Playfair Display', serif;
@@ -126,16 +140,13 @@
       border-radius: 4px;
     }
 
-    /* Каждая реплика — гармоничный блок с эффектом притяжения и видимыми соседями в блюре */
     .dlg-root .line{
-      position:relative;z-index:2;display:flex;align-items:flex-start;gap:1rem;
-      margin:5rem 0;
-      scroll-snap-align: center;
-      padding: 1.5rem 0;
-      transition:opacity 0.8s cubic-bezier(.2,.7,.2,1), transform 0.8s cubic-bezier(.2,.7,.2,1), filter 0.8s ease;
-      opacity: 0.22;
-      filter: saturate(0.5) blur(4px);
-      transform: translateY(15px);
+      width: 100%;
+      display:flex;align-items:center;gap:1rem;
+      transition:opacity 0.8s ease, transform 0.8s ease, filter 0.8s ease;
+      opacity: 0.15;
+      filter: saturate(0.3) blur(5px);
+      transform: translateY(30px);
     }
     
     .dlg-root .line.active{
@@ -156,10 +167,9 @@
       max-width:78%;position:relative;flex-grow:1;
     }
     
-    /* Линия оживает строго когда блок становится активным в фокусе */
     .dlg-root .line .card::before{
       content:"";position:absolute;top:0;width:0;height:2.1px;background:currentColor;
-      transition:width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s;
+      transition:width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s;
     }
     .dlg-root .line.active .card::before{
       width:54px;
@@ -200,21 +210,16 @@
     .dlg-root .line.accused .card::before{right:1.8rem}
     .dlg-root .line.accused .role{justify-content:flex-end}
 
-    .dlg-root .line .nub{position:absolute;top:1.9rem;width:46px;height:1px;background:var(--line)}
-    .dlg-root .line.prosecutor .nub{left:50%;transform:translateX(-46px)}
-    .dlg-root .line.accused .nub{right:50%;transform:translateX(46px)}
-
     .dlg-root .verdict{
-      text-align:center;margin:8rem auto 2rem;max-width:680px;padding:3rem 1.5rem;position:relative;z-index:2;
-      scroll-snap-align: center;
-      opacity: 0.25;
-      filter: saturate(0.4) blur(4px);
-      transform: translateY(15px);
+      text-align:center;max-width:680px;position:relative;z-index:2;
+      opacity: 0.2;
+      filter: blur(4px);
       transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease;
+      transform: translateY(20px);
     }
     .dlg-root .verdict.active{
       opacity: 1;
-      filter: saturate(1) blur(0px);
+      filter: blur(0px);
       transform: translateY(0);
     }
     .dlg-root .verdict .seal{
@@ -230,13 +235,14 @@
       color:var(--terracotta);font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;font-weight:600;border-radius:999px;
     }
     
-    .dlg-root footer{text-align:center;padding:4rem 1.5rem 6rem;color:var(--ink-soft);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase}
+    .dlg-root footer{
+      text-align:center;color:var(--ink-soft);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+    }
     .dlg-root footer span{color:var(--terracotta)}
 
     @media (max-width:640px){
       .dlg-root .line .card{max-width:82%}
       .dlg-root .line .speech{font-size:1.16rem}
-      .dlg-root .line .nub{display:none}
     }
   </style>
 </head>
@@ -270,36 +276,65 @@
       useEffect(() => {
         const root = rootRef.current;
         if (!root) return;
-        const targets = Array.from(root.querySelectorAll('.court > div'));
+
+        const sections = Array.from(root.querySelectorAll('.snap-section'));
         const rail = root.querySelector('.rail');
 
-        // Отслеживаем центральную зону экрана, чтобы реплики плавно подсвечивались по мере прокрутки
+        // Наблюдатель за блоками для мгновенного снятия блюра при фиксации
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.classList.add('active');
-            } else {
-              e.target.classList.remove('active');
+            const innerContent = e.target.querySelector('.line, .scene-label, .verdict');
+            if (innerContent) {
+              if (e.isIntersecting) {
+                innerContent.classList.add('active');
+              } else {
+                innerContent.classList.remove('active');
+              }
             }
           });
         }, { 
-          rootMargin: '-25% 0px -25% 0px', 
-          threshold: 0.15 
+          root: root,
+          threshold: 0.6
         });
 
-        targets.forEach((t) => io.observe(t));
+        sections.forEach((sec) => io.observe(sec));
 
+        // Обновление прогресс-бара сверху
         const onScroll = () => {
-          const sc = document.documentElement;
-          const max = sc.scrollHeight - window.innerHeight;
-          if (rail) rail.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+          const max = root.scrollHeight - root.clientHeight;
+          if (rail && max > 0) {
+            rail.style.width = (root.scrollTop / max) * 100 + '%';
+          }
         };
 
-        window.addEventListener('scroll', onScroll, { passive: true });
+        root.addEventListener('scroll', onScroll, { passive: true });
+
+        // Перехват колёсика для резкого, широкого шага между слайдами
+        let isScrolling = false;
+        const onWheel = (e) => {
+          e.preventDefault();
+          if (isScrolling) return;
+
+          const direction = e.deltaY > 0 ? 1 : -1;
+          const currentScroll = root.scrollTop;
+          const vh = root.clientHeight;
+          const targetIndex = Math.round(currentScroll / vh) + direction;
+
+          if (targetIndex >= 0 && targetIndex < sections.length) {
+            isScrolling = true;
+            sections[targetIndex].scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+              isScrolling = false;
+            }, 750);
+          }
+        };
+
+        root.addEventListener('wheel', onWheel, { passive: false });
 
         return () => {
           io.disconnect();
-          window.removeEventListener('scroll', onScroll);
+          root.removeEventListener('scroll', onScroll);
+          root.removeEventListener('wheel', onWheel);
         };
       }, []);
 
@@ -307,7 +342,7 @@
         <div className="dlg-root" ref={rootRef}>
           <div className="rail" />
 
-          <header className="hero">
+          <header className="snap-section hero">
             <div className="eyebrow">Зал Суда · Драма в одном акте</div>
             <h1>Экспериментальный Божий суд над <em>Учителем Израилевым</em></h1>
             <p className="sub">Сможет ли Учитель Израилев выиграть схватку в небесном суде, если ангел-прокурор придерживается той же самой идеи?</p>
@@ -318,44 +353,51 @@
           </header>
 
           <main className="court">
-            <div className="scene-label">
-              <div className="cast-title">
-                <span>Действующие лица</span>
+            <div className="snap-section">
+              <div className="scene-label">
+                <div className="cast-title">
+                  <span>Действующие лица</span>
+                </div>
+                <p>
+                  <span className="role-highlight">Судья — Господь.&nbsp;</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
+                  <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Он не желает уступать ни одной позиции и использует все возможные аргументы. Он верит (экспериментально), что Христос принял святую плоть человека, какой она была до грехопадения, но ослабленная невинными немощами, спустя 4000 лет.<br /><br />
+                  <span className="role-highlight">Учитель Израилев — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей либо лишь физически ослабленной человеческой природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет не только объяснение, но, при определённом понимании природы Христа, — и основание для оправдания. Хитрые мысли и расчет, он как искусный и хитрый грешник уже приготовил, посмотрим... 
+                </p>
               </div>
-              <p>
-                <span className="role-highlight">Судья — Господь.&nbsp;</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
-                <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Он не желает уступать ни одной позиции и использует все возможные аргументы. Он верит (экспериментально), что Христос принял святую плоть человека, какой она была до грехопадения, но ослабленная невинными немощами, спустя 4000 лет.<br /><br />
-                <span className="role-highlight">Учитель Израилев — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей либо лишь физически ослабленной человеческой природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет не только объяснение, но, при определённом понимании природы Христа, — и основание для оправдания. Хитрае мысли и расчет, он как искусный и хитрый грешник уже приготовил, посмотрим... 
-              </p>
             </div>
 
             {LINES.map((l, i) => (
-              <div className={`line ${l.side}`} key={i}>
-                {AVATARS[l.side] && (
-                  <div className="avatar">
-                    <img src={AVATARS[l.side]} alt={l.role} />
+              <div className="snap-section" key={i}>
+                <div className={`line ${l.side}`}>
+                  {AVATARS[l.side] && (
+                    <div className="avatar">
+                      <img src={AVATARS[l.side]} alt={l.role} />
+                    </div>
+                  )}
+                  <div className="card">
+                    <div className="role">
+                      <span className="dot" />
+                      <span className="role-text">{l.role}</span>
+                    </div>
+                    <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
                   </div>
-                )}
-                <span className="nub" />
-                <div className="card">
-                  <div className="role">
-                    <span className="dot" />
-                    <span className="role-text">{l.role}</span>
-                  </div>
-                  <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
                 </div>
               </div>
             ))}
 
-            <section className="verdict">
-              <div className="seal">Ω</div>
-              <h2>Тюрьма «я» <em>рухнула</em>.<br />Праведность — <em>не по заслугам</em>.</h2>
-              <p>Ухищрения ума исчерпаны. Судья нарушает молчание не для осуждения, а чтобы даровать жизнь тем, кто умер для своего оправдания.</p>
-              <div className="stamp">Приговор: Оправдание через Христа</div>
-            </section>
+            <div className="snap-section">
+              <section className="verdict">
+                <div className="seal">Ω</div>
+                <h2>Тюрьма «я» <em>рухнула</em>.<br />Праведность — <em>не по заслугам</em>.</h2>
+                <p>Ухищрения ума исчерпаны. Судья нарушает молчание не для осуждения, а чтобы даровать жизнь тем, кто умер для своего оправдания.</p>
+                <div className="stamp">Приговор: Оправдание через Христа</div>
+              </section>
+            </div>
           </main>
 
-          <footer>Экспериментальный суд &nbsp;·&nbsp; <span>Голос Истины</span></footer>
+          <div className="snap-section" style={{ minHeight: '40vh', height: '40vh' }}>
+            <footer>Экспериментальный суд &nbsp;·&nbsp; <span>Голос Истины</span></footer>
+          </div>
         </div>
       );
     }
