@@ -57,6 +57,7 @@
       display:flex;flex-direction:column;align-items:center;gap:.7rem;
       color:var(--ink-soft);font-size:.72rem;letter-spacing:.35em;text-transform:uppercase;
       opacity:0;animation:dlgFadeUp 1.3s 1.1s ease forwards;
+      width: max-content;
     }
     .dlg-root .scroll-cue .bar{
       width:1px;height:46px;background:var(--terracotta-soft);
@@ -349,7 +350,6 @@
         const verdict = root.querySelector('.verdict');
         const rail = root.querySelector('.rail');
         const startSection = root.querySelector('.start-court-section');
-        const hero = root.querySelector('.hero');
 
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
@@ -382,12 +382,16 @@
           const scrollY = window.scrollY;
           const firstLineTop = lines[0].offsetTop - 40;
           const lastLineTop = lines[lines.length - 1].offsetTop;
+          const sectionBottom = startSection ? (startSection.offsetTop + startSection.offsetHeight) : firstLineTop;
 
           e.preventDefault();
 
+          // Строгое ограничение: пока кнопка не нажата, скролл вниз заблокирован на секции кнопки
           let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
+          if (!isCourtStartedRef.current) {
+            maxAllowedScroll = sectionBottom;
+          }
 
-          // Пошаговый скролл от блока к блоку работает только тогда, когда пользователь движется вниз от кнопки старта
           if (isCourtStartedRef.current && scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
             const direction = e.deltaY > 0 ? 1 : -1;
             
@@ -413,7 +417,6 @@
 
             targetScrollYRef.current = Math.max(0, Math.min(snapTargets[nextIndex], maxAllowedScroll));
           } else {
-            // Свободный и плавный инерционный скролл вверху (в hero) и при возврате обратно
             targetScrollYRef.current = Math.max(0, Math.min(targetScrollYRef.current + e.deltaY * 0.9, maxAllowedScroll));
           }
 
@@ -525,7 +528,7 @@
                 <span className="nub" />
                 <div className="card">
                   <div className="role">
-                    <span className="dot" />
+                    <span className="span dot" />
                     <span className="role-text">{l.role}</span>
                   </div>
                   <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
