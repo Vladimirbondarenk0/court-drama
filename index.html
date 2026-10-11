@@ -108,16 +108,15 @@
       border-radius: 4px;
     }
 
-    /* Отдельный полноценный блок для кнопки «Старт Суда» с адаптивными отступами */
+    /* Блок с кнопкой Старт Суда сразу после описания */
     .dlg-root .start-court-section {
-      min-height: 80vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
       z-index: 5;
-      padding: 4rem 1.5rem;
+      padding: 2rem 1.5rem 5rem;
     }
     .dlg-root .start-court-btn {
       display: inline-flex;
@@ -303,7 +302,6 @@
         if (!root) return;
         const firstLine = root.querySelector('.line');
         if (firstLine) {
-          // Идеально плавно переходим к первому блоку текста через нативный метод
           firstLine.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       };
@@ -348,16 +346,14 @@
           const scrollY = window.scrollY;
           const firstLineTop = lines[0].offsetTop;
           const lastLineTop = lines[lines.length - 1].offsetTop;
-          // Безопасная граница по верху секции с кнопкой старта
           const sectionBottom = startSection ? (startSection.offsetTop + startSection.offsetHeight) : firstLineTop;
 
           e.preventDefault();
 
-          // Четкая структурная граница: пока суд не начат, скролл жестко ограничен низом блока кнопки
+          // Четкая граница по низу секции кнопки: скролл блокируется ровно до неё, пока кнопка не нажата
           let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
           if (!isCourtStartedRef.current) {
-            maxAllowedScroll = sectionBottom - window.innerHeight;
-            if (maxAllowedScroll < 0) maxAllowedScroll = 0;
+            maxAllowedScroll = sectionBottom;
           }
 
           if (isCourtStartedRef.current && scrollY >= firstLineTop - 40 && scrollY < lastLineTop - 40) {
@@ -453,7 +449,7 @@
               </p>
             </div>
 
-            {/* Отдельный блок для кнопки с полноценным пространством */}
+            {/* Секция с кнопкой Старт Суда, идущая сразу после описания без угадывания высоты */}
             <div className="start-court-section">
               <button 
                 className={`start-court-btn ${isCourtStarted ? 'started' : ''}`}
