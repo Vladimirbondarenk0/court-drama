@@ -262,15 +262,15 @@
 
         const onWheel = (e) => {
           const scrollY = window.scrollY;
-          const firstSnapTarget = lines[0].offsetTop; // Начинаем с самого первого блока реплик
-          const lastSnapTarget = lines[lines.length - 1].offsetTop; // Заканчиваем на последнем блоке
+          const firstSnapTarget = lines[0].offsetTop;
+          const lastSnapTarget = lines[lines.length - 1].offsetTop;
 
-          // Фиксация работает с первого блока по последний включительно
-          if (scrollY >= firstSnapTarget - 120 && scrollY <= lastSnapTarget + 40) {
+          // Фиксация строго от 1-го блока и ДО достижения последнего блока.
+          // Когда последний блок встает в фокус (scrollY >= lastSnapTarget - 20) — фиксация отключается!
+          if (scrollY >= firstSnapTarget - 120 && scrollY < lastSnapTarget - 20) {
             e.preventDefault();
 
             const direction = e.deltaY > 0 ? 1 : -1;
-            // Берем весь массив точек начала блоков
             const snapTargets = lines.map(l => l.offsetTop);
 
             let nextTarget = targetScrollY;
@@ -279,7 +279,6 @@
               nextTarget = next !== undefined ? next : lastSnapTarget;
             } else {
               const prev = [...snapTargets].reverse().find(t => t < targetScrollY - 30);
-              // Если пытаются проскроллить выше первого диалогового блока — возвращаем к началу первого блока или даем подняться
               nextTarget = prev !== undefined ? prev : firstSnapTarget;
             }
 
@@ -289,7 +288,7 @@
               requestAnimationFrame(lerpLoop);
             }
           } else {
-            // Вне зоны фиксации (Hero, блок действующих лиц, а также вердикт и футер после последнего блока) — свободный плавний скролл
+            // Как только последний блок оказывается в фокусе, а также ниже него (вердикт, футер) — включен свободный плавный скролл без фиксации!
             e.preventDefault();
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
             targetScrollY = Math.max(0, Math.min(targetScrollY + e.deltaY * 0.9, maxScroll));
