@@ -12,9 +12,6 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
     .dlg-root{
       --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
       --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
@@ -70,10 +67,8 @@
 
     .dlg-root .court{max-width:880px;margin:0 auto;padding:0rem 1.5rem 8rem;position:relative}
     
-    /* Стили блока сцены с пустыми кавычками и serif */
     .dlg-root .scene-label{
       text-align:center;
-      font-family:'', serif;
       font-style:italic;
       color:var(--ink-soft);
       font-size:1.05rem;
@@ -99,7 +94,6 @@
       font-style: normal;
     }
 
-    /* Выделение имен в действующих лицах цветом #766346 */
     .dlg-root .scene-label .role-highlight {
       font-weight: 600;
       color: #766346;
@@ -110,17 +104,14 @@
       background-color: rgb(234 161 73 / 30%);
       padding: 2px 4px 2px 4px; 
       box-decoration-break: clone;
-     -webkit-box-decoration-break: clone;
-    border-radius: 4px;
+      -webkit-box-decoration-break: clone;
+      border-radius: 4px;
     }
 
     .dlg-root .line{
       position:relative;z-index:2;display:flex;align-items:flex-start;gap:1rem;margin:2.4rem 0;opacity:0;transform:translateY(40px);
       transition:opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter .6s ease;
       filter:saturate(.9);
-      min-height: 85vh; /* Даем блокам комфортную высоту для скролл-снэпа */
-      display: flex;
-      align-items: center;
     }
     .dlg-root .line.reveal{opacity:1;transform:translateY(0)}
     .dlg-root .line.dim{opacity:.32;filter:saturate(.6) blur(.4px)}
@@ -166,12 +157,10 @@
     .dlg-root .line .speech{font-family:inherit;font-weight:500;letter-spacing: .3px;font-size:1.05rem;line-height:1.6875rem;color:var(--ink)}
     .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
 
-    /* Расположение по ролям */
     .dlg-root .line.prosecutor{justify-content:flex-start;flex-direction:row;}
     .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:#e8d3c6}
     .dlg-root .line.prosecutor .card::before{left:1.8rem}
 
-    /* Учитель Израилев (справа, с использованием второй аватарки) */
     .dlg-root .line.accused{justify-content:flex-end;flex-direction:row-reverse;}
     .dlg-root .line.accused .card{color:var(--olive);border-color:#e2e0cf;background:linear-gradient(180deg,#fffefb,#f6f3ec)}
     .dlg-root .line.accused .card::before{right:1.8rem}
@@ -242,36 +231,6 @@
         const verdict = root.querySelector('.verdict');
         const rail = root.querySelector('.rail');
 
-        // Динамическое включение скролл-снэппинга для диалоговых блоков
-        const firstLine = lines[0];
-        const lastLine = lines[lines.length - 1];
-
-        const snapObserver = new IntersectionObserver((entries) => {
-          entries.forEach((e) => {
-            // Как только первый диалоговый блок касается зоны видимости, включаем привязку
-            if (e.target === firstLine) {
-              if (e.isIntersecting) {
-                root.style.scrollSnapType = 'y mandatory';
-              } else if (window.scrollY < e.target.offsetTop) {
-                // Если пользователь поднялся выше первого диалогового блока (в Hero) — отключаем привязку
-                root.style.scrollSnapType = 'none';
-              }
-            }
-            // Если проскроллили ниже последнего диалогового блока — тоже отключаем привязку для вердикта и футера
-            if (e.target === lastLine && !e.isIntersecting && window.scrollY > e.target.offsetTop) {
-              root.style.scrollSnapType = 'none';
-            }
-          });
-        }, { threshold: 0.1 });
-
-        if (firstLine) snapObserver.observe(firstLine);
-        if (lastLine) snapObserver.observe(lastLine);
-
-        // Назначаем каждому диалоговому блоку правило привязки scroll-snap-align
-        lines.forEach(l => {
-          l.style.scrollSnapAlign = 'start';
-        });
-
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
             if (e.isIntersecting) { e.target.classList.add('reveal'); io.unobserve(e.target); }
@@ -283,6 +242,57 @@
           entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('reveal'); ioV.unobserve(e.target); } });
         }, { threshold: 0.4 });
         if (verdict) ioV.observe(verdict);
+
+        // Интеллектуальный мягкий перехват колесика мыши (со 2-го по последний блок)
+        let isSnapping = false;
+
+        const onWheel = (e) => {
+          // Если уже летим к блоку, блокируем повторные импульсы
+          if (isSnapping) {
+            e.preventDefault();
+            return;
+          }
+
+          const scrollY = window.scrollY;
+          // Собираем массив точек начала блоков (начиная со 2-го блока, индекс 1)
+          const snapTargets = lines.slice(1).map(l => l.offsetTop);
+          const firstSnapTarget = lines[1].offsetTop;
+          const lastSnapTarget = lines[lines.length - 1].offsetTop;
+
+          // Если мы находимся в зоне действия эффекта (от начала 2-го блока до начала последнего)
+          if (scrollY >= firstSnapTarget - 120 && scrollY <= lastSnapTarget + 50) {
+            e.preventDefault();
+            isSnapping = true;
+
+            // Определяем, куда крутят колесо (вниз или вверх)
+            const direction = e.deltaY > 0 ? 1 : -1;
+
+            // Находим ближайший целевой блок относительно текущей позиции
+            let targetY = scrollY;
+            if (direction > 0) {
+              // Ищем следующий блок, который находится ниже текущей позиции с запасом
+              const next = snapTargets.find(t => t > scrollY + 40);
+              targetY = next !== undefined ? next : lastSnapTarget;
+            } else {
+              // Ищем предыдущий блок, который находится выше текущей позиции
+              const prev = [...snapTargets].reverse().find(t => t < scrollY - 40);
+              targetY = prev !== undefined ? prev : lines[0].offsetTop;
+            }
+
+            // Плавная программная прокрутка к нужному блоку
+            window.scrollTo({
+              top: targetY,
+              behavior: 'smooth'
+            });
+
+            // Снимаем блокировку после завершения анимации прокрутки
+            setTimeout(() => {
+              isSnapping = false;
+            }, 450);
+          }
+        };
+
+        window.addEventListener('wheel', onWheel, { passive: false });
 
         let raf;
         const tick = () => {
@@ -310,10 +320,10 @@
         raf = requestAnimationFrame(tick);
 
         return () => {
-          snapObserver.disconnect();
           io.disconnect();
           ioV.disconnect();
           cancelAnimationFrame(raf);
+          window.removeEventListener('wheel', onWheel);
         };
       }, []);
 
