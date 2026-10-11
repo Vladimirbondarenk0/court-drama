@@ -12,39 +12,13 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
-    .dlg-root{
-      --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
-      --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
-      --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;
-      background:
-        radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
-        radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
-        var(--ivory);
-      color:var(--ink);
-      font-family:'Montserrat',sans-serif;
-      font-weight:300; line-height:1.8; overflow-x:hidden;
-      -webkit-font-smoothing:antialiased;
-      min-height: 100vh;
-      transition: background 0.5s ease, color 0.5s ease;
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #FBF9F5;
+      transition: background-color 0.5s ease;
     }
 
-    .dlg-root.dark {
-      --ivory:#161311; --beige:#211c18; --ink:#ece5dc; --ink-soft:#b5aaa0;
-      --terracotta:#d4836a; --terracotta-soft:#8a5342; --olive:#a39755;
-      --gold:#d4b483; --slate:#9aa5ae; --line:#332b25;
-      background:
-        radial-gradient(1200px 800px at 80% -10%, #201a16 0%, transparent 60%),
-        radial-gradient(900px 700px at -10% 110%, #110e0c 0%, transparent 55%),
-        var(--ivory);
-    }
-
-    background-color: #161311; /* Цвет фона темной темы, чтобы не было белых полос */
-
-   html, body {
-  margin: 0;
-  padding: 0;
-  background-color: #161311; /* Цвет фона темной темы, чтобы не было белых полос */
-}
     body.dark {
       background-color: #161311;
     }
@@ -65,6 +39,19 @@
       width: 100%;
       transition: background 0.5s ease, color 0.5s ease;
     }
+
+    .dlg-root.dark {
+      --ivory:#161311; --beige:#211c18; --ink:#ece5dc; --ink-soft:#b5aaa0;
+      --terracotta:#d4836a; --terracotta-soft:#8a5342; --olive:#a39755;
+      --gold:#d4b483; --slate:#9aa5ae; --line:#332b25;
+      background:
+        radial-gradient(1200px 800px at 80% -10%, #201a16 0%, transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, #110e0c 0%, transparent 55%),
+        var(--ivory);
+    }
+
+    .dlg-root *{margin:0;padding:0;box-sizing:border-box}
+    
     /* Кнопка переключения темы */
     .theme-toggle {
       position: fixed;
@@ -381,6 +368,15 @@
       const targetScrollYRef = useRef(0);
       const currentScrollYRef = useRef(0);
       const isAnimatingRef = useRef(false);
+
+      // Синхронизация класса dark с тегом body для полного заполнения экрана цветом темы
+      useEffect(() => {
+        if (isDarkMode) {
+          document.body.classList.add('dark');
+        } else {
+          document.body.classList.remove('dark');
+        }
+      }, [isDarkMode]);
 
       const handleStartCourt = () => {
         setIsCourtStarted(true);
