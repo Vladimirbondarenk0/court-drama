@@ -90,7 +90,7 @@
     .dlg-root .line .card::before{content:"";position:absolute;top:0;width:0;height:2px;background:currentColor;transition:width .9s .25s ease}
     .dlg-root .line.reveal .card::before{width:54px}
     
-    /* Стили роли по твоему решению с оберткой и прозрачностью */
+    /* Стили роли с оберткой текста для безупречного выравнивания */
     .dlg-root .line .role{
       display: flex;
       align-items: center;
@@ -176,4 +176,150 @@
       defender: "https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp"
     };
 
-    const LINES =
+    const LINES = [
+      { side: 'prosecutor', role: 'Прокурор', html: 'Суд идёт. Подсудимый, встань. Закон не закрывается на ночь — он требует отчёта за каждый день, каждый помысел, каждый невыплаченный долг. Где твои заслуги? Покажи мне реестр твоей праведности.' },
+      { side: 'defender', role: 'Защитник · Голос Истины', html: 'Не требуй с него реестра, обвинитель. Я принёс не весы, а <em>милость</em>. Закон взвешивает — а я поднимаю.' },
+      { side: 'prosecutor', role: 'Прокурор', html: 'Милость без закона — хаос! Вот его жизнь: «я» хотел, «я» брал, «я» судил, «я» оправдывал себя. Каждый поступок — кирпич в стену его тюрьмы. Приговор должен быть. Справедливость не молчит.' },
+      { side: 'accused', role: 'Подсудимый', html: 'Это правда. Я строил стену из себя. И не могу из неё выйти.' },
+      { side: 'defender', role: 'Защитник · Голос Истины', html: 'Закон исполнен — не тобой, а <em>Мною</em>. Каждый кирпич, что ты сложил, Я понёс. Каждый долг, что ты назвал своим, Я оплатил. Реестр закрыт. Подпись на нём — Моя.' },
+      { side: 'prosecutor', role: 'Прокурор', html: 'Ты отменяешь закон? Тогда где граница между праведным и виновным? Где страх перед судом?' },
+      { side: 'defender', role: 'Защитник · Голос Истины', html: 'Я не отменяю закон — Я <em>исполняю</em> его любовью. Граница не стёрта: она проведена через Меня. Страх перед судом умер там, где Я умер вместо него.' },
+      { side: 'accused', role: 'Подсудимый', html: 'Если это так… могу ли я дышать, не оправдываясь больше собой?' },
+      { side: 'prosecutor', role: 'Прокурор', html: 'Тогда кто ответит за его прошлое? Слова не сжигают вину. Мне нужен приговор — на бумаге, с печатью.' },
+      { side: 'defender', role: 'Защитник · Голос Истины', html: 'Вот приговор — не на бумаге, а в плоти. <em>«Оправдан даром»</em>. Печать — раны Мои. Прошлое закрыто, будущее открыто. Встань и иди.' },
+      { side: 'accused', role: 'Подсудимый', html: 'Тюрьма «я»… открыта? Я выхожу — не потому, что заслужил, а потому, что меня выпустили.' },
+      { side: 'defender', role: 'Защитник · Голос Истины', html: 'Именно так. Свобода — не награда за заслуги, а <em>дар</em> любящего. Ты больше не подсудимый. Ты — гость за Моим столом.' }
+    ];
+
+    function Dialogue() {
+      const rootRef = useRef(null);
+
+      useEffect(() => {
+        const root = rootRef.current;
+        if (!root) return;
+        const lines = Array.from(root.querySelectorAll('.line'));
+        const verdict = root.querySelector('.verdict');
+        const rail = root.querySelector('.rail');
+
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) { e.target.classList.add('reveal'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.22, rootMargin: '0px 0px -8% 0px' });
+        lines.forEach((l) => io.observe(l));
+
+        const ioV = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('reveal'); ioV.unobserve(e.target); } });
+        }, { threshold: 0.4 });
+        if (verdict) ioV.observe(verdict);
+
+        let raf;
+        const tick = () => {
+          const vh = window.innerHeight;
+          const center = vh * 0.5;
+          let best = null, bestDist = Infinity;
+          lines.forEach((l) => {
+            if (!l.classList.contains('reveal')) return;
+            const r = l.getBoundingClientRect();
+            if (r.bottom < 0 || r.top > vh) return;
+            const mid = (r.top + r.bottom) / 2;
+            const d = Math.abs(mid - center);
+            if (d < bestDist) { bestDist = d; best = l; }
+          });
+          lines.forEach((l) => {
+            if (l === best) { l.classList.add('active'); l.classList.remove('dim'); }
+            else if (best) { l.classList.remove('active'); l.classList.add('dim'); }
+            else { l.classList.remove('active', 'dim'); }
+          });
+          const sc = document.documentElement;
+          const max = sc.scrollHeight - vh;
+          if (rail) rail.style.width = (max > 0 ? (sc.scrollTop / max) * 100 : 0) + '%';
+          raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
+
+        let target = window.scrollY;
+        let current = window.scrollY;
+        let animating = false;
+        const smoothLoop = () => {
+          current += (target - current) * 0.14;
+          if (Math.abs(target - current) < 0.5) {
+            current = target;
+            window.scrollTo(0, current);
+            animating = false;
+            return;
+          }
+          window.scrollTo(0, current);
+          requestAnimationFrame(smoothLoop);
+        };
+        const onWheel = (e) => {
+          e.preventDefault();
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          target = Math.max(0, Math.min(target + e.deltaY, max));
+          if (!animating) { animating = true; smoothLoop(); }
+        };
+        const onScroll = () => {
+          if (!animating) { target = window.scrollY; current = window.scrollY; }
+        };
+        window.addEventListener('wheel', onWheel, { passive: false });
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        return () => {
+          io.disconnect();
+          ioV.disconnect();
+          cancelAnimationFrame(raf);
+          window.removeEventListener('wheel', onWheel);
+          window.removeEventListener('scroll', onScroll);
+        };
+      }, []);
+
+      return (
+        <div className="dlg-root" ref={rootRef}>
+          <div className="rail" />
+
+          <header className="hero">
+            <div className="eyebrow">Зал Суда · Драма в одном акте</div>
+            <h1>Суд над <em>душой</em><br />Обвинение и&nbsp;Оправдание</h1>
+            <p className="sub">Прокурор требует закона и отчёта. Защитник приносит оправдание даром. Подсудимый стоит на пороге освобождения из тюрьмы собственного «я».</p>
+            <div className="scroll-cue">Слушай дело</div>
+          </header>
+
+          <main className="court">
+            <p className="scene-label">Тишина в зале. Свет падает на скамью подсудимых. Обвинитель поднимается первым.</p>
+
+            {LINES.map((l, i) => (
+              <div className={`line ${l.side}`} key={i}>
+                {l.side !== 'accused' && AVATARS[l.side] && (
+                  <div className="avatar">
+                    <img src={AVATARS[l.side]} alt={l.role} />
+                  </div>
+                )}
+                {l.side !== 'accused' && <span className="nub" />}
+                <div className="card">
+                  <div className="role">
+                    <span className="dot" />
+                    <span className="role-text">{l.role}</span>
+                  </div>
+                  <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
+                </div>
+              </div>
+            ))}
+
+            <section className="verdict">
+              <div className="seal">Ω</div>
+              <h2>Дело <em>закрыто</em>.<br />Душа — <em>оправдана</em>.</h2>
+              <p>Закон потребовал — Закон исполнился. Обвинитель замолчал. Тюрьма «я» осталась пустой. На пороге стоит свободный человек, и свет его — не его собственный.</p>
+              <div className="stamp">Приговор: Оправдание даром</div>
+            </section>
+          </main>
+
+          <footer>Текст · драматическая аллегория &nbsp;·&nbsp; <span>Голос Истины</span></footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<Dialogue />);
+  </script>
+</body>
+</html>
