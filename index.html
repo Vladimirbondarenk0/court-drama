@@ -1,372 +1,744 @@
 <!DOCTYPE html>
+
 <html lang="ru">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Голос Истины: Судебный Диалог</title>
-  <link rel="icon" href="https://api.iconify.design/lucide:scale.svg?color=%23b89968">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-  
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <style>
-    .dlg-root{
-      --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
-      --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
-      --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;
-      background:
-        radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
-        radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
-        var(--ivory);
-      color:var(--ink);
-      font-family:'Montserrat',sans-serif;
-      font-weight:300; line-height:1.8; overflow-x:hidden;
-      -webkit-font-smoothing:antialiased;
-      min-height: 100vh;
-    }
-    .dlg-root *{margin:0;padding:0;box-sizing:border-box}
-    .dlg-root .rail{
-      position:fixed;top:0;left:0;height:3px;width:0;
-      background:linear-gradient(90deg,var(--terracotta),var(--gold),var(--olive));
-      z-index:50;transition:width .1s linear;
-    }
-    .dlg-root .hero{
-      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-      text-align:center;padding:6rem 1.5rem;position:relative;gap: 1.5rem;
-    }
-    .dlg-root .eyebrow{
-      letter-spacing:.5em;text-transform:uppercase;font-size:.72rem;font-weight:500;
-      color:var(--terracotta);margin-bottom:2.2rem;
-      opacity:0;animation:dlgFadeUp 1.1s .1s ease forwards;
-    }
-    .dlg-root h1{
-      font-family:'Playfair Display',serif;font-weight:600;
-      font-size:clamp(2.4rem,5.5vw,4.8rem);line-height:1.15;letter-spacing:-.01em;
-      max-width:22ch;opacity:0;animation:dlgFadeUp 1.3s .35s ease forwards;
-      text-align:center;
-    }
-    .dlg-root h1 em{font-style:italic;color:var(--olive);font-weight:400}
-    .dlg-root .sub{
-      margin-top:2rem;max-width:46ch;color:var(--ink-soft);font-size:1.02rem;
-      opacity:0;animation:dlgFadeUp 1.3s .7s ease forwards;
-    }
-    .dlg-root .scroll-cue{
-      position:absolute;bottom:2.6rem;left:50%;transform:translateX(-50%);
-      display:flex;flex-direction:column;align-items:center;gap:.7rem;
-      color:var(--ink-soft);font-size:.72rem;letter-spacing:.35em;text-transform:uppercase;
-      opacity:0;animation:dlgFadeUp 1.3s 1.1s ease forwards;
-    }
-    .dlg-root .scroll-cue .bar{
-      width:1px;height:46px;background:var(--terracotta-soft);
-      animation:dlgDrop 2.2s ease-in-out infinite;transform-origin:top;
-    }
-    @keyframes dlgDrop{0%,100%{transform:scaleY(.2);opacity:.3}50%{transform:scaleY(1);opacity:1}}
-    @keyframes dlgFadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+  <meta charset="UTF-8">
 
-    .dlg-root .court{max-width:880px;margin:0 auto;padding:0rem 1.5rem 8rem;position:relative}
-    
-    /* Стили блока сцены с пустыми кавычками и serif */
-    .dlg-root .scene-label{
-      text-align:center;
-      font-family:'', serif;
-      font-style:italic;
-      color:var(--ink-soft);
-      font-size:1.05rem;
-      margin:0rem auto 4rem;
-      max-width:68ch;
-      position:relative;
-      z-index:2;
-      line-height:1.8;
-    }
-    .dlg-root .scene-label::before,.dlg-root .scene-label::after{content:"";display:block;width:60px;height:1px;background:var(--line);margin:1.2rem auto}
-    
-    .dlg-root .scene-label .cast-title{
-      display: inline-flex;
-      align-items: center;
-      gap: .6rem;
-      font-size: .92rem;
-      font-family: 'Playfair Display', serif;
-      font-weight: 600;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-      color: var(--terracotta);
-      font-style: normal;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    /* Выделение имен в действующих лицах цветом #766346 */
-    .dlg-root .scene-label .role-highlight {
-      font-weight: 600;
-      color: #766346;
-    }
+  <title>Голос Истины: Судебный Диалог</title>
 
-    .role-highlight-bold {
-      color: #766346;
-      background-color: rgb(234 161 73 / 30%);
-     padding: 2px 4px 2px 4px; 
-     box-decoration-break: clone;
-    -webkit-box-decoration-break: clone;
-    border-radius: 4px;
-    }
+  <link rel="icon" href="https://api.iconify.design/lucide:scale.svg?color=%23b89968">
 
-    .dlg-root .line{
-      position:relative;z-index:2;display:flex;align-items:flex-start;gap:1rem;margin:2.4rem 0;opacity:0;transform:translateY(40px);
-      transition:opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter .6s ease;
-      filter:saturate(.9);
-    }
-    .dlg-root .line.reveal{opacity:1;transform:translateY(0)}
-    .dlg-root .line.dim{opacity:.32;filter:saturate(.6) blur(.4px)}
-    .dlg-root .line.active{filter:saturate(1)}
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    .dlg-root .avatar{
-      width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;
-      border:2px solid var(--line);background:var(--beige);box-shadow:0 4px 12px rgba(44,37,33,.1);
-    }
-    .dlg-root .avatar img{width:100%;height:100%;object-fit:cover}
+  
 
-    .dlg-root .line .card{
-      background:var(--ivory);border:1px solid var(--line);border-radius:14px;
-      padding:1.5rem 1.8rem 1.7rem;box-shadow:0 18px 50px -32px rgba(44,37,33,.28);
-      max-width:78%;position:relative;flex-grow:1;
-    }
-    .dlg-root .line .card::before{content:"";position:absolute;top:0;width:0;height:2px;background:currentColor;transition:width .9s .25s ease}
-    .dlg-root .line.reveal .card::before{width:54px; height:2.1px;}
-    
-    .dlg-root .line .role{
-      display: flex;
-      align-items: center;
-      gap: .6rem;
-      font-size: .73rem;
-      line-height: 1rem;
-      font-weight: 500;
-      letter-spacing: .20em;
-      text-transform: uppercase;
-      margin-bottom: .9rem;
-      opacity: 0.55;
-    }
-    .dlg-root .line .role .dot{
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: currentColor;
-      flex-shrink: 0;
-    }
-    .dlg-root .line .role .role-text{
-      display: inline-block;
-    }
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 
-    .dlg-root .line .speech{font-family:inherit;font-weight:500;letter-spacing: .3px;font-size:1.05rem;line-height:1.6875rem;color:var(--ink)}
-    .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 
-    /* Расположение по ролям */
-    .dlg-root .line.prosecutor{justify-content:flex-start;flex-direction:row;}
-    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:#e8d3c6}
-    .dlg-root .line.prosecutor .card::before{left:1.8rem}
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    /* Учитель Израилев (справа, с использованием второй аватарки) */
-    .dlg-root .line.accused{justify-content:flex-end;flex-direction:row-reverse;}
-    .dlg-root .line.accused .card{color:var(--olive);border-color:#e2e0cf;background:linear-gradient(180deg,#fffefb,#f6f3ec)}
-    .dlg-root .line.accused .card::before{right:1.8rem}
-    .dlg-root .line.accused .role{justify-content:flex-end}
 
-    .dlg-root .line .nub{position:absolute;top:1.9rem;width:46px;height:1px;background:var(--line)}
-    .dlg-root .line.prosecutor .nub{left:50%;transform:translateX(-46px)}
-    .dlg-root .line.accused .nub{right:50%;transform:translateX(46px)}
 
-    .dlg-root .verdict{
-      text-align:center;margin:6rem auto 2rem;max-width:680px;padding:0 1.5rem;position:relative;z-index:2;
-      opacity:0;transform:translateY(40px);transition:opacity 1.2s ease,transform 1.2s ease;
-    }
-    .dlg-root .verdict.reveal{opacity:1;transform:translateY(0)}
-    .dlg-root .verdict .seal{
-      width:84px;height:84px;border-radius:50%;border:1px solid var(--gold);margin:0 auto 2rem;
-      display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;
-      color:var(--gold);font-size:1.6rem;font-style:italic;box-shadow:inset 0 0 0 6px rgba(184,153,104,.08);
-    }
-    .dlg-root .verdict h2{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;color:var(--ink)}
-    .dlg-root .verdict h2 em{font-style:italic;color:var(--olive)}
-    .dlg-root .verdict p{margin:1.6rem auto 0;color:var(--ink-soft);font-size:1.05rem;max-width:48ch}
-    .dlg-root .verdict .stamp{
-      margin-top:2.6rem;display:inline-block;padding:.5rem 1.4rem;border:1px solid var(--terracotta);
-      color:var(--terracotta);font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;font-weight:600;border-radius:999px;
-    }
-    .dlg-root footer{text-align:center;padding:3rem 1.5rem 5rem;color:var(--ink-soft);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase}
-    .dlg-root footer span{color:var(--terracotta)}
+  <style>
 
-    @media (max-width:640px){
-      .dlg-root .line .card{max-width:82%}
-      .dlg-root .line .speech{font-size:1.16rem}
-      .dlg-root .line .nub{display:none}
-    }
-  </style>
+    .dlg-root{
+
+      --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
+
+      --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
+
+      --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;
+
+      background:
+
+        radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
+
+        radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
+
+        var(--ivory);
+
+      color:var(--ink);
+
+      font-family:'Montserrat',sans-serif;
+
+      font-weight:300; line-height:1.8; overflow-x:hidden;
+
+      -webkit-font-smoothing:antialiased;
+
+      min-height: 100vh;
+
+    }
+
+    .dlg-root *{margin:0;padding:0;box-sizing:border-box}
+
+    .dlg-root .rail{
+
+      position:fixed;top:0;left:0;height:3px;width:0;
+
+      background:linear-gradient(90deg,var(--terracotta),var(--gold),var(--olive));
+
+      z-index:50;transition:width .1s linear;
+
+    }
+
+    .dlg-root .hero{
+
+      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+
+      text-align:center;padding:6rem 1.5rem;position:relative;gap: 1.5rem;
+
+    }
+
+    .dlg-root .eyebrow{
+
+      letter-spacing:.5em;text-transform:uppercase;font-size:.72rem;font-weight:500;
+
+      color:var(--terracotta);margin-bottom:2.2rem;
+
+      opacity:0;animation:dlgFadeUp 1.1s .1s ease forwards;
+
+    }
+
+    .dlg-root h1{
+
+      font-family:'Playfair Display',serif;font-weight:600;
+
+      font-size:clamp(2.4rem,5.5vw,4.8rem);line-height:1.15;letter-spacing:-.01em;
+
+      max-width:22ch;opacity:0;animation:dlgFadeUp 1.3s .35s ease forwards;
+
+      text-align:center;
+
+    }
+
+    .dlg-root h1 em{font-style:italic;color:var(--olive);font-weight:400}
+
+    .dlg-root .sub{
+
+      margin-top:2rem;max-width:46ch;color:var(--ink-soft);font-size:1.02rem;
+
+      opacity:0;animation:dlgFadeUp 1.3s .7s ease forwards;
+
+    }
+
+    .dlg-root .scroll-cue{
+
+      position:absolute;bottom:2.6rem;left:50%;transform:translateX(-50%);
+
+      display:flex;flex-direction:column;align-items:center;gap:.7rem;
+
+      color:var(--ink-soft);font-size:.72rem;letter-spacing:.35em;text-transform:uppercase;
+
+      opacity:0;animation:dlgFadeUp 1.3s 1.1s ease forwards;
+
+    }
+
+    .dlg-root .scroll-cue .bar{
+
+      width:1px;height:46px;background:var(--terracotta-soft);
+
+      animation:dlgDrop 2.2s ease-in-out infinite;transform-origin:top;
+
+    }
+
+    @keyframes dlgDrop{0%,100%{transform:scaleY(.2);opacity:.3}50%{transform:scaleY(1);opacity:1}}
+
+    @keyframes dlgFadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+
+
+    .dlg-root .court{max-width:880px;margin:0 auto;padding:0rem 1.5rem 8rem;position:relative}
+
+    
+
+    /* Стили блока сцены с пустыми кавычками и serif */
+
+    .dlg-root .scene-label{
+
+      text-align:center;
+
+      font-family:'', serif;
+
+      font-style:italic;
+
+      color:var(--ink-soft);
+
+      font-size:1.05rem;
+
+      margin:0rem auto 4rem;
+
+      max-width:68ch;
+
+      position:relative;
+
+      z-index:2;
+
+      line-height:1.8;
+
+    }
+
+    .dlg-root .scene-label::before,.dlg-root .scene-label::after{content:"";display:block;width:60px;height:1px;background:var(--line);margin:1.2rem auto}
+
+    
+
+    .dlg-root .scene-label .cast-title{
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: .6rem;
+
+      font-size: .92rem;
+
+      font-family: 'Playfair Display', serif;
+
+      font-weight: 600;
+
+      letter-spacing: .22em;
+
+      text-transform: uppercase;
+
+      margin-bottom: 1rem;
+
+      color: var(--terracotta);
+
+      font-style: normal;
+
+    }
+
+
+
+    /* Выделение имен в действующих лицах цветом #766346 */
+
+    .dlg-root .scene-label .role-highlight {
+
+      font-weight: 600;
+
+      color: #766346;
+
+    }
+
+
+
+    .role-highlight-bold {
+
+      color: #766346;
+
+      background-color: rgb(234 161 73 / 30%);
+
+     padding: 2px 4px 2px 4px; 
+
+     box-decoration-break: clone;
+
+    -webkit-box-decoration-break: clone;
+
+    border-radius: 4px;
+
+    }
+
+
+
+    .dlg-root .line{
+
+      position:relative;z-index:2;display:flex;align-items:flex-start;gap:1rem;margin:2.4rem 0;opacity:0;transform:translateY(40px);
+
+      transition:opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter .6s ease;
+
+      filter:saturate(.9);
+
+    }
+
+    .dlg-root .line.reveal{opacity:1;transform:translateY(0)}
+
+    .dlg-root .line.dim{opacity:.32;filter:saturate(.6) blur(.4px)}
+
+    .dlg-root .line.active{filter:saturate(1)}
+
+
+
+    .dlg-root .avatar{
+
+      width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;
+
+      border:2px solid var(--line);background:var(--beige);box-shadow:0 4px 12px rgba(44,37,33,.1);
+
+    }
+
+    .dlg-root .avatar img{width:100%;height:100%;object-fit:cover}
+
+
+
+    .dlg-root .line .card{
+
+      background:var(--ivory);border:1px solid var(--line);border-radius:14px;
+
+      padding:1.5rem 1.8rem 1.7rem;box-shadow:0 18px 50px -32px rgba(44,37,33,.28);
+
+      max-width:78%;position:relative;flex-grow:1;
+
+    }
+
+    .dlg-root .line .card::before{content:"";position:absolute;top:0;width:0;height:2px;background:currentColor;transition:width .9s .25s ease}
+
+    .dlg-root .line.reveal .card::before{width:54px; height:2.1px;}
+
+    
+
+    .dlg-root .line .role{
+
+      display: flex;
+
+      align-items: center;
+
+      gap: .6rem;
+
+      font-size: .73rem;
+
+      line-height: 1rem;
+
+      font-weight: 500;
+
+      letter-spacing: .20em;
+
+      text-transform: uppercase;
+
+      margin-bottom: .9rem;
+
+      opacity: 0.55;
+
+    }
+
+    .dlg-root .line .role .dot{
+
+      width: 7px;
+
+      height: 7px;
+
+      border-radius: 50%;
+
+      background: currentColor;
+
+      flex-shrink: 0;
+
+    }
+
+    .dlg-root .line .role .role-text{
+
+      display: inline-block;
+
+    }
+
+
+
+    .dlg-root .line .speech{font-family:inherit;font-weight:500;letter-spacing: .3px;font-size:1.05rem;line-height:1.6875rem;color:var(--ink)}
+
+    .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
+
+
+
+    /* Расположение по ролям */
+
+    .dlg-root .line.prosecutor{justify-content:flex-start;flex-direction:row;}
+
+    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:#e8d3c6}
+
+    .dlg-root .line.prosecutor .card::before{left:1.8rem}
+
+
+
+    /* Учитель Израилев (справа, с использованием второй аватарки) */
+
+    .dlg-root .line.accused{justify-content:flex-end;flex-direction:row-reverse;}
+
+    .dlg-root .line.accused .card{color:var(--olive);border-color:#e2e0cf;background:linear-gradient(180deg,#fffefb,#f6f3ec)}
+
+    .dlg-root .line.accused .card::before{right:1.8rem}
+
+    .dlg-root .line.accused .role{justify-content:flex-end}
+
+
+
+    .dlg-root .line .nub{position:absolute;top:1.9rem;width:46px;height:1px;background:var(--line)}
+
+    .dlg-root .line.prosecutor .nub{left:50%;transform:translateX(-46px)}
+
+    .dlg-root .line.accused .nub{right:50%;transform:translateX(46px)}
+
+
+
+    .dlg-root .verdict{
+
+      text-align:center;margin:6rem auto 2rem;max-width:680px;padding:0 1.5rem;position:relative;z-index:2;
+
+      opacity:0;transform:translateY(40px);transition:opacity 1.2s ease,transform 1.2s ease;
+
+    }
+
+    .dlg-root .verdict.reveal{opacity:1;transform:translateY(0)}
+
+    .dlg-root .verdict .seal{
+
+      width:84px;height:84px;border-radius:50%;border:1px solid var(--gold);margin:0 auto 2rem;
+
+      display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;
+
+      color:var(--gold);font-size:1.6rem;font-style:italic;box-shadow:inset 0 0 0 6px rgba(184,153,104,.08);
+
+    }
+
+    .dlg-root .verdict h2{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;color:var(--ink)}
+
+    .dlg-root .verdict h2 em{font-style:italic;color:var(--olive)}
+
+    .dlg-root .verdict p{margin:1.6rem auto 0;color:var(--ink-soft);font-size:1.05rem;max-width:48ch}
+
+    .dlg-root .verdict .stamp{
+
+      margin-top:2.6rem;display:inline-block;padding:.5rem 1.4rem;border:1px solid var(--terracotta);
+
+      color:var(--terracotta);font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;font-weight:600;border-radius:999px;
+
+    }
+
+    .dlg-root footer{text-align:center;padding:3rem 1.5rem 5rem;color:var(--ink-soft);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase}
+
+    .dlg-root footer span{color:var(--terracotta)}
+
+
+
+    @media (max-width:640px){
+
+      .dlg-root .line .card{max-width:82%}
+
+      .dlg-root .line .speech{font-size:1.16rem}
+
+      .dlg-root .line .nub{display:none}
+
+    }
+
+  </style>
+
 </head>
+
 <body>
-  <div id="root"></div>
 
-  <script type="text/babel">
-    const { useEffect, useRef } = React;
+  <div id="root"></div>
 
-    const AVATARS = {
-      prosecutor: "https://assets.hope.study/images/8YaRWQakL_main_okE.webp",
-      accused: "https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp"
-    };
 
-    const LINES = [
-      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Суд открыт. Учитель Израилев, встань перед Вечным Законом. Ты обвиняешься в том, что твоя жизнь полна нарушений, а характер не запечатлел святости. Закону нужен не богословский спор, а отчёт: где плоды практической праведности?' },
-      { side: 'accused', role: 'Учитель Израилев', html: 'Я встаю перед судом, но прошу внести в протокол главное основание моей защиты. Вы требуете от меня победы над грехом, но скажите: с какой природой побеждал Христос? Если Он обладал святой, непавшей природой Адама до падения — то Его победа была естественным выражением Его нескверного естества. А моя падшая природа делает грех физически неизбежным.' },
-      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Твой расчет ясен, подсудимый, но Небо не спорит с тем, что Христос воспринял святую плоть без греховных наклонностей, лишь ослабленную 4000 лет физической деградации! Однако святость Его природы не оправдывает твоих падений. Она лишь показывает истинный стандарт, к которому ты обязан был стремиться!' },
-      { side: 'accused', role: 'Учитель Израилев', html: 'Но раз Вы сами признаёте, что Христос был в <em>непавшей святой плоти</em>, то стандарт Неба неприменим к человеку в падшей плоти! Вы не можете требовать от раба законничества и плотских наклонностей плодов Адама из Едема. Суд не может осудить меня за то, что заложено в самой структуре моего естества, если Самим Богом для победы требовалась непавшая природа!' },
-      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Логика твоя изощренна, но она изобличает твою же ложь! Если природа Христа была безупречна, то Его абсолютное послушание отсекает любые твои отговорки. Ты утверждаешь, что разделяешь небесное учение о святой плоти Христа лишь для того, чтобы укрыть за ней свою собственную леность и нежелание умирать для греха!' },
-      { side: 'accused', role: 'Учитель Израилев', html: 'Я не укрываюсь, я лишь указываю на непреложный факт богословия! Разве Закон не требует справедливости? Если условия неравны, то и спрос не может быть одинаковым. Разве сам Судья не молчит, видя справедливость моего довода?' },
-      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Судья молчит не потому, что согласен с твоим алиби, а потому что ждет, когда иссякнет твое религиозное лукавство! Ты пытаешься использовать чистоту Христа как щит для защиты своего нечестивого "я". Но закон не оправдывает бунтаря на основании того, что Царь безгрешен!' },
-      { side: 'accused', role: 'Учитель Израилев', html: 'Тогда в чем же выход? Если моя природа обречена, а стандарт недосягаем, то этот суд — лишь тупик...' },
-      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Выход один — капитуляция твоего эго перед Тем, Кто совершил всё не для того, чтобы ты оправдывал свой грех Его природой, а чтобы Его праведность стала твоим полным замещением!' },
-      { side: 'accused', role: 'Учитель Израилев', html: 'Я больше не спорю. Мое богословское алиби рухнуло. Господи, я прекращаю доказывать свою правоту — я сдаюсь на милость Твоего искупления.' }
-    ];
 
-    function Dialogue() {
-      const rootRef = useRef(null);
+  <script type="text/babel">
 
-      useEffect(() => {
-        const root = rootRef.current;
-        if (!root) return;
-        const lines = Array.from(root.querySelectorAll('.line'));
-        const verdict = root.querySelector('.verdict');
-        const rail = root.querySelector('.rail');
+    const { useEffect, useRef } = React;
 
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) { e.target.classList.add('reveal'); io.unobserve(e.target); }
-          });
-        }, { threshold: 0.22, rootMargin: '0px 0px -8% 0px' });
-        lines.forEach((l) => io.observe(l));
 
-        const ioV = new IntersectionObserver((entries) => {
-          entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('reveal'); ioV.unobserve(e.target); } });
-        }, { threshold: 0.4 });
-        if (verdict) ioV.observe(verdict);
 
-        let raf;
-        const tick = () => {
-          const vh = window.innerHeight;
-          const center = vh * 0.5;
-          let best = null, bestDist = Infinity;
-          lines.forEach((l) => {
-            if (!l.classList.contains('reveal')) return;
-            const r = l.getBoundingClientRect();
-            if (r.bottom < 0 || r.top > vh) return;
-            const mid = (r.top + r.bottom) / 2;
-            const d = Math.abs(mid - center);
-            if (d < bestDist) { bestDist = d; best = l; }
-          });
-          lines.forEach((l) => {
-            if (l === best) { l.classList.add('active'); l.classList.remove('dim'); }
-            else if (best) { l.classList.remove('active'); l.classList.add('dim'); }
-            else { l.classList.remove('active', 'dim'); }
-          });
-          const sc = document.documentElement;
-          const max = sc.scrollHeight - vh;
-          if (rail) rail.style.width = (max > 0 ? (sc.scrollTop / max) * 100 : 0) + '%';
-          raf = requestAnimationFrame(tick);
-        };
-        raf = requestAnimationFrame(tick);
+    const AVATARS = {
 
-        let target = window.scrollY;
-        let current = window.scrollY;
-        let animating = false;
-        const smoothLoop = () => {
-          current += (target - current) * 0.14;
-          if (Math.abs(target - current) < 0.5) {
-            current = target;
-            window.scrollTo(0, current);
-            animating = false;
-            return;
-          }
-          window.scrollTo(0, current);
-          requestAnimationFrame(smoothLoop);
-        };
-        const onWheel = (e) => {
-          e.preventDefault();
-          const max = document.documentElement.scrollHeight - window.innerHeight;
-          target = Math.max(0, Math.min(target + e.deltaY, max));
-          if (!animating) { animating = true; smoothLoop(); }
-        };
-        const onScroll = () => {
-          if (!animating) { target = window.scrollY; current = window.scrollY; }
-        };
-        window.addEventListener('wheel', onWheel, { passive: false });
-        window.addEventListener('scroll', onScroll, { passive: true });
+      prosecutor: "https://assets.hope.study/images/8YaRWQakL_main_okE.webp",
 
-        return () => {
-          io.disconnect();
-          ioV.disconnect();
-          cancelAnimationFrame(raf);
-          window.removeEventListener('wheel', onWheel);
-          window.removeEventListener('scroll', onScroll);
-        };
-      }, []);
+      accused: "https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp"
 
-      return (
-        <div className="dlg-root" ref={rootRef}>
-          <div className="rail" />
+    };
 
-          <header className="hero">
-            <div className="eyebrow">Зал Суда · Драма в одном акте</div>
-            <h1>Экспериментальный Божий суд над <em>Учителем Израилевым</em></h1>
-            <p className="sub">Сможет ли Учитель Израилев выиграть схватку в небесном суде, если ангел-прокурор придерживается той же самой идеи?</p>
-            <div className="scroll-cue">
-              <div className="bar" />
-              <span>Слушай дело</span>
-            </div>
-          </header>
 
-          <main className="court">
-            <div className="scene-label">
-              <div className="cast-title">
-                <span>Действующие лица</span>
-              </div>
-              <p>
-                <span className="role-highlight">Судья — Господь.&nbsp;</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
-                <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Он не желает уступать ни одной позиции и использует все возможные аргументы. Он верит (экспериментально), что Христос принял святую плоть человека, какой она была до грехопадения, но ослабленная невинными немощами, спустя 4000 лет.<br /><br />
-                <span className="role-highlight">Учитель Израилев — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей либо лишь физически ослабленной человеческой природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет не только объяснение, но, при определённом понимании природы Христа, — и основание для оправдания. Хитрае мысли и расчет, он как искусный и хитрый грешник уже приготовил, посмотрим... 
-              </p>
-            </div>
 
-            {LINES.map((l, i) => (
-              <div className={`line ${l.side}`} key={i}>
-                {AVATARS[l.side] && (
-                  <div className="avatar">
-                    <img src={AVATARS[l.side]} alt={l.role} />
-                  </div>
-                )}
-                <span className="nub" />
-                <div className="card">
-                  <div className="role">
-                    <span className="dot" />
-                    <span className="role-text">{l.role}</span>
-                  </div>
-                  <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
-                </div>
-              </div>
-            ))}
+    const LINES = [
 
-            <section className="verdict">
-              <div className="seal">Ω</div>
-              <h2>Тюрьма «я» <em>рухнула</em>.<br />Праведность — <em>не по заслугам</em>.</h2>
-              <p>Ухищрения ума исчерпаны. Судья нарушает молчание не для осуждения, а чтобы даровать жизнь тем, кто умер для своего оправдания.</p>
-              <div className="stamp">Приговор: Оправдание через Христа</div>
-            </section>
-          </main>
+      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Суд открыт. Учитель Израилев, встань перед Вечным Законом. Ты обвиняешься в том, что твоя жизнь полна нарушений, а характер не запечатлел святости. Закону нужен не богословский спор, а отчёт: где плоды практической праведности?' },
 
-          <footer>Экспериментальный суд &nbsp;·&nbsp; <span>Голос Истины</span></footer>
-        </div>
-      );
-    }
+      { side: 'accused', role: 'Учитель Израилев', html: 'Я встаю перед судом, но прошу внести в протокол главное основание моей защиты. Вы требуете от меня победы над грехом, но скажите: с какой природой побеждал Христос? Если Он обладал святой, непавшей природой Адама до падения — то Его победа была естественным выражением Его нескверного естества. А моя падшая природа делает грех физически неизбежным.' },
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<Dialogue />);
-  </script>
+      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Твой расчет ясен, подсудимый, но Небо не спорит с тем, что Христос воспринял святую плоть без греховных наклонностей, лишь ослабленную 4000 лет физической деградации! Однако святость Его природы не оправдывает твоих падений. Она лишь показывает истинный стандарт, к которому ты обязан был стремиться!' },
+
+      { side: 'accused', role: 'Учитель Израилев', html: 'Но раз Вы сами признаёте, что Христос был в <em>непавшей святой плоти</em>, то стандарт Неба неприменим к человеку в падшей плоти! Вы не можете требовать от раба законничества и плотских наклонностей плодов Адама из Едема. Суд не может осудить меня за то, что заложено в самой структуре моего естества, если Самим Богом для победы требовалась непавшая природа!' },
+
+      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Логика твоя изощренна, но она изобличает твою же ложь! Если природа Христа была безупречна, то Его абсолютное послушание отсекает любые твои отговорки. Ты утверждаешь, что разделяешь небесное учение о святой плоти Христа лишь для того, чтобы укрыть за ней свою собственную леность и нежелание умирать для греха!' },
+
+      { side: 'accused', role: 'Учитель Израилев', html: 'Я не укрываюсь, я лишь указываю на непреложный факт богословия! Разве Закон не требует справедливости? Если условия неравны, то и спрос не может быть одинаковым. Разве сам Судья не молчит, видя справедливость моего довода?' },
+
+      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Судья молчит не потому, что согласен с твоим алиби, а потому что ждет, когда иссякнет твое религиозное лукавство! Ты пытаешься использовать чистоту Христа как щит для защиты своего нечестивого "я". Но закон не оправдывает бунтаря на основании того, что Царь безгрешен!' },
+
+      { side: 'accused', role: 'Учитель Израилев', html: 'Тогда в чем же выход? Если моя природа обречена, а стандарт недосягаем, то этот суд — лишь тупик...' },
+
+      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Выход один — капитуляция твоего эго перед Тем, Кто совершил всё не для того, чтобы ты оправдывал свой грех Его природой, а чтобы Его праведность стала твоим полным замещением!' },
+
+      { side: 'accused', role: 'Учитель Израилев', html: 'Я больше не спорю. Мое богословское алиби рухнуло. Господи, я прекращаю доказывать свою правоту — я сдаюсь на милость Твоего искупления.' }
+
+    ];
+
+
+
+    function Dialogue() {
+
+      const rootRef = useRef(null);
+
+
+
+      useEffect(() => {
+
+        const root = rootRef.current;
+
+        if (!root) return;
+
+        const lines = Array.from(root.querySelectorAll('.line'));
+
+        const verdict = root.querySelector('.verdict');
+
+        const rail = root.querySelector('.rail');
+
+
+
+        const io = new IntersectionObserver((entries) => {
+
+          entries.forEach((e) => {
+
+            if (e.isIntersecting) { e.target.classList.add('reveal'); io.unobserve(e.target); }
+
+          });
+
+        }, { threshold: 0.22, rootMargin: '0px 0px -8% 0px' });
+
+        lines.forEach((l) => io.observe(l));
+
+
+
+        const ioV = new IntersectionObserver((entries) => {
+
+          entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('reveal'); ioV.unobserve(e.target); } });
+
+        }, { threshold: 0.4 });
+
+        if (verdict) ioV.observe(verdict);
+
+
+
+        let raf;
+
+        const tick = () => {
+
+          const vh = window.innerHeight;
+
+          const center = vh * 0.5;
+
+          let best = null, bestDist = Infinity;
+
+          lines.forEach((l) => {
+
+            if (!l.classList.contains('reveal')) return;
+
+            const r = l.getBoundingClientRect();
+
+            if (r.bottom < 0 || r.top > vh) return;
+
+            const mid = (r.top + r.bottom) / 2;
+
+            const d = Math.abs(mid - center);
+
+            if (d < bestDist) { bestDist = d; best = l; }
+
+          });
+
+          lines.forEach((l) => {
+
+            if (l === best) { l.classList.add('active'); l.classList.remove('dim'); }
+
+            else if (best) { l.classList.remove('active'); l.classList.add('dim'); }
+
+            else { l.classList.remove('active', 'dim'); }
+
+          });
+
+          const sc = document.documentElement;
+
+          const max = sc.scrollHeight - vh;
+
+          if (rail) rail.style.width = (max > 0 ? (sc.scrollTop / max) * 100 : 0) + '%';
+
+          raf = requestAnimationFrame(tick);
+
+        };
+
+        raf = requestAnimationFrame(tick);
+
+
+
+        let target = window.scrollY;
+
+        let current = window.scrollY;
+
+        let animating = false;
+
+        const smoothLoop = () => {
+
+          current += (target - current) * 0.14;
+
+          if (Math.abs(target - current) < 0.5) {
+
+            current = target;
+
+            window.scrollTo(0, current);
+
+            animating = false;
+
+            return;
+
+          }
+
+          window.scrollTo(0, current);
+
+          requestAnimationFrame(smoothLoop);
+
+        };
+
+        const onWheel = (e) => {
+
+          e.preventDefault();
+
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+
+          target = Math.max(0, Math.min(target + e.deltaY, max));
+
+          if (!animating) { animating = true; smoothLoop(); }
+
+        };
+
+        const onScroll = () => {
+
+          if (!animating) { target = window.scrollY; current = window.scrollY; }
+
+        };
+
+        window.addEventListener('wheel', onWheel, { passive: false });
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+
+
+        return () => {
+
+          io.disconnect();
+
+          ioV.disconnect();
+
+          cancelAnimationFrame(raf);
+
+          window.removeEventListener('wheel', onWheel);
+
+          window.removeEventListener('scroll', onScroll);
+
+        };
+
+      }, []);
+
+
+
+      return (
+
+        <div className="dlg-root" ref={rootRef}>
+
+          <div className="rail" />
+
+
+
+          <header className="hero">
+
+            <div className="eyebrow">Зал Суда · Драма в одном акте</div>
+
+            <h1>Экспериментальный Божий суд над <em>Учителем Израилевым</em></h1>
+
+            <p className="sub">Сможет ли Учитель Израилев выиграть схватку в небесном суде, если ангел-прокурор придерживается той же самой идеи?</p>
+
+            <div className="scroll-cue">
+
+              <div className="bar" />
+
+              <span>Слушай дело</span>
+
+            </div>
+
+          </header>
+
+
+
+          <main className="court">
+
+            <div className="scene-label">
+
+              <div className="cast-title">
+
+                <span>Действующие лица</span>
+
+              </div>
+
+              <p>
+
+                <span className="role-highlight">Судья — Господь.&nbsp;</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
+
+                <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Он не желает уступать ни одной позиции и использует все возможные аргументы. Он верит (экспериментально), что Христос принял святую плоть человека, какой она была до грехопадения, но ослабленная невинными немощами, спустя 4000 лет.<br /><br />
+
+                <span className="role-highlight">Учитель Израилев — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей либо лишь физически ослабленной человеческой природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет не только объяснение, но, при определённом понимании природы Христа, — и основание для оправдания. Хитрае мысли и расчет, он как искусный и хитрый грешник уже приготовил, посмотрим... 
+
+              </p>
+
+            </div>
+
+
+
+            {LINES.map((l, i) => (
+
+              <div className={`line ${l.side}`} key={i}>
+
+                {AVATARS[l.side] && (
+
+                  <div className="avatar">
+
+                    <img src={AVATARS[l.side]} alt={l.role} />
+
+                  </div>
+
+                )}
+
+                <span className="nub" />
+
+                <div className="card">
+
+                  <div className="role">
+
+                    <span className="dot" />
+
+                    <span className="role-text">{l.role}</span>
+
+                  </div>
+
+                  <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
+
+                </div>
+
+              </div>
+
+            ))}
+
+
+
+            <section className="verdict">
+
+              <div className="seal">Ω</div>
+
+              <h2>Тюрьма «я» <em>рухнула</em>.<br />Праведность — <em>не по заслугам</em>.</h2>
+
+              <p>Ухищрения ума исчерпаны. Судья нарушает молчание не для осуждения, а чтобы даровать жизнь тем, кто умер для своего оправдания.</p>
+
+              <div className="stamp">Приговор: Оправдание через Христа</div>
+
+            </section>
+
+          </main>
+
+
+
+          <footer>Экспериментальный суд &nbsp;·&nbsp; <span>Голос Истины</span></footer>
+
+        </div>
+
+      );
+
+    }
+
+
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+
+    root.render(<Dialogue />);
+
+  </script>
+
 </body>
+
 </html>
+
