@@ -108,7 +108,7 @@
       border-radius: 4px;
     }
 
-    /* Блок с кнопкой Старт Суда сразу после описания */
+    /* Блок с кнопкой Старт Суда */
     .dlg-root .start-court-section {
       display: flex;
       flex-direction: column;
@@ -117,6 +117,7 @@
       position: relative;
       z-index: 5;
       padding: 2rem 1.5rem 5rem;
+      transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .dlg-root .start-court-btn {
       display: inline-flex;
@@ -300,9 +301,15 @@
 
         const root = rootRef.current;
         if (!root) return;
-        const firstLine = root.querySelector('.line');
-        if (firstLine) {
-          firstLine.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Находим секцию с кнопкой и плавно прокручиваем так, чтобы она оказалась вверху с отступом (например, 40px)
+        const startSection = root.querySelector('.start-court-section');
+        if (startSection) {
+          const topPos = startSection.getBoundingClientRect().top + window.pageYOffset - 40;
+          window.scrollTo({
+            top: topPos,
+            behavior: 'smooth'
+          });
         }
       };
 
@@ -350,7 +357,6 @@
 
           e.preventDefault();
 
-          // Четкая граница по низу секции кнопки: скролл блокируется ровно до неё, пока кнопка не нажата
           let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
           if (!isCourtStartedRef.current) {
             maxAllowedScroll = sectionBottom;
@@ -449,7 +455,6 @@
               </p>
             </div>
 
-            {/* Секция с кнопкой Старт Суда, идущая сразу после описания без угадывания высоты */}
             <div className="start-court-section">
               <button 
                 className={`start-court-btn ${isCourtStarted ? 'started' : ''}`}
