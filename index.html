@@ -12,6 +12,11 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
     .dlg-root{
       --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
       --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
@@ -38,6 +43,7 @@
       min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
       text-align:center;padding:6rem 1.5rem;position:relative;gap: 1.5rem;
       scroll-snap-align: start;
+      scroll-snap-stop: always;
     }
     .dlg-root .eyebrow{
       letter-spacing:.5em;text-transform:uppercase;font-size:.72rem;font-weight:500;
@@ -82,16 +88,22 @@
       position:relative;
       z-index:2;
       line-height:1.8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       scroll-snap-align: start;
-      padding-top: 4rem;
+      scroll-snap-stop: always;
+      padding-top: 2rem;
     }
     .dlg-root .scene-label::before,.dlg-root .scene-label::after{content:"";display:block;width:60px;height:1px;background:var(--line);margin:1.2rem auto}
     
     .dlg-root .scene-label .cast-title{
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: .6rem;
-      font-size: 1.2rem;
+      font-size: .92rem;
       font-family: 'Playfair Display', serif;
       font-weight: 600;
       letter-spacing: .22em;
@@ -115,16 +127,17 @@
       border-radius: 4px;
     }
 
-    /* Эффекты фокуса и блюра для реплик */
+    /* Каждый блок реплики занимает полный экран для мощного шага прокрутки */
     .dlg-root .line{
-      position:relative;z-index:2;display:flex;align-items:flex-start;gap:1rem;
-      margin:4rem 0;
+      position:relative;z-index:2;display:flex;align-items:center;gap:1rem;
+      min-height: 100vh;
       scroll-snap-align: start;
-      padding-top: 3rem;
+      scroll-snap-stop: always;
+      scroll-margin-top: 5vh;
       transition:opacity 0.8s ease, transform 0.8s ease, filter 0.8s ease;
-      opacity: 0.25;
-      filter: saturate(0.5) blur(3px);
-      transform: translateY(20px);
+      opacity: 0.2;
+      filter: saturate(0.4) blur(4px);
+      transform: translateY(30px);
     }
     
     .dlg-root .line.active{
@@ -145,10 +158,10 @@
       max-width:78%;position:relative;flex-grow:1;
     }
     
-    /* Линия внутри карточки анимируется только тогда, когда класс active */
+    /* Линия внутри карточки оживает строго при переходе в активную зону */
     .dlg-root .line .card::before{
       content:"";position:absolute;top:0;width:0;height:2.1px;background:currentColor;
-      transition:width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s;
+      transition:width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s;
     }
     .dlg-root .line.active .card::before{
       width:54px;
@@ -194,10 +207,15 @@
     .dlg-root .line.accused .nub{right:50%;transform:translateX(46px)}
 
     .dlg-root .verdict{
-      text-align:center;margin:6rem auto 2rem;max-width:680px;padding:4rem 1.5rem 2rem;position:relative;z-index:2;
+      text-align:center;margin:0 auto;max-width:680px;padding:4rem 1.5rem;position:relative;z-index:2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       scroll-snap-align: start;
-      opacity: 0.3;
-      filter: blur(2px);
+      scroll-snap-stop: always;
+      opacity: 0.2;
+      filter: blur(4px);
       transition: opacity 0.8s ease, filter 0.8s ease;
     }
     .dlg-root .verdict.active{
@@ -218,7 +236,11 @@
     }
     
     .dlg-root footer{
-      text-align:center;padding:4rem 1.5rem 5rem;color:var(--ink-soft);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+      text-align:center;padding:4rem 1.5rem;color:var(--ink-soft);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+      min-height: 30vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       scroll-snap-align: start;
     }
     .dlg-root footer span{color:var(--terracotta)}
@@ -263,7 +285,6 @@
         const elements = Array.from(root.querySelectorAll('.court > div'));
         const rail = root.querySelector('.rail');
 
-        // Используем IntersectionObserver для точного определения элемента в фокусе (верхней зоне)
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
             if (e.isIntersecting) {
@@ -273,14 +294,12 @@
             }
           });
         }, { 
-          // Смещение области видимости так, чтобы элемент активировался ближе к верху экрана
-          rootMargin: '-10% 0px -65% 0px', 
+          rootMargin: '-20% 0px -55% 0px', 
           threshold: 0.1 
         });
 
         elements.forEach((el) => io.observe(el));
 
-        // Обновление прогресс-бара сверху
         const onScroll = () => {
           const sc = document.documentElement;
           const vh = window.innerHeight;
@@ -353,7 +372,7 @@
       );
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
+    const root = ReactDOM.createRoot(getElementById('root'));
     root.render(<Dialogue />);
   </script>
 </body>
