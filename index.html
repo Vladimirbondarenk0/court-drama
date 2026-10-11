@@ -67,10 +67,10 @@
 
     .dlg-root .court{max-width:880px;margin:0 auto;padding:2rem 1.5rem 8rem;position:relative}
     
-    /* Стили блока сцены с курсивным Playfair Display */
+    /* Стили блока сцены с пустыми кавычками и serif */
     .dlg-root .scene-label{
       text-align:center;
-      font-family:'Playfair Display',serif;
+      font-family:'', serif;
       font-style:italic;
       color:var(--ink-soft);
       font-size:1.05rem;
@@ -102,7 +102,7 @@
       flex-shrink: 0;
     }
 
-    /* Выделение имен в действующих лицах заданным цветом #766346 */
+    /* Выделение имен в действующих лицах цветом #766346 */
     .dlg-root .scene-label .role-highlight {
       font-weight: 600;
       color: #766346;
@@ -152,7 +152,6 @@
     }
     .dlg-root .line .role .role-text{
       display: inline-block;
-      padding-top: 1px;
       transform: translateY(1.5px);
     }
 
