@@ -38,8 +38,33 @@
         var(--ivory);
     }
 
-    .dlg-root *{margin:0;padding:0;box-sizing:border-box}
-    
+    background-color: #161311; /* Цвет фона темной темы, чтобы не было белых полос */
+
+   html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #161311; /* Цвет фона темной темы, чтобы не было белых полос */
+}
+    body.dark {
+      background-color: #161311;
+    }
+
+    .dlg-root{
+      --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
+      --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
+      --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;
+      background:
+        radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
+        var(--ivory);
+      color:var(--ink);
+      font-family:'Montserrat',sans-serif;
+      font-weight:300; line-height:1.8; overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      min-height: 100vh;
+      width: 100%;
+      transition: background 0.5s ease, color 0.5s ease;
+    }
     /* Кнопка переключения темы */
     .theme-toggle {
       position: fixed;
