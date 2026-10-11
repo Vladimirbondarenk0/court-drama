@@ -249,7 +249,7 @@
         let isAnimating = false;
 
         const lerpLoop = () => {
-          currentScrollY += (targetScrollY - currentScrollY) * 0.08; // Коэффициент задает мягчайшее скольжение
+          currentScrollY += (targetScrollY - currentScrollY) * 0.08;
           if (Math.abs(targetScrollY - currentScrollY) < 0.3) {
             currentScrollY = targetScrollY;
             window.scrollTo(0, currentScrollY);
@@ -262,15 +262,16 @@
 
         const onWheel = (e) => {
           const scrollY = window.scrollY;
-          const firstSnapTarget = lines[1].offsetTop;
-          const lastSnapTarget = lines[lines.length - 1].offsetTop;
+          const firstSnapTarget = lines[0].offsetTop; // Начинаем с самого первого блока реплик
+          const lastSnapTarget = lines[lines.length - 1].offsetTop; // Заканчиваем на последнем блоке
 
-          // Фиксация работает ровно со 2-го блока по последний включительно
+          // Фиксация работает с первого блока по последний включительно
           if (scrollY >= firstSnapTarget - 120 && scrollY <= lastSnapTarget + 40) {
             e.preventDefault();
 
             const direction = e.deltaY > 0 ? 1 : -1;
-            const snapTargets = lines.slice(1).map(l => l.offsetTop);
+            // Берем весь массив точек начала блоков
+            const snapTargets = lines.map(l => l.offsetTop);
 
             let nextTarget = targetScrollY;
             if (direction > 0) {
@@ -278,7 +279,8 @@
               nextTarget = next !== undefined ? next : lastSnapTarget;
             } else {
               const prev = [...snapTargets].reverse().find(t => t < targetScrollY - 30);
-              nextTarget = prev !== undefined ? prev : lines[0].offsetTop;
+              // Если пытаются проскроллить выше первого диалогового блока — возвращаем к началу первого блока или даем подняться
+              nextTarget = prev !== undefined ? prev : firstSnapTarget;
             }
 
             targetScrollY = nextTarget;
@@ -287,7 +289,7 @@
               requestAnimationFrame(lerpLoop);
             }
           } else {
-            // Вне зоны фиксации (Hero, действующие лица, вердикт и футер) — тоже плавно скользим, но без привязок к блокам!
+            // Вне зоны фиксации (Hero, блок действующих лиц, а также вердикт и футер после последнего блока) — свободный плавний скролл
             e.preventDefault();
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
             targetScrollY = Math.max(0, Math.min(targetScrollY + e.deltaY * 0.9, maxScroll));
