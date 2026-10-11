@@ -89,8 +89,20 @@
     }
     .dlg-root .line .card::before{content:"";position:absolute;top:0;width:0;height:2px;background:currentColor;transition:width .9s .25s ease}
     .dlg-root .line.reveal .card::before{width:54px}
-    .dlg-root .line .role{display:flex;align-items:center;gap:.6rem;font-size:.68rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;margin-bottom:.7rem}
-    .dlg-root .line .role .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+    
+    /* Стили роли: выравнивание по центру, уменьшенный размер, прозрачность и отступ */
+    .dlg-root .line .role{
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+      font-size:.62rem;
+      font-weight:500;
+      letter-spacing:.25em;
+      text-transform:uppercase;
+      margin-bottom:.9rem;
+      opacity:0.75;
+    }
+    .dlg-root .line .role .dot{width:5px;height:5px;border-radius:50%;background:currentColor}
     .dlg-root .line .speech{font-family:'Montserrat',sans-serif;font-weight:400;font-size:1.24rem;line-height:1.75;color:var(--ink)}
     .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
 
@@ -109,7 +121,7 @@
     .dlg-root .line.accused .card::before{display:none}
     .dlg-root .line.accused .role{justify-content:center}
     .dlg-root .line.accused .speech{font-size:1.18rem;font-style:italic}
-    .dlg-root .line.accused .avatar {display:none;} /* Подсудимый без отдельной аватарки */
+    .dlg-root .line.accused .avatar {display:none;}
 
     .dlg-root .line .nub{position:absolute;top:1.9rem;width:46px;height:1px;background:var(--line)}
     .dlg-root .line.prosecutor .nub{left:50%;transform:translateX(-46px)}
@@ -149,7 +161,6 @@
   <script type="text/babel">
     const { useEffect, useRef } = React;
 
-    // Ссылки на аватарки из твоего примера
     const AVATARS = {
       prosecutor: "https://assets.hope.study/images/8YaRWQakL_main_okE.webp",
       defender: "https://assets.hope.study/images/jUgRIOcXp_main_NEq.webp"
