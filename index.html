@@ -90,7 +90,7 @@
     .dlg-root .line .card::before{content:"";position:absolute;top:0;width:0;height:2px;background:currentColor;transition:width .9s .25s ease}
     .dlg-root .line.reveal .card::before{width:54px}
     
-    /* Стили роли с оберткой текста для безупречного выравнивания */
+    /* Стили роли с ювелирным выравниванием текста */
     .dlg-root .line .role{
       display: flex;
       align-items: center;
@@ -109,8 +109,9 @@
       background: currentColor;
       flex-shrink: 0;
     }
-    .dlg-root .line .role-text{
+    .dlg-root .line .role .role-text{
       display: inline-block;
+      transform: translateY(1.5px); /* Тонкая ювелирная настройка положения текста */
     }
 
     .dlg-root .line .speech{font-family:'Montserrat',sans-serif;font-weight:400;font-size:1.24rem;line-height:1.75;color:var(--ink)}
@@ -227,99 +228,4 @@
             if (d < bestDist) { bestDist = d; best = l; }
           });
           lines.forEach((l) => {
-            if (l === best) { l.classList.add('active'); l.classList.remove('dim'); }
-            else if (best) { l.classList.remove('active'); l.classList.add('dim'); }
-            else { l.classList.remove('active', 'dim'); }
-          });
-          const sc = document.documentElement;
-          const max = sc.scrollHeight - vh;
-          if (rail) rail.style.width = (max > 0 ? (sc.scrollTop / max) * 100 : 0) + '%';
-          raf = requestAnimationFrame(tick);
-        };
-        raf = requestAnimationFrame(tick);
-
-        let target = window.scrollY;
-        let current = window.scrollY;
-        let animating = false;
-        const smoothLoop = () => {
-          current += (target - current) * 0.14;
-          if (Math.abs(target - current) < 0.5) {
-            current = target;
-            window.scrollTo(0, current);
-            animating = false;
-            return;
-          }
-          window.scrollTo(0, current);
-          requestAnimationFrame(smoothLoop);
-        };
-        const onWheel = (e) => {
-          e.preventDefault();
-          const max = document.documentElement.scrollHeight - window.innerHeight;
-          target = Math.max(0, Math.min(target + e.deltaY, max));
-          if (!animating) { animating = true; smoothLoop(); }
-        };
-        const onScroll = () => {
-          if (!animating) { target = window.scrollY; current = window.scrollY; }
-        };
-        window.addEventListener('wheel', onWheel, { passive: false });
-        window.addEventListener('scroll', onScroll, { passive: true });
-
-        return () => {
-          io.disconnect();
-          ioV.disconnect();
-          cancelAnimationFrame(raf);
-          window.removeEventListener('wheel', onWheel);
-          window.removeEventListener('scroll', onScroll);
-        };
-      }, []);
-
-      return (
-        <div className="dlg-root" ref={rootRef}>
-          <div className="rail" />
-
-          <header className="hero">
-            <div className="eyebrow">Зал Суда · Драма в одном акте</div>
-            <h1>Суд над <em>душой</em><br />Обвинение и&nbsp;Оправдание</h1>
-            <p className="sub">Прокурор требует закона и отчёта. Защитник приносит оправдание даром. Подсудимый стоит на пороге освобождения из тюрьмы собственного «я».</p>
-            <div className="scroll-cue">Слушай дело</div>
-          </header>
-
-          <main className="court">
-            <p className="scene-label">Тишина в зале. Свет падает на скамью подсудимых. Обвинитель поднимается первым.</p>
-
-            {LINES.map((l, i) => (
-              <div className={`line ${l.side}`} key={i}>
-                {l.side !== 'accused' && AVATARS[l.side] && (
-                  <div className="avatar">
-                    <img src={AVATARS[l.side]} alt={l.role} />
-                  </div>
-                )}
-                {l.side !== 'accused' && <span className="nub" />}
-                <div className="card">
-                  <div className="role">
-                    <span className="dot" />
-                    <span className="role-text">{l.role}</span>
-                  </div>
-                  <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
-                </div>
-              </div>
-            ))}
-
-            <section className="verdict">
-              <div className="seal">Ω</div>
-              <h2>Дело <em>закрыто</em>.<br />Душа — <em>оправдана</em>.</h2>
-              <p>Закон потребовал — Закон исполнился. Обвинитель замолчал. Тюрьма «я» осталась пустой. На пороге стоит свободный человек, и свет его — не его собственный.</p>
-              <div className="stamp">Приговор: Оправдание даром</div>
-            </section>
-          </main>
-
-          <footer>Текст · драматическая аллегория &nbsp;·&nbsp; <span>Голос Истины</span></footer>
-        </div>
-      );
-    }
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<Dialogue />);
-  </script>
-</body>
-</html>
+            if (l === best) { l.classList.add('active'); l.classList.
