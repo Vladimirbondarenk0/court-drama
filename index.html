@@ -196,8 +196,22 @@
       padding:1.5rem 1.8rem 1.7rem;box-shadow:0 18px 50px -32px rgba(44,37,33,.28);
       max-width:78%;position:relative;flex-grow:1;
     }
-    .dlg-root .line .card::before{content:"";position:absolute;top:0;width:0;height:2px;background:currentColor;transition:width .9s .25s ease}
-    .dlg-root .line.reveal .card::before{width:54px; height:2.1px;}
+    
+    /* Линия изначально скрыта (ширина 0) */
+    .dlg-root .line .card::before{
+      content:"";
+      position:absolute;
+      top:0;
+      width:0;
+      height:2.1px;
+      background:currentColor;
+      transition:width 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+    }
+    
+    /* Когда блок получает фокус (.active), линия плавно вырастает слева направо */
+    .dlg-root .line.active .card::before{
+      width:54px;
+    }
     
     .dlg-root .line .role{
       display: flex;
@@ -306,7 +320,6 @@
         
         const startSection = root.querySelector('.start-court-section');
         if (startSection) {
-          // Вычисляем положение кнопки так, чтобы она оказалась наверху с отступом в 40px
           const topPos = startSection.getBoundingClientRect().top + window.pageYOffset - 40;
           
           targetScrollYRef.current = topPos;
