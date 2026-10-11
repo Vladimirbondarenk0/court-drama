@@ -117,7 +117,6 @@
       position: relative;
       z-index: 5;
       padding: 2rem 1.5rem 5rem;
-      transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .dlg-root .start-court-btn {
       display: inline-flex;
@@ -294,6 +293,9 @@
       const rootRef = useRef(null);
       const [isCourtStarted, setIsCourtStarted] = useState(false);
       const isCourtStartedRef = useRef(false);
+      const targetScrollYRef = useRef(0);
+      const currentScrollYRef = useRef(0);
+      const isAnimatingRef = useRef(false);
 
       const handleStartCourt = () => {
         setIsCourtStarted(true);
@@ -302,14 +304,26 @@
         const root = rootRef.current;
         if (!root) return;
         
-        // Находим секцию с кнопкой и плавно прокручиваем так, чтобы она оказалась вверху с отступом (например, 40px)
         const startSection = root.querySelector('.start-court-section');
         if (startSection) {
+          // Вычисляем положение кнопки так, чтобы она оказалась наверху с отступом в 40px
           const topPos = startSection.getBoundingClientRect().top + window.pageYOffset - 40;
-          window.scrollTo({
-            top: topPos,
-            behavior: 'smooth'
-          });
+          
+          targetScrollYRef.current = topPos;
+          isAnimatingRef.current = true;
+
+          const lerpJump = () => {
+            currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.18;
+            if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.5) {
+              currentScrollYRef.current = targetScrollYRef.current;
+              window.scrollTo(0, currentScrollYRef.current);
+              isAnimatingRef.current = false;
+              return;
+            }
+            window.scrollTo(0, currentScrollYRef.current);
+            requestAnimationFrame(lerpJump);
+          };
+          requestAnimationFrame(lerpJump);
         }
       };
 
@@ -333,19 +347,18 @@
         }, { threshold: 0.4 });
         if (verdict) ioV.observe(verdict);
 
-        let targetScrollY = window.scrollY;
-        let currentScrollY = window.scrollY;
-        let isAnimating = false;
+        targetScrollYRef.current = window.scrollY;
+        currentScrollYRef.current = window.scrollY;
 
         const lerpLoop = () => {
-          currentScrollY += (targetScrollY - currentScrollY) * 0.18;
-          if (Math.abs(targetScrollY - currentScrollY) < 0.5) {
-            currentScrollY = targetScrollY;
-            window.scrollTo(0, currentScrollY);
-            isAnimating = false;
+          currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.18;
+          if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.5) {
+            currentScrollYRef.current = targetScrollYRef.current;
+            window.scrollTo(0, currentScrollYRef.current);
+            isAnimatingRef.current = false;
             return;
           }
-          window.scrollTo(0, currentScrollY);
+          window.scrollTo(0, currentScrollYRef.current);
           requestAnimationFrame(lerpLoop);
         };
 
@@ -366,29 +379,29 @@
             const direction = e.deltaY > 0 ? 1 : -1;
             const snapTargets = lines.map(l => l.offsetTop);
 
-            let nextTarget = targetScrollY;
+            let nextTarget = targetScrollYRef.current;
             if (direction > 0) {
-              const next = snapTargets.find(t => t > targetScrollY + 20);
+              const next = snapTargets.find(t => t > targetScrollYRef.current + 20);
               nextTarget = next !== undefined ? next : lastLineTop;
             } else {
-              const prev = [...snapTargets].reverse().find(t => t < targetScrollY - 20);
+              const prev = [...snapTargets].reverse().find(t => t < targetScrollYRef.current - 20);
               nextTarget = prev !== undefined ? prev : 0;
             }
-            targetScrollY = nextTarget;
+            targetScrollYRef.current = nextTarget;
           } else {
-            targetScrollY = Math.max(0, Math.min(targetScrollY + e.deltaY * 1.1, maxAllowedScroll));
+            targetScrollYRef.current = Math.max(0, Math.min(targetScrollYRef.current + e.deltaY * 1.1, maxAllowedScroll));
           }
 
-          if (!isAnimating) {
-            isAnimating = true;
+          if (!isAnimatingRef.current) {
+            isAnimatingRef.current = true;
             requestAnimationFrame(lerpLoop);
           }
         };
 
         const onScroll = () => {
-          if (!isAnimating) {
-            targetScrollY = window.scrollY;
-            currentScrollY = window.scrollY;
+          if (!isAnimatingRef.current) {
+            targetScrollYRef.current = window.scrollY;
+            currentScrollYRef.current = window.scrollY;
           }
         };
 
