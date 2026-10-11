@@ -67,11 +67,18 @@
 
     .dlg-root .court{max-width:880px;margin:0 auto;padding:2rem 1.5rem 8rem;position:relative}
     
-    /* Стили блока сцены без Playfair Display */
+    /* Стили блока сцены с курсивным Playfair Display */
     .dlg-root .scene-label{
-      text-align:center;font-family:inherit;font-style:normal;
-      color:var(--ink-soft);font-size:1.02rem;margin:3rem auto 4rem;max-width:68ch;position:relative;z-index:2;
-      line-height: 1.8;
+      text-align:center;
+      font-family:'Playfair Display',serif;
+      font-style:italic;
+      color:var(--ink-soft);
+      font-size:1.05rem;
+      margin:3rem auto 4rem;
+      max-width:68ch;
+      position:relative;
+      z-index:2;
+      line-height:1.8;
     }
     .dlg-root .scene-label::before,.dlg-root .scene-label::after{content:"";display:block;width:60px;height:1px;background:var(--line);margin:1.2rem auto}
     
@@ -85,6 +92,7 @@
       text-transform: uppercase;
       margin-bottom: 1rem;
       color: var(--terracotta);
+      font-style: normal;
     }
     .dlg-root .scene-label .cast-title .dot{
       width: 7px;
@@ -94,10 +102,11 @@
       flex-shrink: 0;
     }
 
-    /* Выделение ролей в действующих лицах */
+    /* Выделение имен в действующих лицах заданным цветом #766346 */
     .dlg-root .scene-label .role-highlight {
       font-weight: 600;
-      color: var(--terracotta);
+      color: #766346;
+      font-style: normal;
     }
 
     .dlg-root .line{
@@ -212,7 +221,8 @@
       { side: 'accused', role: 'Учитель Израилев', html: 'Я не укрываюсь, я лишь указываю на непреложный факт богословия! Разве Закон не требует справедливости? Если условия неравны, то и спрос не может быть одинаковым. Разве сам Судья не молчит, видя справедливость моего довода?' },
       { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Судья молчит не потому, что согласен с твоим алиби, а потому что ждет, когда иссякнет твое религиозное лукавство! Ты пытаешься использовать чистоту Христа как щит для защиты своего нечестивого "я". Но закон не оправдывает бунтаря на основании того, что Царь безгрешен!' },
       { side: 'accused', role: 'Учитель Израилев', html: 'Тогда в чем же выход? Если моя природа обречена, а стандарт недосягаем, то этот суд — лишь тупик...' },
-      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Выход один — капитуляция твоего эго перед Тем, Кто совершил всё не для того, чтобы ты оправдывал свой грех Его природой, а чтобы Его праведность стала твоим полным замещением!' }
+      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Выход один — капитуляция твоего эго перед Тем, Кто совершил всё не для того, чтобы ты оправдывал свой грех Его природой, а чтобы Его праведность стала твоим полным замещением!' },
+      { side: 'accused', role: 'Учитель Израилев', html: 'Я больше не спорю. Мое богословское алиби рухнуло. Господи, я прекращаю доказывать свою правоту — я сдаюсь на милость Твоего искупления.' }
     ];
 
     function Dialogue() {
