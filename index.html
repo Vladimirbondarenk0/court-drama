@@ -263,11 +263,12 @@
         const onWheel = (e) => {
           const scrollY = window.scrollY;
           const firstSnapTarget = lines[0].offsetTop;
-          const lastSnapTarget = lines[lines.length - 1].offsetTop;
+          const lastLine = lines[lines.length - 1];
+          const lastLineTop = lastLine.offsetTop;
 
-          // Фиксация строго от 1-го блока и ДО достижения последнего блока.
-          // Когда последний блок встает в фокус (scrollY >= lastSnapTarget - 20) — фиксация отключается!
-          if (scrollY >= firstSnapTarget - 120 && scrollY < lastSnapTarget - 20) {
+          // Фиксация работает от 1-го блока ПОКА ПОСЛЕДНИЙ блок еще не достиг фокуса (верха экрана).
+          // Как только последний блок ("Я больше не спорю...") в фокусе (scrollY >= lastLineTop - 40), фиксация отключается!
+          if (scrollY >= firstSnapTarget - 120 && scrollY < lastLineTop - 40) {
             e.preventDefault();
 
             const direction = e.deltaY > 0 ? 1 : -1;
@@ -276,7 +277,7 @@
             let nextTarget = targetScrollY;
             if (direction > 0) {
               const next = snapTargets.find(t => t > targetScrollY + 30);
-              nextTarget = next !== undefined ? next : lastSnapTarget;
+              nextTarget = next !== undefined ? next : lastLineTop;
             } else {
               const prev = [...snapTargets].reverse().find(t => t < targetScrollY - 30);
               nextTarget = prev !== undefined ? prev : firstSnapTarget;
@@ -288,7 +289,7 @@
               requestAnimationFrame(lerpLoop);
             }
           } else {
-            // Как только последний блок оказывается в фокусе, а также ниже него (вердикт, футер) — включен свободный плавный скролл без фиксации!
+            // Когда последний блок в фокусе или ниже (вердикт, футер) — свободный плавный ледовый скролл без фиксации!
             e.preventDefault();
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
             targetScrollY = Math.max(0, Math.min(targetScrollY + e.deltaY * 0.9, maxScroll));
