@@ -53,8 +53,8 @@
       opacity:0;animation:dlgFadeUp 1.3s .7s ease forwards;
     }
     .dlg-root .scroll-cue{
-      position:absolute;bottom:2.6rem;left:50%;transform:translateX(-50%);
-      display:flex;flex-direction:column;align-items:center;gap:.7rem;
+      position:absolute;bottom:2.6rem;left:0;right:0;margin:0 auto;
+      display:flex;flex-direction:column;align-items:center;text-align:center;gap:.7rem;
       color:var(--ink-soft);font-size:.72rem;letter-spacing:.35em;text-transform:uppercase;
       opacity:0;animation:dlgFadeUp 1.3s 1.1s ease forwards;
       width: max-content;
@@ -386,7 +386,6 @@
 
           e.preventDefault();
 
-          // Строгое ограничение: пока кнопка не нажата, скролл вниз заблокирован на секции кнопки
           let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
           if (!isCourtStartedRef.current) {
             maxAllowedScroll = sectionBottom;
@@ -528,7 +527,7 @@
                 <span className="nub" />
                 <div className="card">
                   <div className="role">
-                    <span className="span dot" />
+                    <span className="dot" />
                     <span className="role-text">{l.role}</span>
                   </div>
                   <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
