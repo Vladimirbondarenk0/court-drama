@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Голос Истины: Судебный Диалог</title>
   <link rel="icon" href="https://api.iconify.design/lucide:scale.svg?color=%23b89968">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -42,9 +42,10 @@
       opacity:0;animation:dlgFadeUp 1.1s .1s ease forwards;
     }
     .dlg-root h1{
-      font-family:'Playfair Display',serif;font-weight:600;
-      font-size:clamp(2.6rem,7vw,5.4rem);line-height:1.08;letter-spacing:-.01em;
-      max-width:16ch;opacity:0;animation:dlgFadeUp 1.3s .35s ease forwards;
+      font-family:Georgia, serif;font-weight:600;
+      font-size:clamp(2.4rem,6vw,4.8rem);line-height:1.15;letter-spacing:-.01em;
+      max-width:28ch;opacity:0;animation:dlgFadeUp 1.3s .35s ease forwards;
+      text-align:center;
     }
     .dlg-root h1 em{font-style:italic;color:var(--olive);font-weight:400}
     .dlg-root .sub{
@@ -61,8 +62,9 @@
 
     .dlg-root .court{max-width:880px;margin:0 auto;padding:2rem 1.5rem 8rem;position:relative}
     .dlg-root .scene-label{
-      text-align:center;font-family:'Playfair Display',serif;font-style:italic;
-      color:var(--ink-soft);font-size:1.05rem;margin:3rem auto 4rem;max-width:40ch;position:relative;z-index:2;
+      text-align:center;font-family:Georgia, serif;font-style:italic;
+      color:var(--ink-soft);font-size:1.05rem;margin:3rem auto 4rem;max-width:68ch;position:relative;z-index:2;
+      line-height: 1.8;
     }
     .dlg-root .scene-label::before,.dlg-root .scene-label::after{content:"";display:block;width:60px;height:1px;background:var(--line);margin:1.2rem auto}
 
@@ -146,10 +148,10 @@
     .dlg-root .verdict.reveal{opacity:1;transform:translateY(0)}
     .dlg-root .verdict .seal{
       width:84px;height:84px;border-radius:50%;border:1px solid var(--gold);margin:0 auto 2rem;
-      display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;
+      display:flex;align-items:center;justify-content:center;font-family:Georgia, serif;
       color:var(--gold);font-size:1.6rem;font-style:italic;box-shadow:inset 0 0 0 6px rgba(184,153,104,.08);
     }
-    .dlg-root .verdict h2{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;color:var(--ink)}
+    .dlg-root .verdict h2{font-family:Georgia, serif;font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;color:var(--ink)}
     .dlg-root .verdict h2 em{font-style:italic;color:var(--olive)}
     .dlg-root .verdict p{margin:1.6rem auto 0;color:var(--ink-soft);font-size:1.05rem;max-width:48ch}
     .dlg-root .verdict .stamp{
@@ -182,7 +184,9 @@
       { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Суд открыт. Учитель Израилев, встань перед Вечным Законом. Ты обвиняешься в том, что твоя жизнь полна нарушений, а характер не запечатлел святости. Закону нужен не богословский спор, а отчёт: где плоды практической праведности?' },
       { side: 'accused', role: 'Учитель Израилев', html: 'Я встаю перед судом, но прошу внести в протокол главное основание моей защиты. Вы требуете от меня победы над грехом, но скажите: с какой природой побеждал Христос? Если Он обладал святой, непавшей природой Адама до падения — то Его победа была естественным выражением Его нескверного естества. А моя падшая природа делает грех физически неизбежным.' },
       { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Твой расчет ясен, подсудимый, но Небо не спорит с тем, что Христос воспринял святую плоть без греховных наклонностей, лишь ослабленную 4000 лет физической деградации! Однако святость Его природы не оправдывает твоих падений. Она лишь показывает истинный стандарт, к которому ты обязан был стремиться!' },
-      { side: 'accused', role: 'Учитель Израилев', html: 'Но раз Вы сами признаёте, что Христос был в <em>непавшей святой плоти</em>, то стандарт Неба неприменим к человеку в падшей плоти! Вы не можете требовать от раба законничества и плотских наклонностей плодов Адама из Едема. Суд не может осудить меня за то, что заложено в самой структуре моего естества, если Самим Богом для победы требовалась непавшая природа!' }
+      { side: 'accused', role: 'Учитель Израилев', html: 'Но раз Вы сами признаёте, что Христос был в <em>непавшей святой плоти</em>, то стандарт Неба неприменим к человеку в падшей плоти! Вы не можете требовать от раба законничества и плотских наклонностей плодов Адама из Едема. Суд не может осудить меня за то, что заложено в самой структуре моего естества, если Самим Богом для победы требовалась непавшая природа!' },
+      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Логика твоя изощренна, но она изобличает твою же ложь! Если природа Христа была безупречна, то Его абсолютное послушание отсекает любые твои отговорки. Ты утверждаешь, что разделяешь небесное учение о святой плоти Христа лишь для того, чтобы укрыть за ней свою собственную леность и нежелание умирать для греха!' },
+      { side: 'accused', role: 'Учитель Израилев', html: 'Я не укрываюсь, я лишь указываю на непреложный факт богословия! Разве Закон не требует справедливости? Если условия неравны, то и спрос не может быть одинаковым. Разве сам Судья не молчит, видя справедливость моего довода?' }
     ];
 
     function Dialogue() {
@@ -273,7 +277,7 @@
 
           <header className="hero">
             <div className="eyebrow">Зал Суда · Драма в одном акте</div>
-            <h1>ЭКСПЕРИМЕНТАЛЬНЫЙ БОЖИЙ СУД над <em>Учителем Израилевым</em></h1>
+            <h1>Экспериментальный Божий суд над <em>Учителем Израилевым</em></h1>
             <p className="sub">Сможет ли Учитель Израилев выиграть схватку в небесном суде, если ангел-прокурор придерживается той же самой идеи?</p>
             <div className="scroll-cue">Слушай дело</div>
           </header>
@@ -307,18 +311,4 @@
             <section className="verdict">
               <div className="seal">Ω</div>
               <h2>Процесс <em>продолжается</em>...</h2>
-              <p>Аргументы скрещиваются, хитрость сталкивается с законнической логикой обвинения. Судья молчит, пока не раскроется вся немощь человеческих ухищрений.</p>
-              <div className="stamp">Слушание в разгаре</div>
-            </section>
-          </main>
-
-          <footer>Экспериментальный суд &nbsp;·&nbsp; <span>Голос Истины</span></footer>
-        </div>
-      );
-    }
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<Dialogue />);
-  </script>
-</body>
-</html>
+              <p>Аргументы скрещиваются, хитрость сталкивается с законнической логикой обвинения. Судья молчит, пока не раскроется вся немощь
