@@ -26,7 +26,7 @@
     .dlg-root{
       --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
       --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
-      --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;--cast-title-color: #594438;
+      --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2; --cast-title-color: #594438;
       background:
         radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
         radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
@@ -345,15 +345,18 @@
     .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
 
     .dlg-root .line.prosecutor{justify-content:flex-start;flex-direction:row;}
-    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:var(--line);background: linear-gradient(135deg, #fff8f4 0%, #f0ece96b 100%);}
+    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:var(--line);background: linear-gradient(to left, #fff8f4 0%, #f0ece9 100%);}
     .dlg-root .line.prosecutor .card::before{left:1.8rem}
-.dlg-root.dark .line.prosecutor .card {
-      background: linear-gradient(135deg, #211c18 0%, #211c19 100%);
+    .dlg-root.dark .line.prosecutor .card {
+      background: linear-gradient(to left, #251f1a 0%, #1a1614 100%);
     }
     .dlg-root .line.accused{justify-content:flex-end;flex-direction:row-reverse;}
-    .dlg-root .line.accused .card{color:var(--olive);border-color:var(--line);background:var(--beige)}
+    .dlg-root .line.accused .card{color:var(--olive);border-color:var(--line);background: linear-gradient(to left, #F2EFE9 0%, #e5e0d8 100%);}
     .dlg-root .line.accused .card::before{right:1.8rem}
     .dlg-root .line.accused .role{justify-content:flex-end}
+    .dlg-root.dark .line.accused .card {
+      background: linear-gradient(to left, #1e1916 0%, #151210 100%);
+    }
 
     .dlg-root .line .nub{position:absolute;top:1.9rem;width:46px;height:1px;background:var(--line)}
     .dlg-root .line.prosecutor .nub{left:50%;transform:translateX(-46px)}
@@ -495,19 +498,82 @@
         }, { threshold: 0.4 });
         if (verdict) ioV.observe(verdict);
 
-        // Мягкий перехват колесика мыши до старта суда, чтобы избежать рывков
+        targetScrollYRef.current = window.scrollY;
+        currentScrollYRef.current = window.scrollY;
+
+        const lerpLoop = () => {
+          currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
+          if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.3) {
+            currentScrollYRef.current = targetScrollYRef.current;
+            window.scrollTo(0, currentScrollYRef.current);
+            isAnimatingRef.current = false;
+            return;
+          }
+          window.scrollTo(0, currentScrollYRef.current);
+          requestAnimationFrame(lerpLoop);
+        };
+
         const onWheel = (e) => {
-          if (!isCourtStartedRef.current && startSection) {
-            const maxAllowedScroll = startSection.offsetTop + startSection.offsetHeight - window.innerHeight + 80;
-            // Если пытаемся крутить вниз дальше барьера кнопки — блокируем движение
-            if (e.deltaY > 0 && window.scrollY >= maxAllowedScroll) {
-              e.preventDefault();
-              window.scrollTo(0, maxAllowedScroll);
+          const scrollY = window.scrollY;
+          const firstLineTop = lines[0].offsetTop - 40;
+          const lastLineTop = lines[lines.length - 1].offsetTop;
+          const sectionBottom = startSection ? (startSection.offsetTop + startSection.offsetHeight) : firstLineTop;
+
+          e.preventDefault();
+
+          let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
+          if (!isCourtStartedRef.current) {
+            maxAllowedScroll = sectionBottom;
+          }
+
+          // Если суд начат и мы внутри диалога — используем фиксированный пошаговый скролл
+          if (isCourtStartedRef.current && scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
+            const direction = e.deltaY > 0 ? 1 : -1;
+            
+            const snapTargets = lines.map(l => l.offsetTop - 40);
+            snapTargets.push(verdict.offsetTop - 40);
+
+            let currentIndex = 0;
+            let minDiff = Infinity;
+            snapTargets.forEach((t, idx) => {
+              const diff = Math.abs(t - targetScrollYRef.current);
+              if (diff < minDiff) {
+                minDiff = diff;
+                currentIndex = idx;
+              }
+            });
+
+            let nextIndex = currentIndex;
+            if (direction > 0 && currentIndex < snapTargets.length - 1) {
+              nextIndex = currentIndex + 1;
+            } else if (direction < 0 && currentIndex > 0) {
+              nextIndex = currentIndex - 1;
             }
+
+            targetScrollYRef.current = Math.max(0, Math.min(snapTargets[nextIndex], maxAllowedScroll));
+          } else {
+            // До старта или в шапке — свободный плавный скролл, но с ограничением барьера кнопки
+            const nextTarget = targetScrollYRef.current + e.deltaY * 0.9;
+            // Если пытаемся крутить вверх (назад к заголовку) — разрешаем всегда
+            if (e.deltaY < 0) {
+              targetScrollYRef.current = Math.max(0, nextTarget);
+            } else {
+              targetScrollYRef.current = Math.max(0, Math.min(nextTarget, maxAllowedScroll));
+            }
+          }
+
+          if (!isAnimatingRef.current) {
+            isAnimatingRef.current = true;
+            requestAnimationFrame(lerpLoop);
           }
         };
 
         const onScroll = () => {
+          if (!isAnimatingRef.current) {
+            targetScrollYRef.current = window.scrollY;
+            currentScrollYRef.current = window.scrollY;
+          }
+
           if (verdict) {
             const verdictRect = verdict.getBoundingClientRect();
             if (verdictRect.top <= window.innerHeight * 0.75) {
@@ -554,6 +620,7 @@
           window.removeEventListener('scroll', onScroll);
         };
       }, []);
+
       return (
         <div className={`dlg-root ${isDarkMode ? 'dark' : ''}`} ref={rootRef}>
           <div className="rail" />
@@ -598,7 +665,7 @@
               <p className="role-highlight-family">
                 <span className="role-highlight">Судья — Господь.&nbsp;</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
                 <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Он не желает уступать ни одной позиции и использует все возможные аргументы. Он верит (экспериментально), что Христос принял святую плоть человека, какой она была до грехопадения, но ослабленная невинными немощами, спустя 4000 лет.<br /><br />
-                <span className="role-highlight">Богослов — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей либо лишь физически ослабленной человеческой природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет не только объяснение, но, при определённом понимании природы Христа, — и основание для оправдания. Хитрае мысли и расчеты, он как искусный и хитрый грешник уже приготовил, посмотрим... 
+                <span className="role-highlight">Богослов — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей либо лишь физически ослабленной человеческой природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет не только объяснение, но, при определённом понимании природы Христа, — и основание для оправдания. Хитрая мысль и расчет, он как искусный и хитрый грешник уже приготовил, посмотрим... 
               </p>
             </div>
 
