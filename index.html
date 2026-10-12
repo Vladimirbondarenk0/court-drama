@@ -17,6 +17,7 @@
       padding: 0;
       background-color: #FBF9F5;
       transition: background-color 0.5s ease;
+      scroll-behavior: smooth;
     }
 
     body.dark {
@@ -87,7 +88,7 @@
       filter: brightness(0.6) contrast(1.1);
       opacity: 0;
       transform: scale(1.03);
-      transition: opacity 2s ease, transform 3.5s cubic-bezier(0.16, 1, 0.3, 1), filter 3s ease;
+      transition: opacity 2.5s ease, transform 3.5s cubic-bezier(0.16, 1, 0.3, 1), filter 3s ease;
       pointer-events: none;
     }
 
@@ -229,7 +230,7 @@
       line-height:1.8;
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 1s ease;
+      transition: opacity 1.2s ease;
     }
     
     .dlg-root.court-active:not(.content-revealed) .scene-label,
@@ -363,7 +364,6 @@
     }
     .dlg-root .avatar img{width:100%;height:100%;object-fit:cover}
 
-    /* Карточки диалога адаптируются под режим день/ночь через переменные */
     .dlg-root .line .card{
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -492,12 +492,9 @@
       const rootRef = useRef(null);
       const [isCourtStarted, setIsCourtStarted] = useState(false);
       const [isContentRevealed, setIsContentRevealed] = useState(false);
-      const [isDarkTheme, setIsDarkTheme] = useState(false); // Изначально день (светлый режим)
+      const [isDarkTheme, setIsDarkTheme] = useState(false); // Тема остается пользовательской (без насильственного сброса)
       const [showScrollTop, setShowScrollTop] = useState(false);
       const isCourtStartedRef = useRef(false);
-      const targetScrollYRef = useRef(0);
-      const currentScrollYRef = useRef(0);
-      const isAnimatingRef = useRef(false);
 
       useEffect(() => {
         if (isDarkTheme) {
@@ -510,7 +507,6 @@
       const handleStartCourt = () => {
         setIsCourtStarted(true);
         isCourtStartedRef.current = true;
-        setIsDarkTheme(true); // Автоматически переключаем в ночной режим при старте суда
 
         setTimeout(() => {
           setIsContentRevealed(true);
@@ -523,47 +519,25 @@
         if (startSection) {
           const topPos = startSection.getBoundingClientRect().top + window.pageYOffset - 40;
           
-          targetScrollYRef.current = topPos;
-          isAnimatingRef.current = true;
-
-          const lerpJump = () => {
-            currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
-            if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.5) {
-              currentScrollYRef.current = targetScrollYRef.current;
-              window.scrollTo(0, currentScrollYRef.current);
-              isAnimatingRef.current = false;
-              return;
-            }
-            window.scrollTo(0, currentScrollYRef.current);
-            requestAnimationFrame(lerpJump);
-          };
-          requestAnimationFrame(lerpJump);
+          // Плавная прокрутка без рывков
+          window.scrollTo({
+            top: topPos,
+            behavior: 'smooth'
+          });
         }
       };
 
       const handleScrollToTop = () => {
-        // Сброс в исходное светлое состояние (день)
         setIsCourtStarted(false);
         isCourtStartedRef.current = false;
         setIsContentRevealed(false);
-        setIsDarkTheme(false);
         setShowScrollTop(false);
 
-        targetScrollYRef.current = 0;
-        isAnimatingRef.current = true;
-
-        const lerpToTop = () => {
-          currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.1;
-          if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.5) {
-            currentScrollYRef.current = 0;
-            window.scrollTo(0, 0);
-            isAnimatingRef.current = false;
-            return;
-          }
-          window.scrollTo(0, currentScrollYRef.current);
-          requestAnimationFrame(lerpToTop);
-        };
-        requestAnimationFrame(lerpToTop);
+        // Плавный запуск возврата в самое начало
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
       };
 
       useEffect(() => {
@@ -586,82 +560,21 @@
         }, { threshold: 0.4 });
         if (verdict) ioV.observe(verdict);
 
-        targetScrollYRef.current = window.scrollY;
-        currentScrollYRef.current = window.scrollY;
-
-        const lerpLoop = () => {
-          currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
-          if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.3) {
-            currentScrollYRef.current = targetScrollYRef.current;
-            window.scrollTo(0, currentScrollYRef.current);
-            isAnimatingRef.current = false;
-            return;
-          }
-          window.scrollTo(0, currentScrollYRef.current);
-          requestAnimationFrame(lerpLoop);
-        };
-
         const onWheel = (e) => {
           const scrollY = window.scrollY;
           const firstLineTop = lines[0].offsetTop - 40;
-          const lastLineTop = lines[lines.length - 1].offsetTop;
           const sectionBottom = startSection ? (startSection.offsetTop + startSection.offsetHeight) : firstLineTop;
 
-          e.preventDefault();
-
-          let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
-          
           if (isCourtStartedRef.current) {
             const minAllowedScroll = sectionBottom - 40;
-            if (targetScrollYRef.current + e.deltaY * 0.9 < minAllowedScroll && e.deltaY < 0) {
+            if (scrollY + e.deltaY < minAllowedScroll && e.deltaY < 0) {
+              e.preventDefault();
               return; 
             }
-          }
-
-          if (!isCourtStartedRef.current) {
-            maxAllowedScroll = sectionBottom;
-          }
-
-          if (isCourtStartedRef.current && scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
-            const direction = e.deltaY > 0 ? 1 : -1;
-            
-            const snapTargets = lines.map(l => l.offsetTop - 40);
-            snapTargets.push(verdict.offsetTop - 40);
-
-            let currentIndex = 0;
-            let minDiff = Infinity;
-            snapTargets.forEach((t, idx) => {
-              const diff = Math.abs(t - targetScrollYRef.current);
-              if (diff < minDiff) {
-                minDiff = diff;
-                currentIndex = idx;
-              }
-            });
-
-            let nextIndex = currentIndex;
-            if (direction > 0 && currentIndex < snapTargets.length - 1) {
-              nextIndex = currentIndex + 1;
-            } else if (direction < 0 && currentIndex > 0) {
-              nextIndex = currentIndex - 1;
-            }
-
-            targetScrollYRef.current = Math.max(0, Math.min(snapTargets[nextIndex], maxAllowedScroll));
-          } else {
-            targetScrollYRef.current = Math.max(0, Math.min(targetScrollYRef.current + e.deltaY * 0.9, maxAllowedScroll));
-          }
-
-          if (!isAnimatingRef.current) {
-            isAnimatingRef.current = true;
-            requestAnimationFrame(lerpLoop);
           }
         };
 
         const onScroll = () => {
-          if (!isAnimatingRef.current) {
-            targetScrollYRef.current = window.scrollY;
-            currentScrollYRef.current = window.scrollY;
-          }
-
           if (verdict) {
             const verdictRect = verdict.getBoundingClientRect();
             if (verdictRect.top <= window.innerHeight * 0.75) {
