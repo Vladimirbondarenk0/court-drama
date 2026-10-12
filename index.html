@@ -24,13 +24,13 @@
     }
 
     .dlg-root{
-      /* По умолчанию темная тема */
-      --ivory:#161311; --beige:#211c18; --ink:#ece5dc; --ink-soft:#b5aaa0;
-      --terracotta:#ad7e6d; --terracotta-soft:#8a5342; --olive:#a39755;
-      --gold:#d4b483; --slate:#9aa5ae; --line:#332b25;
+      /* По умолчанию светлая тема */
+      --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
+      --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
+      --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;
       background:
-        radial-gradient(1200px 800px at 80% -10%, #201a16 0%, transparent 60%),
-        radial-gradient(900px 700px at -10% 110%, #110e0c 0%, transparent 55%),
+        radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
         var(--ivory);
       color:var(--ink);
       font-family:'Montserrat',sans-serif;
@@ -438,7 +438,7 @@
     }
   </style>
 </head>
-<body>
+<body class="light">
   <div id="root"></div>
 
   <script type="text/babel">
@@ -466,7 +466,7 @@
       const rootRef = useRef(null);
       const [isCourtStarted, setIsCourtStarted] = useState(false);
       const [isContentRevealed, setIsContentRevealed] = useState(false);
-      const [isLightMode, setIsLightMode] = useState(false);
+      const [isLightMode, setIsLightMode] = useState(true);
       const [showScrollTop, setShowScrollTop] = useState(false);
       const isCourtStartedRef = useRef(false);
       const targetScrollYRef = useRef(0);
@@ -515,7 +515,6 @@
       };
 
       const handleScrollToTop = () => {
-        // Полный сброс состояния до исходного
         setIsCourtStarted(false);
         isCourtStartedRef.current = false;
         setIsContentRevealed(false);
@@ -583,11 +582,10 @@
 
           let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
           
-          // Жесткая блокировка прокрутки назад к заголовку после старта суда
           if (isCourtStartedRef.current) {
             const minAllowedScroll = sectionBottom - 40;
             if (targetScrollYRef.current + e.deltaY * 0.9 < minAllowedScroll && e.deltaY < 0) {
-              return; // Блокируем скролл вверх до тех пор, пока пользователь не дойдет до низа и не нажмет стрелочку
+              return;
             }
           }
 
