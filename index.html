@@ -21,7 +21,6 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com"></script>
 
 
 
@@ -815,20 +814,7 @@
 
     ];
 
-// Инициализация скролла
-const lenis = new Lenis({
-  duration: 1.2,   // Время анимации скролла (в секундах)
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Функция плавности (фирменный эффект)
-  smoothWheel: true // Включить плавность для колесика мыши
-});
 
-// Запуск цикла анимации
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
-}
-
-requestAnimationFrame(raf);
 
     function Dialogue() {
 
