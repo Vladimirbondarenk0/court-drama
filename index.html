@@ -481,7 +481,6 @@
         const lines = Array.from(root.querySelectorAll('.line'));
         const verdict = root.querySelector('.verdict');
         const rail = root.querySelector('.rail');
-        const startSection = root.querySelector('.start-court-section');
 
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
@@ -495,75 +494,8 @@
         }, { threshold: 0.4 });
         if (verdict) ioV.observe(verdict);
 
-        targetScrollYRef.current = window.scrollY;
-        currentScrollYRef.current = window.scrollY;
-
-        const lerpLoop = () => {
-          currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
-          if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.3) {
-            currentScrollYRef.current = targetScrollYRef.current;
-            window.scrollTo(0, currentScrollYRef.current);
-            isAnimatingRef.current = false;
-            return;
-          }
-          window.scrollTo(0, currentScrollYRef.current);
-          requestAnimationFrame(lerpLoop);
-        };
-
-        const onWheel = (e) => {
-          const scrollY = window.scrollY;
-          const firstLineTop = lines[0].offsetTop - 40;
-          const lastLineTop = lines[lines.length - 1].offsetTop;
-          const sectionBottom = startSection ? (startSection.offsetTop + startSection.offsetHeight) : firstLineTop;
-
-          e.preventDefault();
-
-          let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
-          if (!isCourtStartedRef.current) {
-            maxAllowedScroll = sectionBottom;
-          }
-
-          if (isCourtStartedRef.current && scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
-            const direction = e.deltaY > 0 ? 1 : -1;
-            
-            const snapTargets = lines.map(l => l.offsetTop - 40);
-            snapTargets.push(verdict.offsetTop - 40);
-
-            let currentIndex = 0;
-            let minDiff = Infinity;
-            snapTargets.forEach((t, idx) => {
-              const diff = Math.abs(t - targetScrollYRef.current);
-              if (diff < minDiff) {
-                minDiff = diff;
-                currentIndex = idx;
-              }
-            });
-
-            let nextIndex = currentIndex;
-            if (direction > 0 && currentIndex < snapTargets.length - 1) {
-              nextIndex = currentIndex + 1;
-            } else if (direction < 0 && currentIndex > 0) {
-              nextIndex = currentIndex - 1;
-            }
-
-            targetScrollYRef.current = Math.max(0, Math.min(snapTargets[nextIndex], maxAllowedScroll));
-          } else {
-            targetScrollYRef.current = Math.max(0, Math.min(targetScrollYRef.current + e.deltaY * 0.9, maxAllowedScroll));
-          }
-
-          if (!isAnimatingRef.current) {
-            isAnimatingRef.current = true;
-            requestAnimationFrame(lerpLoop);
-          }
-        };
-
         const onScroll = () => {
-          if (!isAnimatingRef.current) {
-            targetScrollYRef.current = window.scrollY;
-            currentScrollYRef.current = window.scrollY;
-          }
-
-          // Показываем кнопку "Наверх" только когда пользователь доходит до самого низа (после всех реплик)
+          // Показываем кнопку "Наверх" когда прокрутили ниже половины экрана
           if (verdict) {
             const verdictRect = verdict.getBoundingClientRect();
             if (verdictRect.top <= window.innerHeight * 0.75) {
@@ -574,7 +506,6 @@
           }
         };
 
-        window.addEventListener('wheel', onWheel, { passive: false });
         window.addEventListener('scroll', onScroll, { passive: true });
 
         let raf;
@@ -606,7 +537,6 @@
           io.disconnect();
           ioV.disconnect();
           cancelAnimationFrame(raf);
-          window.removeEventListener('wheel', onWheel);
           window.removeEventListener('scroll', onScroll);
         };
       }, []);
