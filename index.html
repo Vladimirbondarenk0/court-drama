@@ -94,16 +94,21 @@
     .dlg-root.court-active .verdict p { color: #d4ccc2; }
     .dlg-root.court-active footer { color: #b5aaa0; }
 
-    /* Когда суд активен, кнопка переключения меняет тему ТОЛЬКО для карточек диалога */
-    .dlg-root.court-active.dark-mode .line .card {
+    /* Исправленный стиль карточек диалога при тёмном режиме */
+    .dlg-root.dark-mode .line .card {
       background: #1b1714;
       border-color: #3b312b;
-      color: #ece5dc;
     }
-    .dlg-root.court-active.dark-mode .line.prosecutor .card { color: #d49a85; }
-    .dlg-root.court-active.dark-mode .line.accused .card { color: #c8bc6e; }
-    .dlg-root.court-active.dark-mode .avatar { border-color: #3b312b; background: #211c18; }
-    .dlg-root.court-active.dark-mode .line .nub { background: #3b312b; }
+    .dlg-root.dark-mode .line .speech {
+      color: #ece5dc !important; /* Делаем основной текст светлым и хорошо читаемым */
+    }
+    .dlg-root.dark-mode .line .speech em {
+      color: #d4b483 !important; /* Курсив делаем золотистым */
+    }
+    .dlg-root.dark-mode .line.prosecutor .card { color: #e59b82; }
+    .dlg-root.dark-mode .line.accused .card { color: #d8ca77; }
+    .dlg-root.dark-mode .avatar { border-color: #3b312b; background: #211c18; }
+    .dlg-root.dark-mode .line .nub { background: #3b312b; }
 
     /* Кнопка переключения темы */
     .theme-toggle {
@@ -430,8 +435,8 @@
       display: inline-block;
     }
 
-    .dlg-root .line .speech{font-family:inherit;font-weight:500;letter-spacing: .3px;font-size:1.05rem;line-height:1.6875rem;color:var(--ink)}
-    .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
+    .dlg-root .line .speech{font-family:inherit;font-weight:500;letter-spacing: .3px;font-size:1.05rem;line-height:1.6875rem;color:var(--ink); transition: color 0.5s ease;}
+    .dlg-root .line .speech em{font-style:italic;color:var(--olive); transition: color 0.5s ease;}
 
     .dlg-root .line.prosecutor{justify-content:flex-start;flex-direction:row;}
     .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:var(--line)}
