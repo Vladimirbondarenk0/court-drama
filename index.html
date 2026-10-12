@@ -53,7 +53,7 @@
 
     .dlg-root *{margin:0;padding:0;box-sizing:border-box}
     
-    /* Эпический фон Храма (по умолчанию скрыт/затемнен, проявляется при старте) */
+    /* Эпический фон Храма */
     .temple-bg {
       position: fixed;
       top: 0;
@@ -71,7 +71,6 @@
       pointer-events: none;
     }
 
-    /* Когда суд запущен — храм «телепортирует» пользователя в атмосферу */
     .dlg-root.court-active .temple-bg {
       opacity: 1;
       transform: scale(1);
@@ -198,6 +197,7 @@
 
     .dlg-root .court{max-width:880px;margin:0 auto;padding:0rem 1.5rem 8rem;position:relative;z-index:2}
     
+    /* Блок Действующих лиц виден сразу, но плавно появляется через 3 сек после старта */
     .dlg-root .scene-label{
       text-align:center;
       font-style:italic;
@@ -208,15 +208,17 @@
       position:relative;
       z-index:2;
       line-height:1.8;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 1.2s ease, transform 1.2s ease;
-    }
-    /* После старта суда сцена плавно проявляется через 3 секунды молчания */
-    .dlg-root.court-active .scene-label {
       opacity: 1;
       transform: translateY(0);
-      transition-delay: 2.8s;
+      transition: opacity 1s ease;
+    }
+    
+    /* Состояние до старта суда или во время 3-секундной паузы */
+    .dlg-root.court-active:not(.content-revealed) .scene-label,
+    .dlg-root.court-active:not(.content-revealed) .line,
+    .dlg-root.court-active:not(.content-revealed) .verdict {
+      opacity: 0;
+      pointer-events: none;
     }
 
     .dlg-root .scene-label::before,.dlg-root .scene-label::after{content:"";display:block;width:60px;height:1px;background:var(--line);margin:1.2rem auto}
@@ -329,16 +331,10 @@
       filter:saturate(.9);
     }
     
-    /* Проявление реплик после старта суда с задержкой */
-    .dlg-root.court-active .line.reveal {
+    .dlg-root .line.reveal {
       opacity: 1;
       transform: translateY(0);
     }
-    .dlg-root.court-active .line:nth-child(1) { transition-delay: 3.2s; }
-    .dlg-root.court-active .line:nth-child(2) { transition-delay: 3.5s; }
-    .dlg-root.court-active .line:nth-child(3) { transition-delay: 3.8s; }
-    .dlg-root.court-active .line:nth-child(4) { transition-delay: 4.1s; }
-    .dlg-root.court-active .line:nth-child(5) { transition-delay: 4.4s; }
 
     .dlg-root .line.dim{opacity:.32;filter:saturate(.6) blur(.4px)}
     .dlg-root .line.active{filter:saturate(1)}
@@ -475,6 +471,7 @@
     function Dialogue() {
       const rootRef = useRef(null);
       const [isCourtStarted, setIsCourtStarted] = useState(false);
+      const [isContentRevealed, setIsContentRevealed] = useState(false);
       const [isDarkMode, setIsDarkMode] = useState(false);
       const [showScrollTop, setShowScrollTop] = useState(false);
       const isCourtStartedRef = useRef(false);
@@ -493,6 +490,11 @@
       const handleStartCourt = () => {
         setIsCourtStarted(true);
         isCourtStartedRef.current = true;
+
+        // Таймер на 3 секунды затишья, после которого всё плавно проявляется
+        setTimeout(() => {
+          setIsContentRevealed(true);
+        }, 3000);
 
         const root = rootRef.current;
         if (!root) return;
@@ -673,8 +675,8 @@
       }, []);
 
       return (
-        <div className={`dlg-root ${isDarkMode ? 'dark' : ''} ${isCourtStarted ? 'court-active' : ''}`} ref={rootRef}>
-          {/* Величественный фон Храма на заднем плане */}
+        <div className={`dlg-root ${isDarkMode ? 'dark' : ''} ${isCourtStarted ? 'court-active' : ''} ${isContentRevealed ? 'content-revealed' : ''}`} ref={rootRef}>
+          {/* Величественный фон Храма */}
           <div className="temple-bg" />
 
           <div className="rail" />
