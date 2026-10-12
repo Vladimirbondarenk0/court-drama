@@ -15,31 +15,22 @@
     html, body {
       margin: 0;
       padding: 0;
-      background-color: #FBF9F5;
+      background-color: #161311;
       transition: background-color 0.5s ease;
     }
 
-    body.dark {
-      background-color: #161311;
+    body.light {
+      background-color: #FBF9F5;
     }
 
     .dlg-root{
-      /* ДНЕВНОЙ РЕЖИМ (по умолчанию) */
-      --ivory:#FBF9F5; 
-      --beige:#F2EFE9; 
-      --ink:#3e3129; 
-      --ink-soft:#5b4f47;
-      --card-bg: rgba(255, 253, 248, 0.94);
-      --card-border: #e3ddd2;
-      --terracotta:#B5654A; 
-      --terracotta-soft:#d8a98f; 
-      --olive:#7c7340;
-      --gold:#b89968; 
-      --line:#e3ddd2;
-
+      /* По умолчанию темная тема */
+      --ivory:#161311; --beige:#211c18; --ink:#ece5dc; --ink-soft:#b5aaa0;
+      --terracotta:#ad7e6d; --terracotta-soft:#8a5342; --olive:#a39755;
+      --gold:#d4b483; --slate:#9aa5ae; --line:#332b25;
       background:
-        radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
-        radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
+        radial-gradient(1200px 800px at 80% -10%, #201a16 0%, transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, #110e0c 0%, transparent 55%),
         var(--ivory);
       color:var(--ink);
       font-family:'Montserrat',sans-serif;
@@ -51,29 +42,19 @@
       position: relative;
     }
 
-    .dlg-root.dark-theme {
-      /* НОЧНОЙ РЕЖИМ */
-      --ivory:#161311; 
-      --beige:#211c18; 
-      --ink:#ece5dc; 
-      --ink-soft:#b5aaa0;
-      --card-bg: rgba(24, 20, 18, 0.9);
-      --card-border: #332b25;
-      --terracotta:#ad7e6d; 
-      --terracotta-soft:#8a5342; 
-      --olive:#a39755;
-      --gold:#d4b483; 
-      --line:#332b25;
-
+    .dlg-root.light-theme {
+      --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
+      --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
+      --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;
       background:
-        radial-gradient(1200px 800px at 80% -10%, #201a16 0%, transparent 60%),
-        radial-gradient(900px 700px at -10% 110%, #110e0c 0%, transparent 55%),
+        radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
         var(--ivory);
     }
 
     .dlg-root *{margin:0;padding:0;box-sizing:border-box}
     
-    /* Эпический фон Храма */
+    /* Эпический фон Храма (активен только после старта) */
     .temple-bg {
       position: fixed;
       top: 0;
@@ -82,9 +63,9 @@
       height: 100vh;
       z-index: 0;
       background: 
-        linear-gradient(180deg, rgba(22, 19, 17, 0.4) 0%, rgba(22, 19, 17, 0.85) 100%),
+        linear-gradient(180deg, rgba(22, 19, 17, 0.5) 0%, rgba(22, 19, 17, 0.88) 100%),
         url("https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&w=1920&q=80") center/cover no-repeat;
-      filter: brightness(0.6) contrast(1.1);
+      filter: brightness(0.7) contrast(1.1);
       opacity: 0;
       transform: scale(1.03);
       transition: opacity 2s ease, transform 3.5s cubic-bezier(0.16, 1, 0.3, 1), filter 3s ease;
@@ -94,10 +75,10 @@
     .dlg-root.court-active .temple-bg {
       opacity: 1;
       transform: scale(1);
-      filter: brightness(0.85) contrast(1.05);
+      filter: brightness(0.9) contrast(1.05);
     }
     
-    /* Кнопка переключения темы (день/ночь) */
+    /* Кнопка переключения темы */
     .theme-toggle {
       position: fixed;
       top: 1.5rem;
@@ -113,7 +94,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
       transition: all 0.3s ease;
     }
     .theme-toggle:hover {
@@ -146,7 +127,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
       opacity: 0;
       visibility: hidden;
       transform: translateY(20px);
@@ -267,7 +248,7 @@
 
     .role-highlight-bold {
       color: var(--gold);
-      background-color: rgba(181, 101, 74, 0.12);
+      background-color: rgba(181, 101, 74, 0.15);
       padding: 2px 6px; 
       box-decoration-break: clone;
       -webkit-box-decoration-break: clone;
@@ -366,8 +347,8 @@
     .dlg-root .line .card{
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: var(--beige);
+      border: 1px solid var(--line);
       border-radius: 14px;
       padding: 1.5rem 1.8rem 1.7rem;
       box-shadow: 0 18px 50px -32px rgba(0,0,0,0.35);
@@ -401,7 +382,7 @@
       letter-spacing: .20em;
       text-transform: uppercase;
       margin-bottom: .9rem;
-      opacity: 0.8;
+      opacity: 0.75;
     }
     .dlg-root .line .role .dot{
       width: 7px;
@@ -418,11 +399,11 @@
     .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
 
     .dlg-root .line.prosecutor{justify-content:flex-start;flex-direction:row;}
-    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:var(--card-border)}
+    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:var(--line)}
     .dlg-root .line.prosecutor .card::before{left:1.8rem}
 
     .dlg-root .line.accused{justify-content:flex-end;flex-direction:row-reverse;}
-    .dlg-root .line.accused .card{color:var(--olive);border-color:var(--card-border);}
+    .dlg-root .line.accused .card{color:var(--olive);border-color:var(--line);}
     .dlg-root .line.accused .card::before{right:1.8rem}
     .dlg-root .line.accused .role{justify-content:flex-end}
 
@@ -430,28 +411,22 @@
     .dlg-root .line.prosecutor .nub{left:50%;transform:translateX(-46px)}
     .dlg-root .line.accused .nub{right:50%;transform:translateX(46px)}
 
-    /* Финальный вывод */
     .dlg-root .verdict{
-      text-align:center;margin:6rem auto 2rem;max-width:680px;padding:2rem 1.5rem;position:relative;z-index:2;
+      text-align:center;margin:6rem auto 2rem;max-width:680px;padding:0 1.5rem;position:relative;z-index:2;
       opacity:0;transform:translateY(40px);transition:opacity 1.2s ease,transform 1.2s ease;
-      background: rgba(251, 249, 245, 0.94);
-      border: 1px solid #e3ddd2;
-      border-radius: 16px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-      color: #3e3129;
     }
     .dlg-root .verdict.reveal{opacity:1;transform:translateY(0)}
     .dlg-root .verdict .seal{
-      width:84px;height:84px;border-radius:50%;border:1px solid #b89968;margin:0 auto 2rem;
+      width:84px;height:84px;border-radius:50%;border:1px solid var(--gold);margin:0 auto 2rem;
       display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;
-      color:#b89968;font-size:1.6rem;font-style:italic;box-shadow:inset 0 0 0 6px #F2EFE9;
+      color:var(--gold);font-size:1.6rem;font-style:italic;box-shadow:inset 0 0 0 6px var(--beige);
     }
-    .dlg-root .verdict h2{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;color:#3e3129}
-    .dlg-root .verdict h2 em{font-style:italic;color:#7c7340}
-    .dlg-root .verdict p{margin:1.6rem auto 0;color:#5b4f47;font-size:1.05rem;max-width:48ch}
+    .dlg-root .verdict h2{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;color:var(--ink)}
+    .dlg-root .verdict h2 em{font-style:italic;color:var(--olive)}
+    .dlg-root .verdict p{margin:1.6rem auto 0;color:var(--ink-soft);font-size:1.05rem;max-width:48ch}
     .dlg-root .verdict .stamp{
-      margin-top:2.6rem;display:inline-block;padding:.5rem 1.4rem;border:1px solid #B5654A;
-      color:#B5654A;font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;font-weight:600;border-radius:999px;
+      margin-top:2.6rem;display:inline-block;padding:.5rem 1.4rem;border:1px solid var(--terracotta);
+      color:var(--terracotta);font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;font-weight:600;border-radius:999px;
     }
     .dlg-root footer{text-align:center;padding:3rem 1.5rem 5rem;color:var(--ink-soft);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;position:relative;z-index:2;}
     .dlg-root footer span{color:var(--terracotta)}
@@ -491,7 +466,7 @@
       const rootRef = useRef(null);
       const [isCourtStarted, setIsCourtStarted] = useState(false);
       const [isContentRevealed, setIsContentRevealed] = useState(false);
-      const [isDarkTheme, setIsDarkTheme] = useState(false); // Дневной режим по умолчанию
+      const [isLightMode, setIsLightMode] = useState(false);
       const [showScrollTop, setShowScrollTop] = useState(false);
       const isCourtStartedRef = useRef(false);
       const targetScrollYRef = useRef(0);
@@ -499,12 +474,12 @@
       const isAnimatingRef = useRef(false);
 
       useEffect(() => {
-        if (isDarkTheme) {
-          document.body.classList.add('dark');
+        if (isLightMode) {
+          document.body.classList.add('light');
         } else {
-          document.body.classList.remove('dark');
+          document.body.classList.remove('light');
         }
-      }, [isDarkTheme]);
+      }, [isLightMode]);
 
       const handleStartCourt = () => {
         setIsCourtStarted(true);
@@ -521,14 +496,26 @@
         if (startSection) {
           const topPos = startSection.getBoundingClientRect().top + window.pageYOffset - 40;
           
-          // Мгновенный скачок (телепортация) к началу заседания без плавной анимации
-          window.scrollTo(0, topPos);
           targetScrollYRef.current = topPos;
-          currentScrollYRef.current = topPos;
+          isAnimatingRef.current = true;
+
+          const lerpJump = () => {
+            currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
+            if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.5) {
+              currentScrollYRef.current = targetScrollYRef.current;
+              window.scrollTo(0, currentScrollYRef.current);
+              isAnimatingRef.current = false;
+              return;
+            }
+            window.scrollTo(0, currentScrollYRef.current);
+            requestAnimationFrame(lerpJump);
+          };
+          requestAnimationFrame(lerpJump);
         }
       };
 
       const handleScrollToTop = () => {
+        // Полный сброс состояния до исходного
         setIsCourtStarted(false);
         isCourtStartedRef.current = false;
         setIsContentRevealed(false);
@@ -587,9 +574,6 @@
         };
 
         const onWheel = (e) => {
-          // Если суд еще не начат, оставляем стандартный свободный скролл
-          if (!isCourtStartedRef.current) return;
-
           const scrollY = window.scrollY;
           const firstLineTop = lines[0].offsetTop - 40;
           const lastLineTop = lines[lines.length - 1].offsetTop;
@@ -599,12 +583,19 @@
 
           let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
           
-          const minAllowedScroll = sectionBottom - 40;
-          if (targetScrollYRef.current + e.deltaY * 0.9 < minAllowedScroll && e.deltaY < 0) {
-            return; // Замок (блокировка возврата наверх до кнопки)
+          // Жесткая блокировка прокрутки назад к заголовку после старта суда
+          if (isCourtStartedRef.current) {
+            const minAllowedScroll = sectionBottom - 40;
+            if (targetScrollYRef.current + e.deltaY * 0.9 < minAllowedScroll && e.deltaY < 0) {
+              return; // Блокируем скролл вверх до тех пор, пока пользователь не дойдет до низа и не нажмет стрелочку
+            }
           }
 
-          if (scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
+          if (!isCourtStartedRef.current) {
+            maxAllowedScroll = sectionBottom;
+          }
+
+          if (isCourtStartedRef.current && scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
             const direction = e.deltaY > 0 ? 1 : -1;
             
             const snapTargets = lines.map(l => l.offsetTop - 40);
@@ -692,17 +683,17 @@
       }, []);
 
       return (
-        <div className={`dlg-root ${isDarkTheme ? 'dark-theme' : ''} ${isCourtStarted ? 'court-active' : ''} ${isContentRevealed ? 'content-revealed' : ''}`} ref={rootRef}>
+        <div className={`dlg-root ${isLightMode ? 'light-theme' : ''} ${isCourtStarted ? 'court-active' : ''} ${isContentRevealed ? 'content-revealed' : ''}`} ref={rootRef}>
           <div className="temple-bg" />
 
           <div className="rail" />
 
           <button 
             className="theme-toggle" 
-            onClick={() => setIsDarkTheme(!isDarkTheme)}
-            title="Переключить день/ночь"
+            onClick={() => setIsLightMode(!isLightMode)}
+            title="Переключить тему"
           >
-            {isDarkTheme ? (
+            {isLightMode ? (
               <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             ) : (
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
