@@ -308,9 +308,9 @@
 
     .dlg-root .scroll-cue{
 
-      position:absolute;bottom:2.6rem;
+      bottom:2.6rem;
 
-      display:flex;flex-direction:column;align-items:center;gap:.7rem;
+      display: block;
 
       color:var(--ink-soft);font-size:.72rem;letter-spacing:.35em;text-transform:uppercase;
 
@@ -324,6 +324,11 @@
 
       animation:dlgDrop 2.2s ease-in-out infinite;transform-origin:top;
 
+    }
+
+    .bar-span {
+          line-height: 42px;
+    letter-spacing: .85em;
     }
 
     @keyframes dlgDrop{0%,100%{transform:scaleY(.2);opacity:.3}50%{transform:scaleY(1);opacity:1}}
@@ -1282,7 +1287,7 @@
 
               <div className="bar" />
 
-              <span>Слушай дело</span>
+              <span className="bar-span">Слушай дело</span>
 
             </div>
 
