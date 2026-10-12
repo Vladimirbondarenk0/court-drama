@@ -481,6 +481,7 @@
         const lines = Array.from(root.querySelectorAll('.line'));
         const verdict = root.querySelector('.verdict');
         const rail = root.querySelector('.rail');
+        const startSection = root.querySelector('.start-court-section');
 
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
@@ -495,7 +496,15 @@
         if (verdict) ioV.observe(verdict);
 
         const onScroll = () => {
-          // Показываем кнопку "Наверх" когда прокрутили ниже половины экрана
+          // Если суд еще не начат, жестко удерживаем пользователя от прокрутки ниже секции кнопки
+          if (!isCourtStartedRef.current && startSection) {
+            const maxAllowedScroll = startSection.offsetTop + startSection.offsetHeight - 40;
+            if (window.scrollY > maxAllowedScroll) {
+              window.scrollTo(0, maxAllowedScroll);
+            }
+          }
+
+          // Управление видимостью кнопки "Наверх"
           if (verdict) {
             const verdictRect = verdict.getBoundingClientRect();
             if (verdictRect.top <= window.innerHeight * 0.75) {
