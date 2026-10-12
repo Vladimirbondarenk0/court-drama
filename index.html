@@ -24,10 +24,19 @@
     }
 
     .dlg-root{
-      /* По умолчанию светлая тема */
-      --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
-      --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
-      --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;
+      /* ДНЕВНОЙ РЕЖИМ (по умолчанию) */
+      --ivory:#FBF9F5; 
+      --beige:#F2EFE9; 
+      --ink:#3e3129; 
+      --ink-soft:#5b4f47;
+      --card-bg: rgba(255, 253, 248, 0.94);
+      --card-border: #e3ddd2;
+      --terracotta:#B5654A; 
+      --terracotta-soft:#d8a98f; 
+      --olive:#7c7340;
+      --gold:#b89968; 
+      --line:#e3ddd2;
+
       background:
         radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
         radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
@@ -43,9 +52,19 @@
     }
 
     .dlg-root.dark-theme {
-      --ivory:#161311; --beige:#211c18; --ink:#ece5dc; --ink-soft:#b5aaa0;
-      --terracotta:#ad7e6d; --terracotta-soft:#8a5342; --olive:#a39755;
-      --gold:#d4b483; --slate:#9aa5ae; --line:#332b25;
+      /* НОЧНОЙ РЕЖИМ */
+      --ivory:#161311; 
+      --beige:#211c18; 
+      --ink:#ece5dc; 
+      --ink-soft:#b5aaa0;
+      --card-bg: rgba(24, 20, 18, 0.9);
+      --card-border: #332b25;
+      --terracotta:#ad7e6d; 
+      --terracotta-soft:#8a5342; 
+      --olive:#a39755;
+      --gold:#d4b483; 
+      --line:#332b25;
+
       background:
         radial-gradient(1200px 800px at 80% -10%, #201a16 0%, transparent 60%),
         radial-gradient(900px 700px at -10% 110%, #110e0c 0%, transparent 55%),
@@ -78,7 +97,7 @@
       filter: brightness(0.85) contrast(1.05);
     }
     
-    /* Кнопка переключения темы */
+    /* Кнопка переключения темы (день/ночь) */
     .theme-toggle {
       position: fixed;
       top: 1.5rem;
@@ -239,7 +258,7 @@
 
     .dlg-root .scene-label .role-highlight {
       font-weight: 600;
-      color: #ad7e6d;
+      color: var(--terracotta);
     }
 
     .role-highlight-family{
@@ -248,7 +267,7 @@
 
     .role-highlight-bold {
       color: var(--gold);
-      background-color: #b5654a12;
+      background-color: rgba(181, 101, 74, 0.12);
       padding: 2px 6px; 
       box-decoration-break: clone;
       -webkit-box-decoration-break: clone;
@@ -344,11 +363,12 @@
     }
     .dlg-root .avatar img{width:100%;height:100%;object-fit:cover}
 
+    /* Карточки диалога адаптируются под режим день/ночь через переменные */
     .dlg-root .line .card{
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      background: rgba(251, 249, 245, 0.92);
-      border: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 14px;
       padding: 1.5rem 1.8rem 1.7rem;
       box-shadow: 0 18px 50px -32px rgba(0,0,0,0.35);
@@ -356,10 +376,6 @@
       position: relative;
       flex-grow: 1;
       transition: background 0.5s ease, border-color 0.5s ease;
-    }
-    
-    .dlg-root.dark-theme .line .card {
-      background: rgba(22, 19, 17, 0.88);
     }
     
     .dlg-root .line .card::before{
@@ -386,7 +402,7 @@
       letter-spacing: .20em;
       text-transform: uppercase;
       margin-bottom: .9rem;
-      opacity: 0.7;
+      opacity: 0.8;
     }
     .dlg-root .line .role .dot{
       width: 7px;
@@ -403,12 +419,11 @@
     .dlg-root .line .speech em{font-style:italic;color:var(--olive)}
 
     .dlg-root .line.prosecutor{justify-content:flex-start;flex-direction:row;}
-    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:var(--line)}
+    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:var(--card-border)}
     .dlg-root .line.prosecutor .card::before{left:1.8rem}
 
     .dlg-root .line.accused{justify-content:flex-end;flex-direction:row-reverse;}
-    .dlg-root .line.accused .card{color:var(--olive);border-color:var(--line);background: rgba(242, 239, 233, 0.92);}
-    .dlg-root.dark-theme .dlg-root .line.accused .card { background: rgba(33, 28, 24, 0.88); }
+    .dlg-root .line.accused .card{color:var(--olive);border-color:var(--card-border);}
     .dlg-root .line.accused .card::before{right:1.8rem}
     .dlg-root .line.accused .role{justify-content:flex-end}
 
@@ -420,7 +435,7 @@
     .dlg-root .verdict{
       text-align:center;margin:6rem auto 2rem;max-width:680px;padding:2rem 1.5rem;position:relative;z-index:2;
       opacity:0;transform:translateY(40px);transition:opacity 1.2s ease,transform 1.2s ease;
-      background: rgba(251, 249, 245, 0.92);
+      background: rgba(251, 249, 245, 0.94);
       border: 1px solid #e3ddd2;
       border-radius: 16px;
       box-shadow: 0 20px 50px rgba(0,0,0,0.3);
@@ -477,7 +492,7 @@
       const rootRef = useRef(null);
       const [isCourtStarted, setIsCourtStarted] = useState(false);
       const [isContentRevealed, setIsContentRevealed] = useState(false);
-      const [isDarkTheme, setIsDarkTheme] = useState(false); // По умолчанию светлый режим
+      const [isDarkTheme, setIsDarkTheme] = useState(false); // Изначально день (светлый режим)
       const [showScrollTop, setShowScrollTop] = useState(false);
       const isCourtStartedRef = useRef(false);
       const targetScrollYRef = useRef(0);
@@ -495,7 +510,7 @@
       const handleStartCourt = () => {
         setIsCourtStarted(true);
         isCourtStartedRef.current = true;
-        setIsDarkTheme(true); // Автоматически переключаем на тёмный режим для контраста на фоне храма
+        setIsDarkTheme(true); // Автоматически переключаем в ночной режим при старте суда
 
         setTimeout(() => {
           setIsContentRevealed(true);
@@ -527,7 +542,7 @@
       };
 
       const handleScrollToTop = () => {
-        // Сброс в исходное светлое состояние
+        // Сброс в исходное светлое состояние (день)
         setIsCourtStarted(false);
         isCourtStartedRef.current = false;
         setIsContentRevealed(false);
@@ -703,7 +718,7 @@
           <button 
             className="theme-toggle" 
             onClick={() => setIsDarkTheme(!isDarkTheme)}
-            title="Переключить тему"
+            title="Переключить день/ночь"
           >
             {isDarkTheme ? (
               <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
