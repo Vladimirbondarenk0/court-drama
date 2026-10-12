@@ -94,10 +94,12 @@
     .dlg-root.court-active .verdict p { color: #d4ccc2; }
     .dlg-root.court-active footer { color: #b5aaa0; }
 
-    /* Карточки диалога в темном режиме с рамкой #454545 */
-    .dlg-root.dark-mode .line .card {
+    /* Карточки диалога в темном режиме с точным селектором для рамок #454545 */
+    .dlg-root.dark-mode .line .card,
+    .dlg-root.dark-mode .line.prosecutor .card,
+    .dlg-root.dark-mode .line.accused .card {
       background: #1b1714;
-      border-color: #454545;
+      border-color: #454545 !important;
       box-shadow: 0 18px 50px -32px rgba(0,0,0,0.6);
     }
     .dlg-root.dark-mode .line .speech {
