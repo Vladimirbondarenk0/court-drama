@@ -40,8 +40,8 @@
       position: relative;
     }
 
-    /* Ручной темный режим ДО старта суда */
-    .dlg-root.dark-mode:not(.court-active) {
+    /* Единый тёмный режим (и до старта, и после старта суда) */
+    .dlg-root.dark-mode {
       --ivory:#161311; --beige:#211c18; --ink:#ece5dc; --ink-soft:#b5aaa0;
       --terracotta:#ad7e6d; --terracotta-soft:#8a5342; --olive:#a39755;
       --gold:#d4b483; --slate:#9aa5ae; --line:#332b25;
@@ -94,16 +94,16 @@
     .dlg-root.court-active .verdict p { color: #d4ccc2; }
     .dlg-root.court-active footer { color: #b5aaa0; }
 
-    /* Исправленный стиль карточек диалога при тёмном режиме */
+    /* Карточки диалога в темном режиме */
     .dlg-root.dark-mode .line .card {
       background: #1b1714;
       border-color: #3b312b;
     }
     .dlg-root.dark-mode .line .speech {
-      color: #ece5dc !important; /* Делаем основной текст светлым и хорошо читаемым */
+      color: #ece5dc !important;
     }
     .dlg-root.dark-mode .line .speech em {
-      color: #d4b483 !important; /* Курсив делаем золотистым */
+      color: #d4b483 !important;
     }
     .dlg-root.dark-mode .line.prosecutor .card { color: #e59b82; }
     .dlg-root.dark-mode .line.accused .card { color: #d8ca77; }
