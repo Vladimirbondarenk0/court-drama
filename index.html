@@ -28,17 +28,14 @@
       --ivory:#161311; --beige:#211c18; --ink:#ece5dc; --ink-soft:#b5aaa0;
       --terracotta:#ad7e6d; --terracotta-soft:#8a5342; --olive:#a39755;
       --gold:#d4b483; --slate:#9aa5ae; --line:#332b25;
-      background:
-        radial-gradient(1200px 800px at 80% -10%, #201a16 0%, transparent 60%),
-        radial-gradient(900px 700px at -10% 110%, #110e0c 0%, transparent 55%),
-        var(--ivory);
+      background: transparent;
       color:var(--ink);
       font-family:'Montserrat',sans-serif;
       font-weight:300; line-height:1.8; overflow-x:hidden;
       -webkit-font-smoothing:antialiased;
       min-height: 100vh;
       width: 100%;
-      transition: background 0.5s ease, color 0.5s ease;
+      transition: color 0.5s ease;
       position: relative;
     }
 
@@ -46,15 +43,11 @@
       --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
       --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
       --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;
-      background:
-        radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
-        radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
-        var(--ivory);
     }
 
     .dlg-root *{margin:0;padding:0;box-sizing:border-box}
     
-    /* Эпический фон Храма (активен только после старта) */
+    /* Эпический фон Храма всегда на заднем плане */
     .temple-bg {
       position: fixed;
       top: 0;
@@ -65,17 +58,11 @@
       background: 
         linear-gradient(180deg, rgba(22, 19, 17, 0.5) 0%, rgba(22, 19, 17, 0.88) 100%),
         url("https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&w=1920&q=80") center/cover no-repeat;
-      filter: brightness(0.7) contrast(1.1);
-      opacity: 0;
-      transform: scale(1.03);
-      transition: opacity 2s ease, transform 3.5s cubic-bezier(0.16, 1, 0.3, 1), filter 3s ease;
-      pointer-events: none;
-    }
-
-    .dlg-root.court-active .temple-bg {
+      filter: brightness(0.8) contrast(1.05);
       opacity: 1;
       transform: scale(1);
-      filter: brightness(0.9) contrast(1.05);
+      transition: filter 3s ease;
+      pointer-events: none;
     }
     
     /* Кнопка переключения темы */
@@ -272,7 +259,7 @@
       padding: 1rem 2.4rem;
       border-radius: 999px;
       border: 1px solid var(--terracotta);
-      background: var(--ivory);
+      background: var(--beige);
       color: var(--terracotta);
       font-family: 'Montserrat', sans-serif;
       font-size: 0.82rem;
@@ -515,7 +502,7 @@
       };
 
       const handleScrollToTop = () => {
-        // Полный сброс состояния до исходного
+        // Сбрасываем флаги суда, чтобы разблокировать врата и вернуть кнопку в исходное состояние
         setIsCourtStarted(false);
         isCourtStartedRef.current = false;
         setIsContentRevealed(false);
@@ -587,7 +574,7 @@
           if (isCourtStartedRef.current) {
             const minAllowedScroll = sectionBottom - 40;
             if (targetScrollYRef.current + e.deltaY * 0.9 < minAllowedScroll && e.deltaY < 0) {
-              return; // Блокируем скролл вверх до тех пор, пока пользователь не дойдет до низа и не нажмет стрелочку
+              return; 
             }
           }
 
@@ -684,6 +671,7 @@
 
       return (
         <div className={`dlg-root ${isLightMode ? 'light-theme' : ''} ${isCourtStarted ? 'court-active' : ''} ${isContentRevealed ? 'content-revealed' : ''}`} ref={rootRef}>
+          {/* Фон Храма присутствует всегда */}
           <div className="temple-bg" />
 
           <div className="rail" />
