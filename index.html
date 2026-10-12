@@ -363,7 +363,6 @@
     }
     .dlg-root .avatar img{width:100%;height:100%;object-fit:cover}
 
-    /* Карточки диалога адаптируются под режим день/ночь через переменные */
     .dlg-root .line .card{
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -431,7 +430,7 @@
     .dlg-root .line.prosecutor .nub{left:50%;transform:translateX(-46px)}
     .dlg-root .line.accused .nub{right:50%;transform:translateX(46px)}
 
-    /* Финальный вывод всегда в светлых тонах для идеальной читаемости на фоне храма */
+    /* Финальный вывод */
     .dlg-root .verdict{
       text-align:center;margin:6rem auto 2rem;max-width:680px;padding:2rem 1.5rem;position:relative;z-index:2;
       opacity:0;transform:translateY(40px);transition:opacity 1.2s ease,transform 1.2s ease;
@@ -492,7 +491,7 @@
       const rootRef = useRef(null);
       const [isCourtStarted, setIsCourtStarted] = useState(false);
       const [isContentRevealed, setIsContentRevealed] = useState(false);
-      const [isDarkTheme, setIsDarkTheme] = useState(false); // Изначально день (светлый режим)
+      const [isDarkTheme, setIsDarkTheme] = useState(false); // Дневной режим по умолчанию
       const [showScrollTop, setShowScrollTop] = useState(false);
       const isCourtStartedRef = useRef(false);
       const targetScrollYRef = useRef(0);
@@ -510,7 +509,6 @@
       const handleStartCourt = () => {
         setIsCourtStarted(true);
         isCourtStartedRef.current = true;
-        setIsDarkTheme(true); // Автоматически переключаем в ночной режим при старте суда
 
         setTimeout(() => {
           setIsContentRevealed(true);
@@ -523,30 +521,17 @@
         if (startSection) {
           const topPos = startSection.getBoundingClientRect().top + window.pageYOffset - 40;
           
+          // Мгновенный скачок (телепортация) к началу заседания без плавной анимации
+          window.scrollTo(0, topPos);
           targetScrollYRef.current = topPos;
-          isAnimatingRef.current = true;
-
-          const lerpJump = () => {
-            currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
-            if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.5) {
-              currentScrollYRef.current = targetScrollYRef.current;
-              window.scrollTo(0, currentScrollYRef.current);
-              isAnimatingRef.current = false;
-              return;
-            }
-            window.scrollTo(0, currentScrollYRef.current);
-            requestAnimationFrame(lerpJump);
-          };
-          requestAnimationFrame(lerpJump);
+          currentScrollYRef.current = topPos;
         }
       };
 
       const handleScrollToTop = () => {
-        // Сброс в исходное светлое состояние (день)
         setIsCourtStarted(false);
         isCourtStartedRef.current = false;
         setIsContentRevealed(false);
-        setIsDarkTheme(false);
         setShowScrollTop(false);
 
         targetScrollYRef.current = 0;
@@ -602,6 +587,9 @@
         };
 
         const onWheel = (e) => {
+          // Если суд еще не начат, оставляем стандартный свободный скролл
+          if (!isCourtStartedRef.current) return;
+
           const scrollY = window.scrollY;
           const firstLineTop = lines[0].offsetTop - 40;
           const lastLineTop = lines[lines.length - 1].offsetTop;
@@ -611,18 +599,12 @@
 
           let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
           
-          if (isCourtStartedRef.current) {
-            const minAllowedScroll = sectionBottom - 40;
-            if (targetScrollYRef.current + e.deltaY * 0.9 < minAllowedScroll && e.deltaY < 0) {
-              return; 
-            }
+          const minAllowedScroll = sectionBottom - 40;
+          if (targetScrollYRef.current + e.deltaY * 0.9 < minAllowedScroll && e.deltaY < 0) {
+            return; // Замок (блокировка возврата наверх до кнопки)
           }
 
-          if (!isCourtStartedRef.current) {
-            maxAllowedScroll = sectionBottom;
-          }
-
-          if (isCourtStartedRef.current && scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
+          if (scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
             const direction = e.deltaY > 0 ? 1 : -1;
             
             const snapTargets = lines.map(l => l.offsetTop - 40);
