@@ -495,16 +495,19 @@
         }, { threshold: 0.4 });
         if (verdict) ioV.observe(verdict);
 
-        const onScroll = () => {
-          // Если суд еще не начат, жестко удерживаем пользователя от прокрутки ниже секции кнопки
+        // Мягкий перехват колесика мыши до старта суда, чтобы избежать рывков
+        const onWheel = (e) => {
           if (!isCourtStartedRef.current && startSection) {
-            const maxAllowedScroll = startSection.offsetTop + startSection.offsetHeight - 40;
-            if (window.scrollY > maxAllowedScroll) {
+            const maxAllowedScroll = startSection.offsetTop + startSection.offsetHeight - window.innerHeight + 80;
+            // Если пытаемся крутить вниз дальше барьера кнопки — блокируем движение
+            if (e.deltaY > 0 && window.scrollY >= maxAllowedScroll) {
+              e.preventDefault();
               window.scrollTo(0, maxAllowedScroll);
             }
           }
+        };
 
-          // Управление видимостью кнопки "Наверх"
+        const onScroll = () => {
           if (verdict) {
             const verdictRect = verdict.getBoundingClientRect();
             if (verdictRect.top <= window.innerHeight * 0.75) {
@@ -515,6 +518,7 @@
           }
         };
 
+        window.addEventListener('wheel', onWheel, { passive: false });
         window.addEventListener('scroll', onScroll, { passive: true });
 
         let raf;
@@ -546,10 +550,10 @@
           io.disconnect();
           ioV.disconnect();
           cancelAnimationFrame(raf);
+          window.removeEventListener('wheel', onWheel);
           window.removeEventListener('scroll', onScroll);
         };
       }, []);
-
       return (
         <div className={`dlg-root ${isDarkMode ? 'dark' : ''}`} ref={rootRef}>
           <div className="rail" />
