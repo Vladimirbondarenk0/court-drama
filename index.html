@@ -18,9 +18,11 @@
       background-color: #FBF9F5;
       transition: background-color 0.5s ease;
     }
+    body.dark-base {
+      background-color: #161311;
+    }
 
     .dlg-root{
-      /* Всегда светлая база сайта */
       --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
       --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
       --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;
@@ -38,9 +40,20 @@
       position: relative;
     }
 
+    /* Ручной темный режим ДО старта суда */
+    .dlg-root.dark-mode:not(.court-active) {
+      --ivory:#161311; --beige:#211c18; --ink:#ece5dc; --ink-soft:#b5aaa0;
+      --terracotta:#ad7e6d; --terracotta-soft:#8a5342; --olive:#a39755;
+      --gold:#d4b483; --slate:#9aa5ae; --line:#332b25;
+      background:
+        radial-gradient(1200px 800px at 80% -10%, #201a16 0%, transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, #110e0c 0%, transparent 55%),
+        var(--ivory);
+    }
+
     .dlg-root *{margin:0;padding:0;box-sizing:border-box}
     
-    /* Эпический фон Храма (активен только после старта) */
+    /* Эпический фон Храма */
     .temple-bg {
       position: fixed;
       top: 0;
@@ -64,7 +77,7 @@
       filter: brightness(0.9) contrast(1.05);
     }
 
-    /* Когда суд активен, тексты хедера, описания и вердикта становятся светлыми для читаемости на фоне храма */
+    /* ПОСЛЕ старта суда: хедер, описания и футер ВСЕГДА светлые/золотые для контраста на фоне храма */
     .dlg-root.court-active .hero .eyebrow { color: var(--gold); }
     .dlg-root.court-active .hero h1 { color: #f4efe6; }
     .dlg-root.court-active .hero .sub { color: #d4ccc2; }
@@ -80,6 +93,50 @@
     .dlg-root.court-active .verdict h2 { color: #f4efe6; }
     .dlg-root.court-active .verdict p { color: #d4ccc2; }
     .dlg-root.court-active footer { color: #b5aaa0; }
+
+    /* Когда суд активен, кнопка переключения меняет тему ТОЛЬКО для карточек диалога */
+    .dlg-root.court-active.dark-mode .line .card {
+      background: #1b1714;
+      border-color: #3b312b;
+      color: #ece5dc;
+    }
+    .dlg-root.court-active.dark-mode .line.prosecutor .card { color: #d49a85; }
+    .dlg-root.court-active.dark-mode .line.accused .card { color: #c8bc6e; }
+    .dlg-root.court-active.dark-mode .avatar { border-color: #3b312b; background: #211c18; }
+    .dlg-root.court-active.dark-mode .line .nub { background: #3b312b; }
+
+    /* Кнопка переключения темы */
+    .theme-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+      background: var(--beige);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+    }
+    .theme-toggle:hover {
+      transform: scale(1.08);
+      border-color: var(--terracotta);
+    }
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
 
     /* Кнопка возврата наверх */
     .scroll-top-btn {
@@ -318,6 +375,7 @@
     .dlg-root .avatar{
       width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;
       border:2px solid var(--line);background:var(--beige);box-shadow:0 4px 12px rgba(0,0,0,0.15);
+      transition: background 0.5s ease, border-color 0.5s ease;
     }
     .dlg-root .avatar img{width:100%;height:100%;object-fit:cover}
 
@@ -332,7 +390,7 @@
       max-width: 78%;
       position: relative;
       flex-grow: 1;
-      transition: background 0.5s ease, border-color 0.5s ease;
+      transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease;
     }
     
     .dlg-root .line .card::before{
@@ -384,7 +442,7 @@
     .dlg-root .line.accused .card::before{right:1.8rem}
     .dlg-root .line.accused .role{justify-content:flex-end}
 
-    .dlg-root .line .nub{position:absolute;top:1.9rem;width:46px;height:1px;background:var(--line)}
+    .dlg-root .line .nub{position:absolute;top:1.9rem;width:46px;height:1px;background:var(--line); transition: background 0.5s ease;}
     .dlg-root .line.prosecutor .nub{left:50%;transform:translateX(-46px)}
     .dlg-root .line.accused .nub{right:50%;transform:translateX(46px)}
 
@@ -397,6 +455,10 @@
       width:84px;height:84px;border-radius:50%;border:1px solid var(--gold);margin:0 auto 2rem;
       display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;
       color:var(--gold);font-size:1.6rem;font-style:italic;box-shadow:inset 0 0 0 6px var(--beige);
+      transition: box-shadow 0.5s ease;
+    }
+    .dlg-root.dark-mode .verdict .seal {
+      box-shadow: inset 0 0 0 6px #211c18;
     }
     .dlg-root .verdict h2{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;color:var(--ink); transition: color 0.5s ease;}
     .dlg-root .verdict h2 em{font-style:italic;color:var(--olive)}
@@ -415,7 +477,7 @@
     }
   </style>
 </head>
-<body class="light">
+<body>
   <div id="root"></div>
 
   <script type="text/babel">
@@ -443,11 +505,20 @@
       const rootRef = useRef(null);
       const [isCourtStarted, setIsCourtStarted] = useState(false);
       const [isContentRevealed, setIsContentRevealed] = useState(false);
+      const [isDarkMode, setIsDarkMode] = useState(false);
       const [showScrollTop, setShowScrollTop] = useState(false);
       const isCourtStartedRef = useRef(false);
       const targetScrollYRef = useRef(0);
       const currentScrollYRef = useRef(0);
       const isAnimatingRef = useRef(false);
+
+      useEffect(() => {
+        if (isDarkMode) {
+          document.body.classList.add('dark-base');
+        } else {
+          document.body.classList.remove('dark-base');
+        }
+      }, [isDarkMode]);
 
       const handleStartCourt = () => {
         setIsCourtStarted(true);
@@ -649,10 +720,22 @@
       }, []);
 
       return (
-        <div className={`dlg-root ${isCourtStarted ? 'court-active' : ''} ${isContentRevealed ? 'content-revealed' : ''}`} ref={rootRef}>
+        <div className={`dlg-root ${isDarkMode ? 'dark-mode' : ''} ${isCourtStarted ? 'court-active' : ''} ${isContentRevealed ? 'content-revealed' : ''}`} ref={rootRef}>
           <div className="temple-bg" />
 
           <div className="rail" />
+
+          <button 
+            className="theme-toggle" 
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            title="Переключить тему день/ночь"
+          >
+            {isDarkMode ? (
+              <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            ) : (
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            )}
+          </button>
 
           <button 
             className={`scroll-top-btn ${showScrollTop ? 'visible' : ''}`}
