@@ -53,7 +53,7 @@
 
     .dlg-root *{margin:0;padding:0;box-sizing:border-box}
     
-    /* Эпический фон Храма */
+    /* Эпический фон Небесного тронного зала */
     .temple-bg {
       position: fixed;
       top: 0;
@@ -62,9 +62,9 @@
       height: 100vh;
       z-index: 0;
       background: 
-        linear-gradient(180deg, rgba(22, 19, 17, 0.6) 0%, rgba(22, 19, 17, 0.9) 100%),
-        url("https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&w=1920&q=80") center/cover no-repeat;
-      filter: brightness(0.7) contrast(1.1);
+        linear-gradient(180deg, rgba(22, 19, 17, 0.75) 0%, rgba(22, 19, 17, 0.92) 100%),
+        url("https://assets.hope.study/images/1_h18Fuvp_main_cEq.webp") center/cover no-repeat;
+      filter: brightness(0.65) contrast(1.15);
       opacity: 0;
       transform: scale(1.03);
       transition: opacity 2s ease, transform 3.5s cubic-bezier(0.16, 1, 0.3, 1), filter 3s ease;
@@ -74,10 +74,10 @@
     .dlg-root.court-active .temple-bg {
       opacity: 1;
       transform: scale(1);
-      filter: brightness(0.9) contrast(1.05);
+      filter: brightness(0.78) contrast(1.08);
     }
 
-    /* Тексты хедера, описаний и футера на фоне храма */
+    /* Тексты хедера, описаний и футера на фоне тронного зала */
     .dlg-root.court-active .hero .eyebrow { color: var(--gold); }
     .dlg-root.court-active .hero h1 { color: #f4efe6; }
     .dlg-root.court-active .hero .sub { color: #d4ccc2; }
@@ -94,7 +94,7 @@
     .dlg-root.court-active .verdict p { color: #d4ccc2; }
     .dlg-root.court-active footer { color: #b5aaa0; }
 
-    /* Карточки диалога в темном режиме с точным селектором для рамок #454545 */
+    /* Карточки диалога в темном режиме */
     .dlg-root.dark-mode .line .card,
     .dlg-root.dark-mode .line.prosecutor .card,
     .dlg-root.dark-mode .line.accused .card {
@@ -621,8 +621,8 @@
 
         const onWheel = (e) => {
           const scrollY = window.scrollY;
-          const firstLineTop = lines[0].offsetTop - 40;
-          const lastLineTop = lines[lines.length - 1].offsetTop;
+          const firstLineTop = lines[0] ? lines[0].offsetTop - 40 : 0;
+          const lastLineTop = lines[lines.length - 1] ? lines[lines.length - 1].offsetTop : 0;
           const sectionBottom = startSection ? (startSection.offsetTop + startSection.offsetHeight) : firstLineTop;
 
           e.preventDefault();
@@ -644,7 +644,7 @@
             const direction = e.deltaY > 0 ? 1 : -1;
             
             const snapTargets = lines.map(l => l.offsetTop - 40);
-            snapTargets.push(verdict.offsetTop - 40);
+            if (verdict) snapTargets.push(verdict.offsetTop - 40);
 
             let currentIndex = 0;
             let minDiff = Infinity;
