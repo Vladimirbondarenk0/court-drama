@@ -41,7 +41,7 @@
 
     .dlg-root * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* Панорамный фон с эффектом объема при скролле[cite: 1] */
+    /* Кинематографический панорамный фон */
     .pano-viewport {
       position: fixed;
       top: 0;
@@ -54,23 +54,24 @@
     }
 
     .pano-image {
-      width: 140vw;
-      height: 140vh;
+      width: 150vw;
+      height: 150vh;
       position: absolute;
-      top: -20vh;
-      left: -20vw;
+      top: -25vh;
+      left: -25vw;
       background: url("./Небесный%20тронный%20зал%20света.png") center/cover no-repeat;
-      filter: brightness(0.85) contrast(1.1);
-      transition: filter 1s ease;
+      filter: brightness(0.9) contrast(1.1);
+      transition: filter 1.2s ease;
       will-change: transform, filter;
     }
 
-    .dlg-root.court-active .pano-image {
+    /* Затемнение фона после завершения экскурсии для чтения блоков */
+    .dlg-root.excursion-completed .pano-image {
       filter: brightness(0.55) contrast(1.15);
     }
 
-    /* Индикатор прокрутки (стрелочка вниз) */
-    .scroll-indicator {
+    /* Подсказка для экскурсии */
+    .excursion-cue {
       position: fixed;
       bottom: 2.5rem;
       left: 50%;
@@ -83,18 +84,20 @@
       font-size: 0.72rem;
       letter-spacing: 0.25em;
       text-transform: uppercase;
-      z-index: 10;
-      opacity: 1;
-      transition: opacity 0.5s ease;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-    }
-
-    .scroll-indicator.hidden {
+      z-index: 20;
       opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
       pointer-events: none;
     }
 
-    .scroll-arrow-icon {
+    .excursion-cue.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .excursion-arrow {
       width: 22px;
       height: 22px;
       stroke: var(--gold);
@@ -108,7 +111,21 @@
       50% { transform: translateY(6px); opacity: 1; }
     }
 
-    /* Тексты хедера и элементов на фоне зала */
+    /* Блоки скрыты до завершения экскурсии */
+    .hidden-until-excursion {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .dlg-root.excursion-completed .hidden-until-excursion {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* Хедер */
     .dlg-root .hero {
       min-height: 100vh;
       display: flex;
@@ -125,76 +142,35 @@
     }
 
     .dlg-root .eyebrow {
-      letter-spacing: .5em;
-      text-transform: uppercase;
-      font-size: .72rem;
-      font-weight: 500;
-      color: var(--gold);
-      margin-bottom: 2.2rem;
+      letter-spacing: .5em; text-transform: uppercase; font-size: .72rem; font-weight: 500; color: var(--gold); margin-bottom: 2.2rem;
     }
 
     .dlg-root h1 {
-      font-family: 'Playfair Display', serif;
-      font-weight: 600;
-      font-size: clamp(2.4rem, 5.5vw, 4.8rem);
-      line-height: 1.15;
-      letter-spacing: -.01em;
-      max-width: 22ch;
-      color: #f4efe6;
+      font-family: 'Playfair Display', serif; font-weight: 600;
+      font-size: clamp(2.4rem, 5.5vw, 4.8rem); line-height: 1.15; letter-spacing: -.01em; max-width: 22ch; color: #f4efe6;
     }
     .dlg-root h1 em { font-style: italic; color: var(--gold); font-weight: 400; }
 
     .dlg-root .sub {
-      margin-top: 2rem;
-      max-width: 46ch;
-      color: #d4ccc2;
-      font-size: 1.02rem;
+      margin-top: 2rem; max-width: 46ch; color: #d4ccc2; font-size: 1.02rem;
     }
 
     /* Кнопки управления */
     .theme-toggle {
-      position: fixed;
-      top: 1.5rem;
-      right: 1.5rem;
-      z-index: 100;
-      background: rgba(33, 28, 24, 0.8);
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      transition: all 0.3s ease;
+      position: fixed; top: 1.5rem; right: 1.5rem; z-index: 100;
+      background: rgba(33, 28, 24, 0.8); border: 1px solid var(--gold); color: var(--gold);
+      width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: all 0.3s ease;
     }
     .theme-toggle:hover { transform: scale(1.08); background: var(--gold); color: #161311; }
     .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
     .scroll-top-btn {
-      position: fixed;
-      bottom: 2rem;
-      right: 1.5rem;
-      z-index: 100;
-      background: rgba(33, 28, 24, 0.8);
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(20px);
-      transition: all 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+      position: fixed; bottom: 2rem; right: 1.5rem; z-index: 100;
+      background: rgba(33, 28, 24, 0.8); border: 1px solid var(--gold); color: var(--gold);
+      width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; backdrop-filter: blur(8px); box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
     }
     .scroll-top-btn.visible { opacity: 1; visibility: visible; transform: translateY(0); }
     .scroll-top-btn:hover { background: var(--gold); color: #161311; transform: translateY(-4px); }
@@ -214,12 +190,6 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
     
-    .dlg-root.court-active:not(.content-revealed) .scene-label,
-    .dlg-root.court-active:not(.content-revealed) .line,
-    .dlg-root.court-active:not(.content-revealed) .verdict {
-      opacity: 0; pointer-events: none;
-    }
-
     .dlg-root .scene-label::before, .dlg-root .scene-label::after {
       content: ""; display: block; width: 60px; height: 1px; background: rgba(255,255,255,0.3); margin: 1.2rem auto;
     }
@@ -239,7 +209,7 @@
 
     .dlg-root .start-court-section {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      position: relative; z-index: 5; padding: 2rem 1.5rem 5rem;
+      position: relative; z-index: 5; padding: 2rem 1.5rem 3rem;
     }
     .dlg-root .start-court-btn {
       display: inline-flex; align-items: center; gap: 0.8rem; padding: 1rem 2.4rem;
@@ -362,75 +332,97 @@
       { side: 'accused', role: 'Богослов', html: 'Я не укрываюсь, я лишь указываю на непреложный факт богословия! Разве Закон не требует справедливости? Если условия неравны, то и спрос не может быть одинаковым. Разве сам Судья не молчит, видя справедливость моего довода?' },
       { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Судья молчит не потому, что согласен с твоим алиби, а потому что ждет, когда иссякнет твое религиозное лукавство! Ты пытаешься использовать чистоту Христа как щит для защиты своего нечестивого "я". Но закон не оправдывает бунтаря на основании того, что Царь безгрешен!' },
       { side: 'accused', role: 'Богослов', html: 'Тогда в чем же выход? Если моя природа обречена, а стандарт недосягаем, то этот суд — лишь тупик...' },
-      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Выход один — капитуляция твоего эго перед Тем, Кто совершил всё не для того, чтобы ты оправдывал свой грех Его природой, а чтобы Его праведность стала твоим полным замещением!' },
+      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Выход один — капитуляция твоего эго перед Тем, Кто совершил всё не для того, чтобы ты оправдывал свой грех Его природу, а чтобы Его праведность стала твоим полным замещением!' },
       { side: 'accused', role: 'Богослов', html: 'Я больше не спорю. Мое богословское алиби рухнуло. Господи, я прекращаю доказывать свою правоту — я сдаюсь на милость Твоего искупления.' }
     ];
 
     function Dialogue() {
       const rootRef = useRef(null);
       const [isCourtStarted, setIsCourtStarted] = useState(false);
-      const [isContentRevealed, setIsContentRevealed] = useState(false);
-      const [isDarkMode, setIsDarkMode] = useState(true); // По умолчанию темная атмосфера тронного зала
+      const [excursionProgress, setExcursionProgress] = useState(0); // от 0 до 1
+      const [isExcursionFinished, setIsExcursionFinished] = useState(false);
+      const [isDarkMode, setIsDarkMode] = useState(true);
       const [showScrollTop, setShowScrollTop] = useState(false);
-      const [scrollProgress, setScrollProgress] = useState(0);
 
-      // Обработка панорамного обзора зала при скролле
+      // Управление кинематографической экскурсией по скроллу
       useEffect(() => {
-        const handleScrollPan = () => {
-          if (isCourtStarted) return;
+        const handleExcursionScroll = () => {
+          if (!isCourtStarted || isExcursionFinished) return;
+          
           const scrollY = window.scrollY;
-          const maxScroll = window.innerHeight * 1.2;
-          const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
-          setScrollProgress(progress);
+          // Зона прокрутки для экскурсии (например, 700 пикселей плавного движения)
+          const excursionZone = 700; 
+          const progress = Math.min(Math.max(scrollY / excursionZone, 0), 1);
+          
+          setExcursionProgress(progress);
+
+          if (progress >= 1) {
+            setIsExcursionFinished(true);
+          }
         };
 
-        window.addEventListener('scroll', handleScrollPan, { passive: true });
-        return () => window.removeEventListener('scroll', handleScrollPan);
-      }, [isCourtStarted]);
+        window.addEventListener('scroll', handleExcursionScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleExcursionScroll);
+      }, [isCourtStarted, isExcursionFinished]);
 
-      // Вычисление движения виртуальной камеры панорамы
+      // Блокируем стандартный скролл во время экскурсии, чтобы пользователь насладился движением камеры
+      useEffect(() => {
+        const handleWheel = (e) => {
+          if (isCourtStarted && !isExcursionFinished) {
+            // Разрешаем скролл для управления экскурсией, но предотвращаем резкие прыжки
+            // Скроллим плавно
+            window.scrollBy({ top: e.deltaY * 0.4, behavior: 'smooth' });
+            e.preventDefault();
+          }
+        };
+        window.addEventListener('wheel', handleWheel, { passive: false });
+        return () => window.removeEventListener('wheel', handleWheel);
+      }, [isCourtStarted, isExcursionFinished]);
+
+      // Вычисление плавного перемещения камеры (Слева направо -> на Христа по центру)
       const calculateCameraTransform = () => {
-        if (isCourtStarted) {
-          return 'scale(1) translate(0px, 0px)';
+        if (!isCourtStarted) {
+          return 'scale(1) translate(0%, 0%)';
         }
-        // Фазы панорамирования: слева направо к центру (Иисус на троне)
-        if (scrollProgress < 0.35) {
-          const p = scrollProgress / 0.35;
-          const scale = 1 + p * 0.18;
-          const moveX = p * 6;
-          return `scale(${scale}) translate(${moveX}%, 1%)`;
-        } else if (scrollProgress < 0.75) {
-          const p = (scrollProgress - 0.35) / 0.4;
-          const scale = 1.18;
-          const moveX = 6 - p * 12;
-          return `scale(${scale}) translate(${moveX}%, 0%)`;
+
+        // Фаза 1 (0 -> 0.5): Слева (Ангел) плавно плывёт вправо (к архивам/богослову)
+        // Фаза 2 (0.5 -> 1.0): Справа плавно центрируется и приближается к Иисусу на Троне
+        if (excursionProgress <= 0.5) {
+          const p = excursionProgress / 0.5; // от 0 до 1
+          const scale = 1.2;
+          // Смещаем картинку слева направо: от +18% до -18%
+          const moveX = 18 - p * 36; 
+          const moveY = 5 - p * 2;
+          return `scale(${scale}) translate(${moveX}%, ${moveY}%)`;
         } else {
-          const p = (scrollProgress - 0.75) / 0.25;
-          const scale = 1.18 - p * 0.18;
-          const moveX = -6 + p * 6;
-          return `scale(${scale}) translate(${moveX}%, 0%)`;
+          const p = (excursionProgress - 0.5) / 0.5; // от 0 до 1
+          // Плавное приближение (zoom-in) к центру на Трон (от 1.2 до 1.38)
+          const scale = 1.2 + p * 0.18;
+          // Плавный возврат по X к строгому центру (от -18% до 0%), подъем по Y к Иисусу (-10%)
+          const moveX = -18 + p * 18;
+          const moveY = 3 - p * 11;
+          return `scale(${scale}) translate(${moveX}%, ${moveY}%)`;
         }
       };
 
       const handleStartCourt = () => {
         setIsCourtStarted(true);
-        setTimeout(() => {
-          setIsContentRevealed(true);
-        }, 1200);
+        setExcursionProgress(0);
+        setIsExcursionFinished(false);
 
         const root = rootRef.current;
         if (!root) return;
         const startSection = root.querySelector('.start-court-section');
         if (startSection) {
-          const topPos = startSection.getBoundingClientRect().top + window.pageYOffset - 40;
+          const topPos = startSection.getBoundingClientRect().top + window.pageYOffset - 20;
           window.scrollTo({ top: topPos, behavior: 'smooth' });
         }
       };
 
       const handleScrollToTop = () => {
         setIsCourtStarted(false);
-        setIsContentRevealed(false);
-        setScrollProgress(0);
+        setIsExcursionFinished(false);
+        setExcursionProgress(0);
         setShowScrollTop(false);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       };
@@ -467,7 +459,6 @@
 
         window.addEventListener('scroll', onScrollProgress, { passive: true });
 
-        // Активная строка по центру экрана
         let raf;
         const tick = () => {
           const vh = window.innerHeight;
@@ -499,16 +490,16 @@
       }, []);
 
       return (
-        <div className={`dlg-root ${isDarkMode ? 'dark-mode' : ''} ${isCourtStarted ? 'court-active' : ''} ${isContentRevealed ? 'content-revealed' : ''}`} ref={rootRef}>
-          {/* Интерактивный панорамный фон тронного зала */}
+        <div className={`dlg-root ${isDarkMode ? 'dark-mode' : ''} ${isExcursionFinished ? 'excursion-completed' : ''}`} ref={rootRef}>
+          {/* Кинематографический панорамный фон */}
           <div className="pano-viewport">
             <div className="pano-image" style={{ transform: calculateCameraTransform() }} />
           </div>
 
-          {/* Анимированная стрелочка вниз для приглашения к осмотру */}
-          <div className={`scroll-indicator ${scrollProgress > 0.15 || isCourtStarted ? 'hidden' : ''}`}>
-            <span>Листайте для обзора Зала</span>
-            <svg className="scroll-arrow-icon" viewBox="0 0 24 24">
+          {/* Подсказка прокрутки для экскурсии */}
+          <div className={`excursion-cue ${isCourtStarted && !isExcursionFinished ? 'visible' : ''}`}>
+            <span>Исследуйте Зал Суда (крутите вниз)</span>
+            <svg className="excursion-arrow" viewBox="0 0 24 24">
               <path d="M12 5v14M19 12l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
@@ -542,17 +533,6 @@
           </header>
 
           <main className="court">
-            <div className="scene-label">
-              <div className="cast-title">
-                <span>Действующие лица</span>
-              </div>
-              <p className="role-highlight-family">
-                <span className="role-highlight">Судья — Господь.&nbsp;</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
-                <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Он не желает уступать ни одной позиции и использует все возможные аргументы.<br /><br />
-                <span className="role-highlight">Богослов — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет основание для оправдания...
-              </p>
-            </div>
-
             <div className="start-court-section">
               <button 
                 className={`start-court-btn ${isCourtStarted ? 'started' : ''}`}
@@ -562,7 +542,7 @@
                 {isCourtStarted ? (
                   <>
                     <span className="status-dot"></span>
-                    <span>Заседание идет</span>
+                    <span>Экскурсия по Залу Суда...</span>
                   </>
                 ) : (
                   <>
@@ -575,33 +555,47 @@
               </button>
             </div>
 
-            {LINES.map((l, i) => (
-              <div className={`line ${l.side}`} key={i}>
-                {AVATARS[l.side] && (
-                  <div className="avatar">
-                    <img src={AVATARS[l.side]} alt={l.role} />
-                  </div>
-                )}
-                <span className="nub" />
-                <div className="card">
-                  <div className="role">
-                    <span className="dot" />
-                    <span className="role-text">{l.role}</span>
-                  </div>
-                  <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
+            {/* Блоки скрыты во время экскурсии и появляются плавно после неё */}
+            <div className="hidden-until-excursion">
+              <div className="scene-label">
+                <div className="cast-title">
+                  <span>Действующие лица</span>
                 </div>
+                <p className="role-highlight-family">
+                  <span className="role-highlight">Судья — Господь.&nbsp;</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
+                  <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Он не желает уступать ни одной позиции и использует все возможные аргументы.<br /><br />
+                  <span className="role-highlight">Богослов — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет основание для оправдания...
+                </p>
               </div>
-            ))}
 
-            <section className="verdict">
-              <div className="seal">Ω</div>
-              <h2>Тюрьма «я» <em>рухнула</em>.<br />Праведность — <em>не по заслугам</em>.</h2>
-              <p>Ухищрения ума исчерпаны. Судья нарушает молчание не для осуждения, а чтобы даровать жизнь тем, кто умер для своего оправдания.</p>
-              <div className="stamp">Приговор: Оправдание через Христа</div>
-            </section>
+              {LINES.map((l, i) => (
+                <div className={`line ${l.side}`} key={i}>
+                  {AVATARS[l.side] && (
+                    <div className="avatar">
+                      <img src={AVATARS[l.side]} alt={l.role} />
+                    </div>
+                  )}
+                  <span className="nub" />
+                  <div className="card">
+                    <div className="role">
+                      <span className="dot" />
+                      <span className="role-text">{l.role}</span>
+                    </div>
+                    <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
+                  </div>
+                </div>
+              ))}
+
+              <section className="verdict">
+                <div className="seal">Ω</div>
+                <h2>Тюрьма «я» <em>рухнула</em>.<br />Праведность — <em>не по заслугам</em>.</h2>
+                <p>Ухищрения ума исчерпаны. Судья нарушает молчание не для осуждения, а чтобы даровать жизнь тем, кто умер для своего оправдания.</p>
+                <div className="stamp">Приговор: Оправдание через Христа</div>
+              </section>
+            </div>
           </main>
 
-          <footer>Экспериментальный суд &nbsp;·&nbsp; <span>Голос Истины</span></footer>
+          <footer>Экскурсия Зала Суда &nbsp;·&nbsp; <span>Голос Истины</span></footer>
         </div>
       );
     }
