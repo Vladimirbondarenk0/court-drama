@@ -15,300 +15,473 @@
     html, body {
       margin: 0;
       padding: 0;
-      background-color: #161311;
+      background-color: #FBF9F5;
       transition: background-color 0.5s ease;
-      overflow-x: hidden;
+    }
+    body.dark-base {
+      background-color: #161311;
     }
 
-    .dlg-root {
+    .dlg-root{
       --ivory:#FBF9F5; --beige:#F2EFE9; --ink:#3e3129; --ink-soft:#5b4f47;
       --terracotta:#B5654A; --terracotta-soft:#d8a98f; --olive:#7c7340;
       --gold:#b89968; --slate:#6f7a82; --line:#e3ddd2;
-      color: var(--ink);
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 300; 
-      line-height: 1.8; 
+      background:
+        radial-gradient(1200px 800px at 80% -10%, #fffdf8 0%, transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, #efe9df 0%, transparent 55%),
+        var(--ivory);
+      color:var(--ink);
+      font-family:'Montserrat',sans-serif;
+      font-weight:300; line-height:1.8; overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
       min-height: 100vh;
       width: 100%;
+      transition: background 0.5s ease, color 0.5s ease;
       position: relative;
     }
 
+    /* Единый тёмный режим */
     .dlg-root.dark-mode {
       --ivory:#161311; --beige:#211c18; --ink:#ece5dc; --ink-soft:#b5aaa0;
       --terracotta:#ad7e6d; --terracotta-soft:#8a5342; --olive:#a39755;
       --gold:#d4b483; --slate:#9aa5ae; --line:#332b25;
+      background:
+        radial-gradient(1200px 800px at 80% -10%, #201a16 0%, transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, #110e0c 0%, transparent 55%),
+        var(--ivory);
     }
 
-    .dlg-root * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    /* Кинематографический панорамный фон */
-    .pano-viewport {
+    .dlg-root *{margin:0;padding:0;box-sizing:border-box}
+    
+   /* Эпический фон Небесного тронного зала */
+    .temple-bg {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      overflow: hidden;
       z-index: 0;
+      background: 
+        linear-gradient(180deg, rgba(22, 19, 17, 0.75) 0%, rgba(22, 19, 17, 0.92) 100%),
+       url("./Небесный%20тронный%20зал%20света.png") center/cover no-repeat;
+      filter: brightness(0.65) contrast(1.15);
+      opacity: 0;
+      transform: scale(1.03);
+      transition: opacity 2s ease, transform 3.5s cubic-bezier(0.16, 1, 0.3, 1), filter 3s ease;
       pointer-events: none;
     }
 
-    .pano-image {
-      width: 150vw;
-      height: 150vh;
-      position: absolute;
-      top: -25vh;
-      left: -25vw;
-      background: url("./Небесный%20тронный%20зал%20света.png") center/cover no-repeat;
-      filter: brightness(0.9) contrast(1.1);
-      transition: filter 1.2s ease;
-      will-change: transform, filter;
+    .dlg-root.court-active .temple-bg {
+      opacity: 1;
+      transform: scale(1);
+      filter: brightness(0.78) contrast(1.08);
     }
 
-    /* Затемнение фона после завершения экскурсии для чтения блоков */
-    .dlg-root.excursion-completed .pano-image {
-      filter: brightness(0.55) contrast(1.15);
-    }
+    /* Тексты хедера, описаний и футера на фоне тронного зала */
+    .dlg-root.court-active .hero .eyebrow { color: var(--gold); }
+    .dlg-root.court-active .hero h1 { color: #f4efe6; }
+    .dlg-root.court-active .hero .sub { color: #d4ccc2; }
+    .dlg-root.court-active .hero .scroll-cue { color: #d4ccc2; }
+    .dlg-root.court-active .hero .scroll-cue .bar { background: var(--gold); }
 
-    /* Подсказка для экскурсии */
-    .excursion-cue {
+    .dlg-root.court-active .scene-label { color: #e8e2d8; }
+    .dlg-root.court-active .scene-label .cast-title span { color: #f4efe6; }
+    .dlg-root.court-active .scene-label::before,
+    .dlg-root.court-active .scene-label::after { background: rgba(255,255,255,0.2); }
+    .dlg-root.court-active .scene-label .role-highlight { color: var(--gold); }
+
+    .dlg-root.court-active .verdict h2 { color: #f4efe6; }
+    .dlg-root.court-active .verdict p { color: #d4ccc2; }
+    .dlg-root.court-active footer { color: #b5aaa0; }
+
+    /* Карточки диалога в темном режиме */
+    .dlg-root.dark-mode .line .card,
+    .dlg-root.dark-mode .line.prosecutor .card,
+    .dlg-root.dark-mode .line.accused .card {
+      background: #1b1714;
+      border-color: #454545 !important;
+      box-shadow: 0 18px 50px -32px rgba(0,0,0,0.6);
+    }
+    .dlg-root.dark-mode .line .speech {
+      color: #ece5dc !important;
+    }
+    .dlg-root.dark-mode .line .speech em {
+      color: #d4b483 !important;
+    }
+    .dlg-root.dark-mode .line.prosecutor .card { color: #e59b82; }
+    .dlg-root.dark-mode .line.accused .card { color: #d8ca77; }
+    .dlg-root.dark-mode .avatar { border-color: #454545; background: #211c18; }
+    .dlg-root.dark-mode .line .nub { background: #454545; }
+
+    /* Кнопка переключения темы */
+    .theme-toggle {
       position: fixed;
-      bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+      background: var(--beige);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
-      color: var(--gold);
-      font-size: 0.72rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      z-index: 20;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+    }
+    .theme-toggle:hover {
+      transform: scale(1.08);
+      border-color: var(--terracotta);
+    }
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Кнопка возврата наверх */
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 1.5rem;
+      z-index: 100;
+      background: var(--beige);
+      border: 1px solid var(--terracotta);
+      color: var(--terracotta);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.6s ease, visibility 0.6s ease;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-      pointer-events: none;
+      transform: translateY(20px);
+      transition: all 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
     }
-
-    .excursion-cue.visible {
+    .scroll-top-btn.visible {
       opacity: 1;
       visibility: visible;
-    }
-
-    .excursion-arrow {
-      width: 22px;
-      height: 22px;
-      stroke: var(--gold);
-      stroke-width: 2;
-      fill: none;
-      animation: arrowBounce 1.8s infinite ease-in-out;
-    }
-
-    @keyframes arrowBounce {
-      0%, 100% { transform: translateY(0); opacity: 0.4; }
-      50% { transform: translateY(6px); opacity: 1; }
-    }
-
-    /* Блоки скрыты до завершения экскурсии */
-    .hidden-until-excursion {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(30px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-
-    .dlg-root.excursion-completed .hidden-until-excursion {
-      opacity: 1;
-      pointer-events: auto;
       transform: translateY(0);
     }
+    .scroll-top-btn:hover {
+      background: var(--terracotta);
+      color: var(--ivory);
+      transform: translateY(-4px);
+    }
+    .scroll-top-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
 
-    /* Хедер */
-    .dlg-root .hero {
-      min-height: 100vh;
+    .dlg-root .rail{
+      position:fixed;top:0;left:0;height:3px;width:0;
+      background:linear-gradient(90deg,var(--terracotta),var(--gold),var(--olive));
+      z-index:50;transition:width .1s linear;
+    }
+    .dlg-root .hero{
+      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;padding:6rem 1.5rem;position:relative;z-index:2;gap: 1.5rem;
+    }
+    .dlg-root .eyebrow{
+      letter-spacing:.5em;text-transform:uppercase;font-size:.72rem;font-weight:500;
+      color:var(--terracotta);margin-bottom:2.2rem;
+      opacity:0;animation:dlgFadeUp 1.1s .1s ease forwards;
+      transition: color 0.5s ease;
+    }
+    .dlg-root h1{
+      font-family:'Playfair Display',serif;font-weight:600;
+      font-size:clamp(2.4rem,5.5vw,4.8rem);line-height:1.15;letter-spacing:-.01em;
+      max-width:22ch;opacity:0;animation:dlgFadeUp 1.3s .35s ease forwards;
+      text-align:center;
+      transition: color 0.5s ease;
+    }
+    .dlg-root h1 em{font-style:italic;color:var(--olive);font-weight:400}
+    .dlg-root .sub{
+      margin-top:2rem;max-width:46ch;color:var(--ink-soft);font-size:1.02rem;
+      opacity:0;animation:dlgFadeUp 1.3s .7s ease forwards;
+      transition: color 0.5s ease;
+    }
+    .dlg-root .scroll-cue{
+      bottom:2.6rem;
+      display: block;
+      color:var(--ink-soft);font-size:.72rem;letter-spacing:.35em;text-transform:uppercase;
+      opacity:0;animation:dlgFadeUp 1.3s 1.1s ease forwards;
+      transition: color 0.5s ease;
+    }
+    .dlg-root .scroll-cue .bar{
+      width:1px;height:46px;background:var(--terracotta-soft);margin-left: 50%;
+      animation:dlgDrop 2.2s ease-in-out infinite;transform-origin:top;
+      transition: background 0.5s ease;
+    }
+    .bar-span {
+      line-height: 42px;
+      letter-spacing: .85em;
+    }
+
+    @keyframes dlgDrop{0%,100%{transform:scaleY(.2);opacity:.3}50%{transform:scaleY(1);opacity:1}}
+    @keyframes dlgFadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+    .dlg-root .court{max-width:880px;margin:0 auto;padding:0rem 1.5rem 8rem;position:relative;z-index:2}
+    
+    .dlg-root .scene-label{
+      text-align:center;
+      font-style:italic;
+      color:var(--ink-soft);
+      font-size:1.15rem;
+      margin:0rem auto 3rem;
+      max-width:68ch;
+      position:relative;
+      z-index:2;
+      line-height:1.8;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 1s ease, color 0.5s ease;
+    }
+    
+    .dlg-root.court-active:not(.content-revealed) .scene-label,
+    .dlg-root.court-active:not(.content-revealed) .line,
+    .dlg-root.court-active:not(.content-revealed) .verdict {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .dlg-root .scene-label::before,.dlg-root .scene-label::after{content:"";display:block;width:60px;height:1px;background:var(--line);margin:1.2rem auto;transition: background 0.5s ease}
+    
+    .dlg-root .scene-label .cast-title{
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      font-size: 1.2rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      letter-spacing: .20em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      margin-top: 3rem;
+      color: var(--ink);
+      font-style: normal;
+      transition: color 0.5s ease;
+    }
+
+    .dlg-root .scene-label .role-highlight {
+      font-weight: 600;
+      color: var(--terracotta);
+      transition: color 0.5s ease;
+    }
+
+    .role-highlight-family{
+      font-family: Minion Pro, serif;
+    }
+
+    .role-highlight-bold {
+      color: var(--gold);
+      background-color: rgba(181, 101, 74, 0.15);
+      padding: 2px 6px; 
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+      border-radius: 4px;
+      border: 1px solid var(--line);
+    }
+
+    .dlg-root .start-court-section {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: 6rem 1.5rem;
       position: relative;
-      z-index: 2;
-      gap: 1.5rem;
-      color: #f4efe6;
-      text-shadow: 0 2px 15px rgba(0,0,0,0.6);
-    }
-
-    .dlg-root .eyebrow {
-      letter-spacing: .5em; text-transform: uppercase; font-size: .72rem; font-weight: 500; color: var(--gold); margin-bottom: 2.2rem;
-    }
-
-    .dlg-root h1 {
-      font-family: 'Playfair Display', serif; font-weight: 600;
-      font-size: clamp(2.4rem, 5.5vw, 4.8rem); line-height: 1.15; letter-spacing: -.01em; max-width: 22ch; color: #f4efe6;
-    }
-    .dlg-root h1 em { font-style: italic; color: var(--gold); font-weight: 400; }
-
-    .dlg-root .sub {
-      margin-top: 2rem; max-width: 46ch; color: #d4ccc2; font-size: 1.02rem;
-    }
-
-    /* Кнопки управления */
-    .theme-toggle {
-      position: fixed; top: 1.5rem; right: 1.5rem; z-index: 100;
-      background: rgba(33, 28, 24, 0.8); border: 1px solid var(--gold); color: var(--gold);
-      width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: all 0.3s ease;
-    }
-    .theme-toggle:hover { transform: scale(1.08); background: var(--gold); color: #161311; }
-    .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
-    .scroll-top-btn {
-      position: fixed; bottom: 2rem; right: 1.5rem; z-index: 100;
-      background: rgba(33, 28, 24, 0.8); border: 1px solid var(--gold); color: var(--gold);
-      width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; backdrop-filter: blur(8px); box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-      opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
-    }
-    .scroll-top-btn.visible { opacity: 1; visibility: visible; transform: translateY(0); }
-    .scroll-top-btn:hover { background: var(--gold); color: #161311; transform: translateY(-4px); }
-    .scroll-top-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
-    .dlg-root .rail {
-      position: fixed; top: 0; left: 0; height: 3px; width: 0;
-      background: linear-gradient(90deg, var(--terracotta), var(--gold), var(--olive));
-      z-index: 50; transition: width .1s linear;
-    }
-
-    .dlg-root .court { max-width: 880px; margin: 0 auto; padding: 0rem 1.5rem 8rem; position: relative; z-index: 2; }
-    
-    .dlg-root .scene-label {
-      text-align: center; font-style: italic; color: #e8e2d8; font-size: 1.15rem;
-      margin: 0rem auto 3rem; max-width: 68ch; position: relative; z-index: 2; line-height: 1.8;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-    }
-    
-    .dlg-root .scene-label::before, .dlg-root .scene-label::after {
-      content: ""; display: block; width: 60px; height: 1px; background: rgba(255,255,255,0.3); margin: 1.2rem auto;
-    }
-    
-    .dlg-root .scene-label .cast-title {
-      display: inline-flex; align-items: center; gap: .6rem; font-size: 1.2rem;
-      font-family: 'Playfair Display', serif; font-weight: 700; letter-spacing: .20em;
-      text-transform: uppercase; margin-bottom: 2rem; margin-top: 3rem; color: #f4efe6; font-style: normal;
-    }
-
-    .dlg-root .scene-label .role-highlight { font-weight: 600; color: var(--gold); }
-    .role-highlight-family { font-family: 'Playfair Display', serif; }
-    .role-highlight-bold {
-      color: var(--gold); background-color: rgba(181, 101, 74, 0.25);
-      padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .dlg-root .start-court-section {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      position: relative; z-index: 5; padding: 2rem 1.5rem 3rem;
+      z-index: 5;
+      padding: 2rem 1.5rem 5rem;
     }
     .dlg-root .start-court-btn {
-      display: inline-flex; align-items: center; gap: 0.8rem; padding: 1rem 2.4rem;
-      border-radius: 999px; border: 1px solid var(--gold);
-      background: rgba(27, 23, 20, 0.85); color: var(--gold);
-      font-family: 'Montserrat', sans-serif; font-size: 0.82rem; font-weight: 600;
-      letter-spacing: 0.35em; text-transform: uppercase; backdrop-filter: blur(10px);
-      box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.6); transition: all 0.4s ease; cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 2.4rem;
+      border-radius: 999px;
+      border: 1px solid var(--terracotta);
+      background: var(--ivory);
+      color: var(--terracotta);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      box-shadow: 0 12px 35px -10px rgba(181, 101, 74, 0.25);
+      transition: all 0.4s ease;
+      cursor: pointer;
     }
-    .dlg-root .start-court-btn:hover { background: var(--gold); color: #161311; transform: translateY(-2px); }
-    .dlg-root .start-court-btn.started { border-color: var(--olive); color: var(--olive); background: rgba(33, 28, 24, 0.9); cursor: default; }
+    .dlg-root .start-court-btn:hover {
+      background: var(--terracotta);
+      color: var(--ivory);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px -8px rgba(181, 101, 74, 0.4);
+    }
+    .dlg-root .start-court-btn.started {
+      border-color: var(--olive);
+      color: var(--olive);
+      background: var(--beige);
+      cursor: default;
+      box-shadow: none;
+    }
     .dlg-root .start-court-btn.started .status-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: var(--olive); display: inline-block; animation: pulseDot 1.5s infinite ease-in-out;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--olive);
+      display: inline-block;
+      animation: pulseDot 1.5s infinite ease-in-out;
     }
-    @keyframes pulseDot { 0%, 100% { opacity: 0.4; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.2); } }
-    .dlg-root .start-court-icon { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    .dlg-root .start-court-icon {
+      width: 15px;
+      height: 15px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      animation: startBounce 2s infinite ease-in-out;
+    }
+    @keyframes startBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
 
-    .dlg-root .line {
-      position: relative; z-index: 2; display: flex; align-items: flex-start; gap: 1rem; margin: 2.4rem 0;
-      opacity: 0; transform: translateY(40px);
-      transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter .6s ease;
-      filter: saturate(.9);
+    .dlg-root .line{
+      position:relative;z-index:2;display:flex;align-items:flex-start;gap:1rem;margin:2.4rem 0;
+      opacity:0;transform:translateY(40px);
+      transition:opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter .6s ease;
+      filter:saturate(.9);
     }
-    .dlg-root .line.reveal { opacity: 1; transform: translateY(0); }
-    .dlg-root .line.dim { opacity: .32; filter: saturate(.6) blur(.4px); }
-    .dlg-root .line.active { filter: saturate(1); }
-
-    .dlg-root .avatar {
-      width: 48px; height: 48px; border-radius: 50%; overflow: hidden; flex-shrink: 0;
-      border: 2px solid rgba(255,255,255,0.2); background: #211c18; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    .dlg-root .avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-    .dlg-root .line .card {
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      background: rgba(27, 23, 20, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 14px; padding: 1.5rem 1.8rem 1.7rem;
-      box-shadow: 0 18px 50px -32px rgba(0,0,0,0.7);
-      max-width: 78%; position: relative; flex-grow: 1;
-    }
-    .dlg-root .line .card::before {
-      content: ""; position: absolute; top: 0; width: 0; height: 2.1px; background: currentColor;
-      transition: width 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
-    }
-    .dlg-root .line.active .card::before { width: 54px; }
     
-    .dlg-root .line .role {
-      display: flex; align-items: center; gap: .6rem; font-size: .73rem; line-height: 1rem;
-      font-weight: 500; letter-spacing: .20em; text-transform: uppercase; margin-bottom: .9rem; opacity: 0.85;
-    }
-    .dlg-root .line .role .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
-
-    .dlg-root .line .speech { font-family: inherit; font-weight: 400; letter-spacing: .3px; font-size: 1.05rem; line-height: 1.6875rem; color: #ece5dc; }
-    .dlg-root .line .speech em { font-style: italic; color: var(--gold); }
-
-    .dlg-root .line.prosecutor { justify-content: flex-start; flex-direction: row; }
-    .dlg-root .line.prosecutor .card { color: #e59b82; }
-    .dlg-root .line.prosecutor .card::before { left: 1.8rem; }
-
-    .dlg-root .line.accused { justify-content: flex-end; flex-direction: row-reverse; }
-    .dlg-root .line.accused .card { color: #d8ca77; }
-    .dlg-root .line.accused .card::before { right: 1.8rem; }
-    .dlg-root .line.accused .role { justify-content: flex-end; }
-
-    .dlg-root .line .nub { position: absolute; top: 1.9rem; width: 46px; height: 1px; background: rgba(255,255,255,0.2); }
-    .dlg-root .line.prosecutor .nub { left: 50%; transform: translateX(-46px); }
-    .dlg-root .line.accused .nub { right: 50%; transform: translateX(46px); }
-
-    .dlg-root .verdict {
-      text-align: center; margin: 6rem auto 2rem; max-width: 680px; padding: 0 1.5rem; position: relative; z-index: 2;
-      opacity: 0; transform: translateY(40px); transition: opacity 1.2s ease, transform 1.2s ease;
-      color: #f4efe6; text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-    }
-    .dlg-root .verdict.reveal { opacity: 1; transform: translateY(0); }
-    .dlg-root .verdict .seal {
-      width: 84px; height: 84px; border-radius: 50%; border: 1px solid var(--gold); margin: 0 auto 2rem;
-      display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif;
-      color: var(--gold); font-size: 1.6rem; font-style: italic; background: rgba(21, 18, 16, 0.9);
-      box-shadow: inset 0 0 0 6px rgba(33, 28, 24, 0.9);
-    }
-    .dlg-root .verdict h2 { font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.15; }
-    .dlg-root .verdict h2 em { font-style: italic; color: var(--gold) !important; }
-    .dlg-root .verdict p { margin: 1.6rem auto 0; color: #d4ccc2; font-size: 1.05rem; max-width: 48ch; }
-    .dlg-root .verdict .stamp {
-      margin-top: 2.6rem; display: inline-block; padding: .5rem 1.4rem; border: 1px solid var(--gold);
-      color: var(--gold); font-size: .7rem; letter-spacing: .4em; text-transform: uppercase; font-weight: 600; border-radius: 999px;
+    .dlg-root .line.reveal {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .dlg-root footer {
-      text-align: center; padding: 3rem 1.5rem 5rem; color: #b5aaa0; font-size: .78rem; letter-spacing: .18em; text-transform: uppercase; position: relative; z-index: 2;
-    }
-    .dlg-root footer span { color: var(--gold); }
+    .dlg-root .line.dim{opacity:.32;filter:saturate(.6) blur(.4px)}
+    .dlg-root .line.active{filter:saturate(1)}
 
-    @media (max-width: 640px) {
-      .dlg-root .line .card { max-width: 82%; }
-      .dlg-root .line .speech { font-size: 1.16rem; }
-      .dlg-root .line .nub { display: none; }
+    .dlg-root .avatar{
+      width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;
+      border:2px solid var(--line);background:var(--beige);box-shadow:0 4px 12px rgba(0,0,0,0.15);
+      transition: background 0.5s ease, border-color 0.5s ease;
+    }
+    .dlg-root .avatar img{width:100%;height:100%;object-fit:cover}
+
+    .dlg-root .line .card{
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: var(--beige);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1.5rem 1.8rem 1.7rem;
+      box-shadow: 0 18px 50px -32px rgba(0,0,0,0.35);
+      max-width: 78%;
+      position: relative;
+      flex-grow: 1;
+      transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+    }
+    
+    .dlg-root .line .card::before{
+      content:"";
+      position:absolute;
+      top:0;
+      width:0;
+      height:2.1px;
+      background:currentColor;
+      transition:width 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+    }
+    
+    .dlg-root .line.active .card::before{
+      width:54px;
+    }
+    
+    .dlg-root .line .role{
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      font-size: .73rem;
+      line-height: 1rem;
+      font-weight: 500;
+      letter-spacing: .20em;
+      text-transform: uppercase;
+      margin-bottom: .9rem;
+      opacity: 0.75;
+    }
+    .dlg-root .line .role .dot{
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+    .dlg-root .line .role .role-text{
+      display: inline-block;
+    }
+
+    .dlg-root .line .speech{font-family:inherit;font-weight:500;letter-spacing: .3px;font-size:1.05rem;line-height:1.6875rem;color:var(--ink); transition: color 0.5s ease;}
+    .dlg-root .line .speech em{font-style:italic;color:var(--olive); transition: color 0.5s ease;}
+
+    .dlg-root .line.prosecutor{justify-content:flex-start;flex-direction:row;}
+    .dlg-root .line.prosecutor .card{color:var(--terracotta);border-color:var(--line)}
+    .dlg-root .line.prosecutor .card::before{left:1.8rem}
+
+    .dlg-root .line.accused{justify-content:flex-end;flex-direction:row-reverse;}
+    .dlg-root .line.accused .card{color:var(--olive);border-color:var(--line);}
+    .dlg-root .line.accused .card::before{right:1.8rem}
+    .dlg-root .line.accused .role{justify-content:flex-end}
+
+    .dlg-root .line .nub{position:absolute;top:1.9rem;width:46px;height:1px;background:var(--line); transition: background 0.5s ease;}
+    .dlg-root .line.prosecutor .nub{left:50%;transform:translateX(-46px)}
+    .dlg-root .line.accused .nub{right:50%;transform:translateX(46px)}
+
+    .dlg-root .verdict{
+      text-align:center;margin:6rem auto 2rem;max-width:680px;padding:0 1.5rem;position:relative;z-index:2;
+      opacity:0;transform:translateY(40px);transition:opacity 1.2s ease,transform 1.2s ease;
+    }
+    .dlg-root .verdict.reveal{opacity:1;transform:translateY(0)}
+    .dlg-root .verdict .seal{
+      width:84px;height:84px;border-radius:50%;border:1px solid var(--gold);margin:0 auto 2rem;
+      display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;
+      color:var(--gold);font-size:1.6rem;font-style:italic;box-shadow:inset 0 0 0 6px var(--beige);
+      transition: box-shadow 0.5s ease;
+    }
+    .dlg-root.dark-mode .verdict .seal {
+      box-shadow: inset 0 0 0 6px #211c18;
+    }
+    .dlg-root .verdict h2{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;color:var(--ink); transition: color 0.5s ease;}
+    .dlg-root .verdict h2 em{font-style:italic;color:#a39755 !important}
+    .dlg-root .verdict p{margin:1.6rem auto 0;color:var(--ink-soft);font-size:1.05rem;max-width:48ch; transition: color 0.5s ease;}
+    .dlg-root .verdict .stamp{
+      margin-top:2.6rem;display:inline-block;padding:.5rem 1.4rem;border:1px solid #ad7e6d;
+      color:#ad7e6d;font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;font-weight:600;border-radius:999px;
+    }
+    .dlg-root footer{text-align:center;padding:3rem 1.5rem 5rem;color:var(--ink-soft);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;position:relative;z-index:2; transition: color 0.5s ease;}
+    .dlg-root footer span{color:#ad7e6d}
+
+    @media (max-width:640px){
+      .dlg-root .line .card{max-width:82%}
+      .dlg-root .line .speech{font-size:1.16rem}
+      .dlg-root .line .nub{display:none}
     }
   </style>
 </head>
@@ -332,99 +505,83 @@
       { side: 'accused', role: 'Богослов', html: 'Я не укрываюсь, я лишь указываю на непреложный факт богословия! Разве Закон не требует справедливости? Если условия неравны, то и спрос не может быть одинаковым. Разве сам Судья не молчит, видя справедливость моего довода?' },
       { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Судья молчит не потому, что согласен с твоим алиби, а потому что ждет, когда иссякнет твое религиозное лукавство! Ты пытаешься использовать чистоту Христа как щит для защиты своего нечестивого "я". Но закон не оправдывает бунтаря на основании того, что Царь безгрешен!' },
       { side: 'accused', role: 'Богослов', html: 'Тогда в чем же выход? Если моя природа обречена, а стандарт недосягаем, то этот суд — лишь тупик...' },
-      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Выход один — капитуляция твоего эго перед Тем, Кто совершил всё не для того, чтобы ты оправдывал свой грех Его природу, а чтобы Его праведность стала твоим полным замещением!' },
+      { side: 'prosecutor', role: 'Высший ангел-прокурор', html: 'Выход один — капитуляция твоего эго перед Тем, Кто совершил всё не для того, чтобы ты оправдывал свой грех Его природой, а чтобы Его праведность стала твоим полным замещением!' },
       { side: 'accused', role: 'Богослов', html: 'Я больше не спорю. Мое богословское алиби рухнуло. Господи, я прекращаю доказывать свою правоту — я сдаюсь на милость Твоего искупления.' }
     ];
 
     function Dialogue() {
       const rootRef = useRef(null);
       const [isCourtStarted, setIsCourtStarted] = useState(false);
-      const [excursionProgress, setExcursionProgress] = useState(0); // от 0 до 1
-      const [isExcursionFinished, setIsExcursionFinished] = useState(false);
-      const [isDarkMode, setIsDarkMode] = useState(true);
+      const [isContentRevealed, setIsContentRevealed] = useState(false);
+      const [isDarkMode, setIsDarkMode] = useState(false);
       const [showScrollTop, setShowScrollTop] = useState(false);
+      const isCourtStartedRef = useRef(false);
+      const targetScrollYRef = useRef(0);
+      const currentScrollYRef = useRef(0);
+      const isAnimatingRef = useRef(false);
 
-      // Управление кинематографической экскурсией по скроллу
       useEffect(() => {
-        const handleExcursionScroll = () => {
-          if (!isCourtStarted || isExcursionFinished) return;
-          
-          const scrollY = window.scrollY;
-          // Зона прокрутки для экскурсии (например, 700 пикселей плавного движения)
-          const excursionZone = 700; 
-          const progress = Math.min(Math.max(scrollY / excursionZone, 0), 1);
-          
-          setExcursionProgress(progress);
-
-          if (progress >= 1) {
-            setIsExcursionFinished(true);
-          }
-        };
-
-        window.addEventListener('scroll', handleExcursionScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleExcursionScroll);
-      }, [isCourtStarted, isExcursionFinished]);
-
-      // Блокируем стандартный скролл во время экскурсии, чтобы пользователь насладился движением камеры
-      useEffect(() => {
-        const handleWheel = (e) => {
-          if (isCourtStarted && !isExcursionFinished) {
-            // Разрешаем скролл для управления экскурсией, но предотвращаем резкие прыжки
-            // Скроллим плавно
-            window.scrollBy({ top: e.deltaY * 0.4, behavior: 'smooth' });
-            e.preventDefault();
-          }
-        };
-        window.addEventListener('wheel', handleWheel, { passive: false });
-        return () => window.removeEventListener('wheel', handleWheel);
-      }, [isCourtStarted, isExcursionFinished]);
-
-      // Вычисление плавного перемещения камеры (Слева направо -> на Христа по центру)
-      const calculateCameraTransform = () => {
-        if (!isCourtStarted) {
-          return 'scale(1) translate(0%, 0%)';
-        }
-
-        // Фаза 1 (0 -> 0.5): Слева (Ангел) плавно плывёт вправо (к архивам/богослову)
-        // Фаза 2 (0.5 -> 1.0): Справа плавно центрируется и приближается к Иисусу на Троне
-        if (excursionProgress <= 0.5) {
-          const p = excursionProgress / 0.5; // от 0 до 1
-          const scale = 1.2;
-          // Смещаем картинку слева направо: от +18% до -18%
-          const moveX = 18 - p * 36; 
-          const moveY = 5 - p * 2;
-          return `scale(${scale}) translate(${moveX}%, ${moveY}%)`;
+        if (isDarkMode) {
+          document.body.classList.add('dark-base');
         } else {
-          const p = (excursionProgress - 0.5) / 0.5; // от 0 до 1
-          // Плавное приближение (zoom-in) к центру на Трон (от 1.2 до 1.38)
-          const scale = 1.2 + p * 0.18;
-          // Плавный возврат по X к строгому центру (от -18% до 0%), подъем по Y к Иисусу (-10%)
-          const moveX = -18 + p * 18;
-          const moveY = 3 - p * 11;
-          return `scale(${scale}) translate(${moveX}%, ${moveY}%)`;
+          document.body.classList.remove('dark-base');
         }
-      };
+      }, [isDarkMode]);
 
       const handleStartCourt = () => {
         setIsCourtStarted(true);
-        setExcursionProgress(0);
-        setIsExcursionFinished(false);
+        isCourtStartedRef.current = true;
+
+        setTimeout(() => {
+          setIsContentRevealed(true);
+        }, 3000);
 
         const root = rootRef.current;
         if (!root) return;
+        
         const startSection = root.querySelector('.start-court-section');
         if (startSection) {
-          const topPos = startSection.getBoundingClientRect().top + window.pageYOffset - 20;
-          window.scrollTo({ top: topPos, behavior: 'smooth' });
+          const topPos = startSection.getBoundingClientRect().top + window.pageYOffset - 40;
+          
+          targetScrollYRef.current = topPos;
+          isAnimatingRef.current = true;
+
+          const lerpJump = () => {
+            currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
+            if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.5) {
+              currentScrollYRef.current = targetScrollYRef.current;
+              window.scrollTo(0, currentScrollYRef.current);
+              isAnimatingRef.current = false;
+              return;
+            }
+            window.scrollTo(0, currentScrollYRef.current);
+            requestAnimationFrame(lerpJump);
+          };
+          requestAnimationFrame(lerpJump);
         }
       };
 
       const handleScrollToTop = () => {
         setIsCourtStarted(false);
-        setIsExcursionFinished(false);
-        setExcursionProgress(0);
+        isCourtStartedRef.current = false;
+        setIsContentRevealed(false);
         setShowScrollTop(false);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        targetScrollYRef.current = 0;
+        isAnimatingRef.current = true;
+
+        const lerpToTop = () => {
+          currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.1;
+          if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.5) {
+            currentScrollYRef.current = 0;
+            window.scrollTo(0, 0);
+            isAnimatingRef.current = false;
+            return;
+          }
+          window.scrollTo(0, currentScrollYRef.current);
+          requestAnimationFrame(lerpToTop);
+        };
+        requestAnimationFrame(lerpToTop);
       };
 
       useEffect(() => {
@@ -433,6 +590,7 @@
         const lines = Array.from(root.querySelectorAll('.line'));
         const verdict = root.querySelector('.verdict');
         const rail = root.querySelector('.rail');
+        const startSection = root.querySelector('.start-court-section');
 
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
@@ -446,18 +604,94 @@
         }, { threshold: 0.4 });
         if (verdict) ioV.observe(verdict);
 
-        const onScrollProgress = () => {
-          if (verdict) {
-            const verdictRect = verdict.getBoundingClientRect();
-            setShowScrollTop(verdictRect.top <= window.innerHeight * 0.75);
+        targetScrollYRef.current = window.scrollY;
+        currentScrollYRef.current = window.scrollY;
+
+        const lerpLoop = () => {
+          currentScrollYRef.current += (targetScrollYRef.current - currentScrollYRef.current) * 0.08;
+          if (Math.abs(targetScrollYRef.current - currentScrollYRef.current) < 0.3) {
+            currentScrollYRef.current = targetScrollYRef.current;
+            window.scrollTo(0, currentScrollYRef.current);
+            isAnimatingRef.current = false;
+            return;
           }
-          const sc = document.documentElement;
-          const vh = window.innerHeight;
-          const max = sc.scrollHeight - vh;
-          if (rail) rail.style.width = (max > 0 ? (sc.scrollTop / max) * 100 : 0) + '%';
+          window.scrollTo(0, currentScrollYRef.current);
+          requestAnimationFrame(lerpLoop);
         };
 
-        window.addEventListener('scroll', onScrollProgress, { passive: true });
+        const onWheel = (e) => {
+          const scrollY = window.scrollY;
+          const firstLineTop = lines[0] ? lines[0].offsetTop - 40 : 0;
+          const lastLineTop = lines[lines.length - 1] ? lines[lines.length - 1].offsetTop : 0;
+          const sectionBottom = startSection ? (startSection.offsetTop + startSection.offsetHeight) : firstLineTop;
+
+          e.preventDefault();
+
+          let maxAllowedScroll = document.documentElement.scrollHeight - window.innerHeight;
+          
+          if (isCourtStartedRef.current) {
+            const minAllowedScroll = sectionBottom - 40;
+            if (targetScrollYRef.current + e.deltaY * 0.9 < minAllowedScroll && e.deltaY < 0) {
+              return;
+            }
+          }
+
+          if (!isCourtStartedRef.current) {
+            maxAllowedScroll = sectionBottom;
+          }
+
+          if (isCourtStartedRef.current && scrollY >= firstLineTop - 80 && scrollY <= lastLineTop + 120) {
+            const direction = e.deltaY > 0 ? 1 : -1;
+            
+            const snapTargets = lines.map(l => l.offsetTop - 40);
+            if (verdict) snapTargets.push(verdict.offsetTop - 40);
+
+            let currentIndex = 0;
+            let minDiff = Infinity;
+            snapTargets.forEach((t, idx) => {
+              const diff = Math.abs(t - targetScrollYRef.current);
+              if (diff < minDiff) {
+                minDiff = diff;
+                currentIndex = idx;
+              }
+            });
+
+            let nextIndex = currentIndex;
+            if (direction > 0 && currentIndex < snapTargets.length - 1) {
+              nextIndex = currentIndex + 1;
+            } else if (direction < 0 && currentIndex > 0) {
+              nextIndex = currentIndex - 1;
+            }
+
+            targetScrollYRef.current = Math.max(0, Math.min(snapTargets[nextIndex], maxAllowedScroll));
+          } else {
+            targetScrollYRef.current = Math.max(0, Math.min(targetScrollYRef.current + e.deltaY * 0.9, maxAllowedScroll));
+          }
+
+          if (!isAnimatingRef.current) {
+            isAnimatingRef.current = true;
+            requestAnimationFrame(lerpLoop);
+          }
+        };
+
+        const onScroll = () => {
+          if (!isAnimatingRef.current) {
+            targetScrollYRef.current = window.scrollY;
+            currentScrollYRef.current = window.scrollY;
+          }
+
+          if (verdict) {
+            const verdictRect = verdict.getBoundingClientRect();
+            if (verdictRect.top <= window.innerHeight * 0.75) {
+              setShowScrollTop(true);
+            } else {
+              setShowScrollTop(false);
+            }
+          }
+        };
+
+        window.addEventListener('wheel', onWheel, { passive: false });
+        window.addEventListener('scroll', onScroll, { passive: true });
 
         let raf;
         const tick = () => {
@@ -477,6 +711,9 @@
             else if (best) { l.classList.remove('active'); l.classList.add('dim'); }
             else { l.classList.remove('active', 'dim'); }
           });
+          const sc = document.documentElement;
+          const max = sc.scrollHeight - vh;
+          if (rail) rail.style.width = (max > 0 ? (sc.scrollTop / max) * 100 : 0) + '%';
           raf = requestAnimationFrame(tick);
         };
         raf = requestAnimationFrame(tick);
@@ -485,31 +722,21 @@
           io.disconnect();
           ioV.disconnect();
           cancelAnimationFrame(raf);
-          window.removeEventListener('scroll', onScrollProgress);
+          window.removeEventListener('wheel', onWheel);
+          window.removeEventListener('scroll', onScroll);
         };
       }, []);
 
       return (
-        <div className={`dlg-root ${isDarkMode ? 'dark-mode' : ''} ${isExcursionFinished ? 'excursion-completed' : ''}`} ref={rootRef}>
-          {/* Кинематографический панорамный фон */}
-          <div className="pano-viewport">
-            <div className="pano-image" style={{ transform: calculateCameraTransform() }} />
-          </div>
-
-          {/* Подсказка прокрутки для экскурсии */}
-          <div className={`excursion-cue ${isCourtStarted && !isExcursionFinished ? 'visible' : ''}`}>
-            <span>Исследуйте Зал Суда (крутите вниз)</span>
-            <svg className="excursion-arrow" viewBox="0 0 24 24">
-              <path d="M12 5v14M19 12l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
+        <div className={`dlg-root ${isDarkMode ? 'dark-mode' : ''} ${isCourtStarted ? 'court-active' : ''} ${isContentRevealed ? 'content-revealed' : ''}`} ref={rootRef}>
+          <div className="temple-bg" />
 
           <div className="rail" />
 
           <button 
             className="theme-toggle" 
             onClick={() => setIsDarkMode(!isDarkMode)}
-            title="Переключить тему"
+            title="Переключить тему день/ночь"
           >
             {isDarkMode ? (
               <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -523,16 +750,33 @@
             onClick={handleScrollToTop}
             title="Вернуться в начало"
           >
-            <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 19V5M5 12l7-7 7 7" />
+            </svg>
           </button>
 
           <header className="hero">
-            <div className="eyebrow">Зал Суда · Небесная Драма</div>
+            <div className="eyebrow">Зал Суда · Драма в одном акте</div>
             <h1>Экспериментальный Божий суд над <em>Богословом</em></h1>
             <p className="sub">Сможет ли Богослов выиграть схватку в небесном суде, если ангел-прокурор придерживается той же самой идеи?</p>
+            <div className="scroll-cue">
+              <div className="bar" />
+              <span className="bar-span">Слушай дело</span>
+            </div>
           </header>
 
           <main className="court">
+            <div className="scene-label">
+              <div className="cast-title">
+                <span>Действующие лица</span>
+              </div>
+              <p className="role-highlight-family">
+                <span className="role-highlight">Судья — Господь.&nbsp;</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
+                <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Он не желает уступать ни одной позиции и использует все возможные аргументы. Он верит (экспериментально), что Христос принял святую плоть человека, какой она была до грехопадения, но ослабленная невинными немощами, спустя 4000 лет.<br /><br />
+                <span className="role-highlight">Богослов — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей либо лишь физически ослабленной человеческой природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет не только объяснение, но, при определённом понимании природы Христа, — и основание для оправдания. Хитрая мысль и расчет, он как искусный и хитрый грешник уже приготовил, посмотрим... 
+              </p>
+            </div>
+
             <div className="start-court-section">
               <button 
                 className={`start-court-btn ${isCourtStarted ? 'started' : ''}`}
@@ -542,7 +786,7 @@
                 {isCourtStarted ? (
                   <>
                     <span className="status-dot"></span>
-                    <span>Экскурсия по Залу Суда...</span>
+                    <span>Заседание идет</span>
                   </>
                 ) : (
                   <>
@@ -555,47 +799,33 @@
               </button>
             </div>
 
-            {/* Блоки скрыты во время экскурсии и появляются плавно после неё */}
-            <div className="hidden-until-excursion">
-              <div className="scene-label">
-                <div className="cast-title">
-                  <span>Действующие лица</span>
-                </div>
-                <p className="role-highlight-family">
-                  <span className="role-highlight">Судья — Господь.&nbsp;</span> Знает истину, но долго не вмешивается. Позволяет быть борьбе аргументов и полемике.<br /><br />
-                  <span className="role-highlight">Высший ангел-прокурор —</span> опытный, мудрейший, логически сильный обвинитель. Он не желает уступать ни одной позиции и использует все возможные аргументы.<br /><br />
-                  <span className="role-highlight">Богослов — подсудимый.</span> Свою защиту сознательно строит на выгодной богословской предпосылке: <span className="role-highlight-bold">Христос не воспринял мою падшую человеческую природу, но обладал святой, непавшей природой.</span> Подсудимый намерен доказать, что его нечестивая жизнь имеет основание для оправдания...
-                </p>
-              </div>
-
-              {LINES.map((l, i) => (
-                <div className={`line ${l.side}`} key={i}>
-                  {AVATARS[l.side] && (
-                    <div className="avatar">
-                      <img src={AVATARS[l.side]} alt={l.role} />
-                    </div>
-                  )}
-                  <span className="nub" />
-                  <div className="card">
-                    <div className="role">
-                      <span className="dot" />
-                      <span className="role-text">{l.role}</span>
-                    </div>
-                    <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
+            {LINES.map((l, i) => (
+              <div className={`line ${l.side}`} key={i}>
+                {AVATARS[l.side] && (
+                  <div className="avatar">
+                    <img src={AVATARS[l.side]} alt={l.role} />
                   </div>
+                )}
+                <span className="nub" />
+                <div className="card">
+                  <div className="role">
+                    <span className="dot" />
+                    <span className="role-text">{l.role}</span>
+                  </div>
+                  <p className="speech" dangerouslySetInnerHTML={{ __html: l.html }} />
                 </div>
-              ))}
+              </div>
+            ))}
 
-              <section className="verdict">
-                <div className="seal">Ω</div>
-                <h2>Тюрьма «я» <em>рухнула</em>.<br />Праведность — <em>не по заслугам</em>.</h2>
-                <p>Ухищрения ума исчерпаны. Судья нарушает молчание не для осуждения, а чтобы даровать жизнь тем, кто умер для своего оправдания.</p>
-                <div className="stamp">Приговор: Оправдание через Христа</div>
-              </section>
-            </div>
+            <section className="verdict">
+              <div className="seal">Ω</div>
+              <h2>Тюрьма «я» <em>рухнула</em>.<br />Праведность — <em>не по заслугам</em>.</h2>
+              <p>Ухищрения ума исчерпаны. Судья нарушает молчание не для осуждения, а чтобы даровать жизнь тем, кто умер для своего оправдания.</p>
+              <div className="stamp">Приговор: Оправдание через Христа</div>
+            </section>
           </main>
 
-          <footer>Экскурсия Зала Суда &nbsp;·&nbsp; <span>Голос Истины</span></footer>
+          <footer>Экспериментальный суд &nbsp;·&nbsp; <span>Голос Истины</span></footer>
         </div>
       );
     }
